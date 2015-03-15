@@ -49,4 +49,12 @@ class Context
     {
         $this->currentMethod = null;
     }
+
+    /**
+     * @return ReflectionMethod|null
+     */
+    public function getCurrentMethod()
+    {
+        return $this->currentMethod;
+    }
 }

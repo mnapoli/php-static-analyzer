@@ -19,9 +19,15 @@ class ReflectionMethod extends AbstractReflection
      */
     private $class;
 
+    /**
+     * @var ReflectionCodeBlock
+     */
+    private $codeBlock;
+
     public function __construct(ClassMethod $node, ReflectionClass $class)
     {
         $this->class = $class;
+        $this->codeBlock = new ReflectionCodeBlock;
 
         parent::__construct($node);
     }
@@ -104,6 +110,14 @@ class ReflectionMethod extends AbstractReflection
     public function isStatic()
     {
         return $this->node->isStatic();
+    }
+
+    /**
+     * @return ReflectionCodeBlock
+     */
+    public function getCodeBlock()
+    {
+        return $this->codeBlock;
     }
 
     // Methods from the PHP reflection

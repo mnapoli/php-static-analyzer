@@ -5,6 +5,7 @@ namespace PhpAnalyzer\Parser\Visitor;
 use PhpAnalyzer\Parser\Context;
 use PhpAnalyzer\Reflection\ReflectionClass;
 use PhpAnalyzer\Reflection\ReflectionMethod;
+use PhpAnalyzer\Reflection\ReflectionVariable;
 use PhpAnalyzer\Reflection\Registry;
 use PhpParser\Node;
 use PhpParser\Node\Stmt\Class_;
@@ -26,10 +27,10 @@ class DeclarationVisitor extends NodeVisitorAbstract
      */
     private $context;
 
-    public function __construct(Registry $registry)
+    public function __construct(Registry $registry, Context $context)
     {
         $this->registry = $registry;
-        $this->context = new Context;
+        $this->context = $context;
     }
 
     public function enterNode(Node $node)
@@ -45,7 +46,16 @@ class DeclarationVisitor extends NodeVisitorAbstract
                 $method = new ReflectionMethod($node, $currentClass);
                 $currentClass->addMethod($method);
                 $this->context->enterMethod($method);
-                echo 'Entering ' . $method->getDeclaringClass()->getName() . '::' . $method->getName() . PHP_EOL;
+
+                foreach ($node->params as $parameter) {
+                    $parameterType = $parameter->type;
+                    if ($parameterType) {
+                        // TODO FQN
+                        $parameterType = $parameterType->toString();
+                    }
+                    $variable = new ReflectionVariable($parameter->name, $parameterType);
+                    $method->getCodeBlock()->addVariable($variable);
+                }
                 break;
         }
     }

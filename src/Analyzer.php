@@ -2,7 +2,9 @@
 
 namespace PhpAnalyzer;
 
+use PhpAnalyzer\Parser\Context;
 use PhpAnalyzer\Parser\Visitor\DeclarationVisitor;
+use PhpAnalyzer\Parser\Visitor\MethodCallVisitor;
 use PhpAnalyzer\Reflection\Registry;
 use PhpParser\Lexer;
 use PhpParser\NodeTraverser;
@@ -42,9 +44,11 @@ class Analyzer
         }
 
         $registry = new Registry;
+        $context = new Context;
 
         $this->traverser->addVisitor(new NameResolver);
-        $this->traverser->addVisitor(new DeclarationVisitor($registry));
+        $this->traverser->addVisitor(new DeclarationVisitor($registry, $context));
+        $this->traverser->addVisitor(new MethodCallVisitor($registry, $context));
 
         $this->traverser->traverse($nodes);
 
