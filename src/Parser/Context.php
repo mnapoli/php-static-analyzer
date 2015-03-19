@@ -2,8 +2,8 @@
 
 namespace PhpAnalyzer\Parser;
 
-use PhpAnalyzer\Parser\Node\ReflectedClass;
 use PhpAnalyzer\Parser\Node\ReflectedMethod;
+use PhpAnalyzer\Parser\Node\ReflectedType;
 use PhpAnalyzer\Scope\Scope;
 
 /**
@@ -24,7 +24,7 @@ class Context
     private $currentScope;
 
     /**
-     * @var ReflectedClass|null
+     * @var ReflectedType|null
      */
     private $currentClass;
 
@@ -38,7 +38,7 @@ class Context
         $this->rootScope = $rootScope;
     }
 
-    public function enterClass(ReflectedClass $class)
+    public function enterClass(ReflectedType $class)
     {
         $this->currentClass = $class;
         $this->currentScope = $class->getScope();
@@ -51,7 +51,7 @@ class Context
     }
 
     /**
-     * @return ReflectedClass|null
+     * @return ReflectedType|null
      */
     public function getCurrentClass()
     {

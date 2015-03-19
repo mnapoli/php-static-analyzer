@@ -24,11 +24,11 @@ class ReflectedProperty extends Stmt
     private $property;
 
     /**
-     * @var ReflectedClass
+     * @var ReflectedType
      */
     private $class;
 
-    public function __construct(Property $propertyBlock, PropertyProperty $property, ReflectedClass $class)
+    public function __construct(Property $propertyBlock, PropertyProperty $property, ReflectedType $class)
     {
         $this->propertyBlock = $propertyBlock;
         $this->property = $property;
@@ -38,7 +38,7 @@ class ReflectedProperty extends Stmt
     }
 
     /**
-     * @return ReflectedClass
+     * @return ReflectedType
      */
     public function getDeclaringClass()
     {

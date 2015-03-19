@@ -15,12 +15,12 @@ use PhpParser\Node\Stmt\ClassMethod;
 class ReflectedMethod extends ClassMethod
 {
     /**
-     * @var ReflectedClass
+     * @var ReflectedType
      */
     protected $class;
 
     /**
-     * @var \PhpAnalyzer\Scope\Scope
+     * @var Scope
      */
     private $scope;
 
@@ -29,7 +29,7 @@ class ReflectedMethod extends ClassMethod
      */
     private $calls;
 
-    public function __construct(ClassMethod $node, ReflectedClass $class, Scope $scope)
+    public function __construct(ClassMethod $node, ReflectedType $class, Scope $scope)
     {
         $this->class = $class;
         $this->scope = $scope;
@@ -38,7 +38,7 @@ class ReflectedMethod extends ClassMethod
     }
 
     /**
-     * @return ReflectedClass
+     * @return ReflectedType
      */
     public function getDeclaringClass()
     {

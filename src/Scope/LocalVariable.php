@@ -2,6 +2,8 @@
 
 namespace PhpAnalyzer\Scope;
 
+use PhpAnalyzer\Type\UnknownType;
+
 /**
  * Local variable.
  *
@@ -22,5 +24,10 @@ class LocalVariable extends Variable
     public function getName()
     {
         return $this->node->name;
+    }
+
+    public function getType()
+    {
+        return new UnknownType;
     }
 }

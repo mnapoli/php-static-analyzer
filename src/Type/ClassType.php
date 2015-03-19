@@ -1,16 +1,15 @@
 <?php
 
-namespace PhpAnalyzer\Scope;
+namespace PhpAnalyzer\Type;
 
 use PhpAnalyzer\Parser\Node\ReflectedClass;
-use PhpAnalyzer\Type\ClassType;
 
 /**
- * `$this` variable representing the current class.
+ * Class
  *
  * @author Matthieu Napoli <matthieu@mnapoli.fr>
  */
-class This extends Variable
+class ClassType implements Type
 {
     /**
      * @var ReflectedClass
@@ -22,13 +21,8 @@ class This extends Variable
         $this->class = $class;
     }
 
-    public function getName()
+    public function toString()
     {
-        return 'this';
-    }
-
-    public function getType()
-    {
-        return new ClassType($this->class);
+        return $this->class->getFQN();
     }
 }

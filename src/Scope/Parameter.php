@@ -2,6 +2,7 @@
 
 namespace PhpAnalyzer\Scope;
 
+use PhpAnalyzer\Type\UnknownType;
 use PhpParser\Node\Param;
 
 /**
@@ -24,5 +25,10 @@ class Parameter extends Variable
     public function getName()
     {
         return $this->node->name;
+    }
+
+    public function getType()
+    {
+        return new UnknownType;
     }
 }

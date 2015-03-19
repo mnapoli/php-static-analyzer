@@ -18,7 +18,7 @@ $app->command('method class method', function ($class, $method, OutputInterface 
     $output->writeln(sprintf('function %s()', $method->getName()));
     foreach ($method->getScope()->getVariables() as $variable) {
         $class = str_replace('PhpAnalyzer\Scope\\', '', get_class($variable));
-        $output->writeln(sprintf("\t$%s (%s)", $variable->getName(), $class));
+        $output->writeln(sprintf("\t$%s: %s (%s)", $variable->getName(), $variable->getType()->toString(), $class));
     }
 });
 

@@ -2,6 +2,8 @@
 
 namespace PhpAnalyzer\Scope;
 
+use PhpAnalyzer\Type\Type;
+
 /**
  * Variable
  *
@@ -9,5 +11,13 @@ namespace PhpAnalyzer\Scope;
  */
 abstract class Variable
 {
+    /**
+     * @return string
+     */
     abstract public function getName();
+
+    /**
+     * @return Type
+     */
+    abstract public function getType();
 }

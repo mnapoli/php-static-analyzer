@@ -2,7 +2,7 @@
 
 namespace PhpAnalyzer\Scope;
 
-use PhpAnalyzer\Parser\Node\ReflectedClass;
+use PhpAnalyzer\Parser\Node\ReflectedType;
 
 /**
  * @author Matthieu Napoli <matthieu@mnapoli.fr>
@@ -15,7 +15,7 @@ class Scope
     private $parentScope;
 
     /**
-     * @var ReflectedClass[]
+     * @var ReflectedType[]
      */
     private $classes = [];
 
@@ -34,13 +34,13 @@ class Scope
         return new self($this);
     }
 
-    public function addClass(ReflectedClass $class)
+    public function addClass(ReflectedType $class)
     {
         $this->classes[$class->getFQN()] = $class;
     }
 
     /**
-     * @return ReflectedClass[]
+     * @return ReflectedType[]
      */
     public function getClasses()
     {
@@ -54,7 +54,7 @@ class Scope
 
     /**
      * @param string $name
-     * @return ReflectedClass
+     * @return ReflectedType
      */
     public function getClass($name)
     {

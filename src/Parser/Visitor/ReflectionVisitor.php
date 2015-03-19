@@ -4,6 +4,7 @@ namespace PhpAnalyzer\Parser\Visitor;
 
 use PhpAnalyzer\Parser\Context;
 use PhpAnalyzer\Parser\Node\ReflectedClass;
+use PhpAnalyzer\Parser\Node\ReflectedInterface;
 use PhpAnalyzer\Parser\Node\ReflectedMethod;
 use PhpAnalyzer\Parser\Node\ReflectedProperty;
 use PhpAnalyzer\Scope\Scope;
@@ -41,6 +42,11 @@ class ReflectionVisitor extends NodeVisitorAbstract
         switch (true) {
             case $node instanceof Class_:
                 $newNode = new ReflectedClass($node, $this->rootScope->enterSubScope());
+                $this->rootScope->addClass($newNode);
+                $this->context->enterClass($newNode);
+                return $newNode;
+            case $node instanceof Node\Stmt\Interface_:
+                $newNode = new ReflectedInterface($node, $this->rootScope->enterSubScope());
                 $this->rootScope->addClass($newNode);
                 $this->context->enterClass($newNode);
                 return $newNode;

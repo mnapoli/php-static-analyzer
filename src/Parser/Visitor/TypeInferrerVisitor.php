@@ -5,9 +5,11 @@ namespace PhpAnalyzer\Parser\Visitor;
 use PhpAnalyzer\Closure\CachedClosure;
 use PhpAnalyzer\Parser\Context;
 use PhpAnalyzer\Parser\Node\ReflectedClass;
+use PhpAnalyzer\Parser\Node\ReflectedInterface;
 use PhpAnalyzer\Parser\Node\ReflectedMethod;
 use PhpAnalyzer\Scope\LocalVariable;
 use PhpAnalyzer\Scope\Parameter;
+use PhpAnalyzer\Type\UnknownType;
 use PhpParser\NodeVisitorAbstract;
 use PhpAnalyzer\Scope\This;
 use PhpParser\Node;
@@ -34,10 +36,12 @@ class TypeInferrerVisitor extends NodeVisitorAbstract
     public function enterNode(Node $node)
     {
         switch (true) {
-            // Traversal
             case $node instanceof ReflectedClass:
                 $this->context->enterClass($node);
                 $this->processClass($node);
+                break;
+            case $node instanceof ReflectedInterface:
+                $this->context->enterClass($node);
                 break;
             case $node instanceof ReflectedMethod:
                 $this->context->enterMethod($node);
@@ -92,15 +96,6 @@ class TypeInferrerVisitor extends NodeVisitorAbstract
         }
 
         $currentScope->addVariable(new LocalVariable($node));
-
-        $node->typeResolver = new CachedClosure(function () use ($node, $currentScope) {
-            $variable = $currentScope->getVariable($node->name);
-
-            if ($variable) {
-                return $variable->getType();
-            }
-            return null;
-        });
     }
 
     public function processMethodCall(MethodCall $node)
@@ -116,7 +111,7 @@ class TypeInferrerVisitor extends NodeVisitorAbstract
 
             // Unknown type
             if (!$varType) {
-                return null;
+                return new UnknownType();
             }
 
             var_dump($varType);

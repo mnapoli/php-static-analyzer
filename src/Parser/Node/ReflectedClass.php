@@ -10,10 +10,10 @@ use PhpParser\Node\Stmt\Class_;
  *
  * @author Matthieu Napoli <matthieu@mnapoli.fr>
  */
-class ReflectedClass extends Class_
+class ReflectedClass extends Class_ implements ReflectedType
 {
     /**
-     * @var \PhpAnalyzer\Scope
+     * @var Scope
      */
     private $scope;
 
