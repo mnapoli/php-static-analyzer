@@ -3,9 +3,9 @@
 namespace PhpAnalyzer;
 
 use PhpAnalyzer\Parser\Context;
-use PhpAnalyzer\Parser\Visitor\DeclarationVisitor;
-use PhpAnalyzer\Parser\Visitor\MethodCallVisitor;
-use PhpAnalyzer\Reflection\Registry;
+use PhpAnalyzer\Parser\Visitor\ReflectionVisitor;
+use PhpAnalyzer\Parser\Visitor\TypeInferrerVisitor;
+use PhpAnalyzer\Scope;
 use PhpParser\Lexer;
 use PhpParser\NodeTraverser;
 use PhpParser\NodeVisitor\NameResolver;
@@ -43,15 +43,23 @@ class Analyzer
             );
         }
 
-        $registry = new Registry;
-        $context = new Context;
+        $rootScope = new Scope;
+        $context = new Context($rootScope);
 
-        $this->traverser->addVisitor(new NameResolver);
-        $this->traverser->addVisitor(new DeclarationVisitor($registry, $context));
-        $this->traverser->addVisitor(new MethodCallVisitor($registry, $context));
+        $traverser = new NodeTraverser;
+        $traverser->addVisitor(new NameResolver);
+        $traverser->traverse($nodes);
 
-        $this->traverser->traverse($nodes);
+        // Create reflection objects
+        $traverser = new NodeTraverser;
+        $traverser->addVisitor(new ReflectionVisitor($rootScope, $context));
+        $traverser->traverse($nodes);
 
-        return $registry;
+        // Type inference
+//        $traverser = new NodeTraverser;
+//        $traverser->addVisitor(new TypeInferrerVisitor($context));
+//        $traverser->traverse($nodes);
+
+        return $rootScope;
     }
 }

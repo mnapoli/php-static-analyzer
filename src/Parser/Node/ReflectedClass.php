@@ -1,56 +1,104 @@
 <?php
 
-namespace PhpAnalyzer\Reflection;
+namespace PhpAnalyzer\Parser\Node;
 
+use PhpAnalyzer\Scope;
 use PhpParser\Node\Stmt\Class_;
 
 /**
+ * Class
+ *
  * @author Matthieu Napoli <matthieu@mnapoli.fr>
  */
-class ReflectionClass extends AbstractReflection
+class ReflectedClass extends Class_
 {
     /**
-     * @var Class_
+     * @var \PhpAnalyzer\Scope
      */
-    protected $node;
+    private $scope;
 
     /**
-     * @var ReflectionMethod[]
+     * @var string
      */
-    private $methods = [];
+    private $fqn;
 
-    public function __construct(Class_ $node)
+    public function __construct(Class_ $node, Scope $scope)
     {
-        parent::__construct($node);
+        $this->scope = new Scope($scope);
+
+        parent::__construct($node->name, $node->subNodes, $node->getAttributes());
+
+        $this->fqn = $node->namespacedName->toString();
     }
 
     /**
      * @return string
      */
-    public function getName()
+    public function getFQN()
     {
-        return $this->node->namespacedName->toString();
-    }
-
-    public function addMethod(ReflectionMethod $method)
-    {
-        $this->methods[$method->getName()] = $method;
+        return $this->fqn;
     }
 
     /**
-     * @return ReflectionMethod[]
+     * @return ReflectedProperty[]
+     */
+    public function getProperties()
+    {
+        // TODO merge with parent & traits
+        return array_filter($this->stmts, function ($stmt) {
+            return $stmt instanceof ReflectedProperty;
+        });
+    }
+
+    /**
+     * @param string $name
+     * @return null|ReflectedProperty
+     */
+    public function getProperty($name)
+    {
+        $properties = $this->getProperties();
+
+        foreach ($properties as $property) {
+            if ($property->name === $name) {
+                return $property;
+            }
+        }
+
+        return null;
+    }
+
+    /**
+     * @return ReflectedMethod[]
      */
     public function getMethods()
     {
-        return $this->methods;
+        // TODO merge with parent & traits
+        return parent::getMethods();
     }
 
     /**
-     * @return ReflectionMethod
+     * @param string $name
+     * @return null|ReflectedMethod
      */
     public function getMethod($name)
     {
-        return $this->methods[$name];
+        $methods = $this->getMethods();
+
+        foreach ($methods as $method) {
+            if ($method->name === $name) {
+                return $method;
+            }
+        }
+
+        return null;
+    }
+
+    /**
+     * @return Scope
+     */
+    public function getScope()
+    {
+        return $this->scope;
     }
 
     // Methods from the PHP reflection

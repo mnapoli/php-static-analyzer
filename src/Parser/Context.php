@@ -2,8 +2,9 @@
 
 namespace PhpAnalyzer\Parser;
 
-use PhpAnalyzer\Reflection\ReflectionClass;
-use PhpAnalyzer\Reflection\ReflectionMethod;
+use PhpAnalyzer\Parser\Node\ReflectedClass;
+use PhpAnalyzer\Scope;
+use PhpParser\Node\Stmt\ClassMethod;
 
 /**
  * Context while traversing an AST.
@@ -13,48 +14,83 @@ use PhpAnalyzer\Reflection\ReflectionMethod;
 class Context
 {
     /**
-     * @var ReflectionClass|null
+     * @var Scope
+     */
+    private $rootScope;
+
+    /**
+     * @var \PhpAnalyzer\Scope
+     */
+    private $currentScope;
+
+    /**
+     * @var ReflectedClass|null
      */
     private $currentClass;
 
     /**
-     * @var ReflectionMethod|null
+     * @var ClassMethod|null
      */
     private $currentMethod;
 
-    public function enterClass(ReflectionClass $class)
+    public function __construct(Scope $rootScope)
+    {
+        $this->rootScope = $rootScope;
+    }
+
+    public function enterClass(ReflectedClass $class)
     {
         $this->currentClass = $class;
+        $this->currentScope = $class->getScope();
     }
 
     public function leaveClass()
     {
         $this->currentClass = null;
+        $this->currentScope = $this->rootScope;
     }
 
     /**
-     * @return ReflectionClass|null
+     * @return ReflectedClass|null
      */
     public function getCurrentClass()
     {
         return $this->currentClass;
     }
 
-    public function enterMethod(ReflectionMethod $method)
+    public function enterMethod(ClassMethod $method)
     {
         $this->currentMethod = $method;
+        $this->currentScope = $method->getScope();
     }
 
     public function leaveMethod()
     {
         $this->currentMethod = null;
+        $this->currentScope = $this->currentClass->getScope();
     }
 
     /**
-     * @return ReflectionMethod|null
+     * @return ClassMethod|null
      */
     public function getCurrentMethod()
     {
         return $this->currentMethod;
+    }
+
+    /**
+     * @return \PhpAnalyzer\Scope
+     */
+    public function getCurrentScope()
+    {
+        return $this->currentScope;
+    }
+
+    /**
+     * @return Scope
+     */
+    public function getRootScope()
+    {
+        return $this->rootScope;
     }
 }
