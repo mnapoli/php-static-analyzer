@@ -3,8 +3,8 @@
 namespace PhpAnalyzer\Parser;
 
 use PhpAnalyzer\Parser\Node\ReflectedClass;
-use PhpAnalyzer\Scope;
-use PhpParser\Node\Stmt\ClassMethod;
+use PhpAnalyzer\Parser\Node\ReflectedMethod;
+use PhpAnalyzer\Scope\Scope;
 
 /**
  * Context while traversing an AST.
@@ -19,7 +19,7 @@ class Context
     private $rootScope;
 
     /**
-     * @var \PhpAnalyzer\Scope
+     * @var Scope
      */
     private $currentScope;
 
@@ -29,7 +29,7 @@ class Context
     private $currentClass;
 
     /**
-     * @var ClassMethod|null
+     * @var ReflectedMethod|null
      */
     private $currentMethod;
 
@@ -58,7 +58,7 @@ class Context
         return $this->currentClass;
     }
 
-    public function enterMethod(ClassMethod $method)
+    public function enterMethod(ReflectedMethod $method)
     {
         $this->currentMethod = $method;
         $this->currentScope = $method->getScope();
@@ -71,7 +71,7 @@ class Context
     }
 
     /**
-     * @return ClassMethod|null
+     * @return ReflectedMethod|null
      */
     public function getCurrentMethod()
     {
@@ -79,7 +79,7 @@ class Context
     }
 
     /**
-     * @return \PhpAnalyzer\Scope
+     * @return Scope
      */
     public function getCurrentScope()
     {
@@ -87,7 +87,7 @@ class Context
     }
 
     /**
-     * @return Scope
+     * @return \PhpAnalyzer\Scope\Scope
      */
     public function getRootScope()
     {

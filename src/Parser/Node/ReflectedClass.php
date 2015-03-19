@@ -2,7 +2,7 @@
 
 namespace PhpAnalyzer\Parser\Node;
 
-use PhpAnalyzer\Scope;
+use PhpAnalyzer\Scope\Scope;
 use PhpParser\Node\Stmt\Class_;
 
 /**

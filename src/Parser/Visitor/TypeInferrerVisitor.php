@@ -4,6 +4,11 @@ namespace PhpAnalyzer\Parser\Visitor;
 
 use PhpAnalyzer\Closure\CachedClosure;
 use PhpAnalyzer\Parser\Context;
+use PhpAnalyzer\Parser\Node\ReflectedClass;
+use PhpAnalyzer\Parser\Node\ReflectedMethod;
+use PhpAnalyzer\Scope\LocalVariable;
+use PhpParser\NodeVisitorAbstract;
+use PhpAnalyzer\Scope\This;
 use PhpParser\Node;
 use PhpParser\Node\Expr\MethodCall;
 use PhpParser\Node\Expr\Variable;
@@ -13,7 +18,7 @@ use PhpParser\Node\Expr\Variable;
  *
  * @author Matthieu Napoli <matthieu@mnapoli.fr>
  */
-class TypeInferrerVisitor
+class TypeInferrerVisitor extends NodeVisitorAbstract
 {
     /**
      * @var Context
@@ -28,6 +33,14 @@ class TypeInferrerVisitor
     public function enterNode(Node $node)
     {
         switch (true) {
+            // Traversal
+            case $node instanceof ReflectedClass:
+                $this->context->enterClass($node);
+                break;
+            case $node instanceof ReflectedMethod:
+                $this->context->enterMethod($node);
+                break;
+            // Processing
             case $node instanceof Variable:
                 $this->processVariable($node);
                 break;
@@ -35,6 +48,23 @@ class TypeInferrerVisitor
                 $this->processMethodCall($node);
                 break;
         }
+    }
+
+    public function leaveNode(Node $node)
+    {
+        switch (true) {
+            case $node instanceof ReflectedClass:
+                $this->context->leaveClass();
+                break;
+            case $node instanceof ReflectedMethod:
+                $this->context->leaveMethod();
+                break;
+        }
+    }
+
+    public function processClass(ReflectedClass $node)
+    {
+        $node->getScope()->addVariable(new This($node));
     }
 
     public function processVariable(Variable $node)
@@ -45,6 +75,7 @@ class TypeInferrerVisitor
         }
 
         $currentScope = $this->context->getCurrentScope();
+        $currentScope->addVariable(new LocalVariable($node));
 
         $node->typeResolver = new CachedClosure(function () use ($node, $currentScope) {
             $variable = $currentScope->getVariable($node->name);

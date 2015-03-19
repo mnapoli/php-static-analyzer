@@ -1,6 +1,6 @@
 <?php
 
-namespace PhpAnalyzer;
+namespace PhpAnalyzer\Scope;
 
 use PhpAnalyzer\Parser\Node\ReflectedClass;
 
@@ -20,7 +20,7 @@ class Scope
     private $classes = [];
 
     /**
-     * @var ReflectedVariable[]
+     * @var Variable[]
      */
     private $variables = [];
 
@@ -56,23 +56,30 @@ class Scope
         return $this->classes[$name];
     }
 
-    public function addVariable(ReflectedVariable $variable)
+    public function addVariable(Variable $variable)
     {
         $this->variables[$variable->getName()] = $variable;
     }
 
     /**
-     * @return ReflectedVariable[]
+     * @param bool $parent Look up in parent scope too.
+     * @return Variable[]
      */
-    public function getVariables()
+    public function getVariables($parent = true)
     {
-        return $this->variables;
+        $variables = $this->variables;
+
+        if ($parent && $this->parentScope) {
+            $variables = array_merge($this->parentScope->getVariables(), $variables);
+        }
+
+        return $variables;
     }
 
     /**
      * @param string $name
      * @param bool   $parent Look up in parent scope too.
-     * @return ReflectedVariable|null
+     * @return Variable|null
      */
     public function getVariable($name, $parent = true)
     {

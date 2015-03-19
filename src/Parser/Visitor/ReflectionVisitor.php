@@ -6,7 +6,7 @@ use PhpAnalyzer\Parser\Context;
 use PhpAnalyzer\Parser\Node\ReflectedClass;
 use PhpAnalyzer\Parser\Node\ReflectedMethod;
 use PhpAnalyzer\Parser\Node\ReflectedProperty;
-use PhpAnalyzer\Scope;
+use PhpAnalyzer\Scope\Scope;
 use PhpParser\Node;
 use PhpParser\Node\Stmt\Class_;
 use PhpParser\Node\Stmt\ClassMethod;
@@ -21,7 +21,7 @@ use PhpParser\NodeVisitorAbstract;
 class ReflectionVisitor extends NodeVisitorAbstract
 {
     /**
-     * @var \PhpAnalyzer\Scope
+     * @var Scope
      */
     private $rootScope;
 
@@ -50,7 +50,7 @@ class ReflectionVisitor extends NodeVisitorAbstract
                 return $newNode;
             case $node instanceof ClassMethod:
                 $class = $this->context->getCurrentClass();
-                $newNode = new ReflectedMethod($node, $class, $this->rootScope->enterSubScope());
+                $newNode = new ReflectedMethod($node, $class, $class->getScope()->enterSubScope());
                 $this->context->enterMethod($newNode);
                 return $newNode;
         }

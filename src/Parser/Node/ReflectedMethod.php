@@ -2,7 +2,7 @@
 
 namespace PhpAnalyzer\Parser\Node;
 
-use PhpAnalyzer\Scope;
+use PhpAnalyzer\Scope\Scope;
 use PhpParser\Node\Expr\MethodCall;
 use PhpParser\Node\Stmt\ClassMethod;
 
@@ -19,7 +19,7 @@ class ReflectedMethod extends ClassMethod
     protected $class;
 
     /**
-     * @var Scope
+     * @var \PhpAnalyzer\Scope\Scope
      */
     private $scope;
 
