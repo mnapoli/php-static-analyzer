@@ -47,12 +47,21 @@ class Scope
         return array_values($this->classes);
     }
 
+    public function hasClass($name)
+    {
+        return isset($this->classes[$name]);
+    }
+
     /**
      * @param string $name
      * @return ReflectedClass
      */
     public function getClass($name)
     {
+        if (! $this->hasClass($name)) {
+            throw new \LogicException(sprintf('Class %s not found', $name));
+        }
+
         return $this->classes[$name];
     }
 

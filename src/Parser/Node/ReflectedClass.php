@@ -78,19 +78,30 @@ class ReflectedClass extends Class_
 
     /**
      * @param string $name
+     * @return bool
+     */
+    public function hasMethod($name)
+    {
+        foreach ($this->getMethods() as $method) {
+            if ($method->name === $name) {
+                return true;
+            }
+        }
+        return false;
+    }
+
+    /**
+     * @param string $name
      * @return null|ReflectedMethod
      */
     public function getMethod($name)
     {
-        $methods = $this->getMethods();
-
-        foreach ($methods as $method) {
+        foreach ($this->getMethods() as $method) {
             if ($method->name === $name) {
                 return $method;
             }
         }
-
-        return null;
+        throw new \LogicException(sprintf('Method %s::%s() not found', $this->getFQN(), $name));
     }
 
     /**
