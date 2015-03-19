@@ -36,6 +36,7 @@ class TypeInferrerVisitor extends NodeVisitorAbstract
             // Traversal
             case $node instanceof ReflectedClass:
                 $this->context->enterClass($node);
+                $this->processClass($node);
                 break;
             case $node instanceof ReflectedMethod:
                 $this->context->enterMethod($node);
@@ -75,6 +76,11 @@ class TypeInferrerVisitor extends NodeVisitorAbstract
         }
 
         $currentScope = $this->context->getCurrentScope();
+
+        if ($currentScope->hasVariable($node->name)) {
+            return;
+        }
+
         $currentScope->addVariable(new LocalVariable($node));
 
         $node->typeResolver = new CachedClosure(function () use ($node, $currentScope) {

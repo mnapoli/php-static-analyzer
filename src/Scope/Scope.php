@@ -58,7 +58,20 @@ class Scope
 
     public function addVariable(Variable $variable)
     {
+        if ($this->hasVariable($variable->getName())) {
+            throw new \LogicException(sprintf('A "%s" variable already exist in that scope', $variable->getName()));
+        }
+
         $this->variables[$variable->getName()] = $variable;
+    }
+
+    /**
+     * @param string $name
+     * @return bool
+     */
+    public function hasVariable($name)
+    {
+        return isset($this->variables[$name]);
     }
 
     /**
