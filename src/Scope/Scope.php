@@ -71,18 +71,21 @@ class Scope
      */
     public function hasVariable($name)
     {
+        if ($this->parentScope && $this->parentScope->hasVariable($name)) {
+            return true;
+        }
+
         return isset($this->variables[$name]);
     }
 
     /**
-     * @param bool $parent Look up in parent scope too.
      * @return Variable[]
      */
-    public function getVariables($parent = true)
+    public function getVariables()
     {
         $variables = $this->variables;
 
-        if ($parent && $this->parentScope) {
+        if ($this->parentScope) {
             $variables = array_merge($this->parentScope->getVariables(), $variables);
         }
 

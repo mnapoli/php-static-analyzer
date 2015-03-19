@@ -4,6 +4,7 @@ namespace PhpAnalyzer\Parser\Node;
 
 use PhpAnalyzer\Scope\Scope;
 use PhpParser\Node\Expr\MethodCall;
+use PhpParser\Node\Param;
 use PhpParser\Node\Stmt\ClassMethod;
 
 /**
@@ -50,6 +51,14 @@ class ReflectedMethod extends ClassMethod
     public function getScope()
     {
         return $this->scope;
+    }
+
+    /**
+     * @return Param[]
+     */
+    public function getParameters()
+    {
+        return $this->params;
     }
 
     public function addCall(MethodCall $call)

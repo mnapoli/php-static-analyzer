@@ -20,7 +20,8 @@ foreach ($scope->getClasses() as $class) {
     foreach ($class->getMethods() as $method) {
         printf("\t%s\n", $method->getName());
         foreach ($method->getScope()->getVariables() as $variable) {
-            printf("\t\t$%s\n", $variable->getName());
+            $class = str_replace('PhpAnalyzer\Scope\\', '', get_class($variable));
+            printf("\t\t$%s (%s)\n", $variable->getName(), $class);
         }
     }
 

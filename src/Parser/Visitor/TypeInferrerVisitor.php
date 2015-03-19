@@ -7,6 +7,7 @@ use PhpAnalyzer\Parser\Context;
 use PhpAnalyzer\Parser\Node\ReflectedClass;
 use PhpAnalyzer\Parser\Node\ReflectedMethod;
 use PhpAnalyzer\Scope\LocalVariable;
+use PhpAnalyzer\Scope\Parameter;
 use PhpParser\NodeVisitorAbstract;
 use PhpAnalyzer\Scope\This;
 use PhpParser\Node;
@@ -40,6 +41,7 @@ class TypeInferrerVisitor extends NodeVisitorAbstract
                 break;
             case $node instanceof ReflectedMethod:
                 $this->context->enterMethod($node);
+                $this->processMethod($node);
                 break;
             // Processing
             case $node instanceof Variable:
@@ -66,6 +68,14 @@ class TypeInferrerVisitor extends NodeVisitorAbstract
     public function processClass(ReflectedClass $node)
     {
         $node->getScope()->addVariable(new This($node));
+    }
+
+    public function processMethod(ReflectedMethod $node)
+    {
+        $scope = $node->getScope();
+        foreach ($node->getParameters() as $parameter) {
+            $scope->addVariable(new Parameter($parameter));
+        }
     }
 
     public function processVariable(Variable $node)
