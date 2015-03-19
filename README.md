@@ -36,6 +36,12 @@ foreach ($nodes as $node) {
 }
 ```
 
+## Implementation
+
+### First pass: reflection
+
+The first pass detects turns the classic nodes into nodes carrying reflection information.
+
 ## Contributing
 
 See the [CONTRIBUTING](CONTRIBUTING.md) file.

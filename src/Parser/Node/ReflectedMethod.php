@@ -3,6 +3,7 @@
 namespace PhpAnalyzer\Parser\Node;
 
 use PhpAnalyzer\Scope;
+use PhpParser\Node\Expr\MethodCall;
 use PhpParser\Node\Stmt\ClassMethod;
 
 /**
@@ -18,9 +19,14 @@ class ReflectedMethod extends ClassMethod
     protected $class;
 
     /**
-     * @var \PhpAnalyzer\Scope
+     * @var Scope
      */
     private $scope;
+
+    /**
+     * @var MethodCall
+     */
+    private $calls;
 
     public function __construct(ClassMethod $node, ReflectedClass $class, Scope $scope)
     {
@@ -39,20 +45,20 @@ class ReflectedMethod extends ClassMethod
     }
 
     /**
-     * @return \PhpAnalyzer\Scope
+     * @return Scope
      */
     public function getScope()
     {
         return $this->scope;
     }
 
-    public function addCall($caller)
+    public function addCall(MethodCall $call)
     {
-        $this->calls[] = $caller;
+        $this->calls[] = $call;
     }
 
     /**
-     * @return array
+     * @return MethodCall[]
      */
     public function getCalls()
     {
