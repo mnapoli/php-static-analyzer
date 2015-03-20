@@ -4,17 +4,15 @@ namespace PhpAnalyzer\Parser\Node;
 
 use PhpAnalyzer\Scope\Scope;
 use PhpAnalyzer\Type\ClassType;
-use PhpAnalyzer\Type\Type;
 use PhpAnalyzer\Type\UnknownType;
 use PhpParser\Node\Expr\MethodCall;
-use PhpParser\Node\Expr\Variable;
 
 /**
  * Method call.
  *
  * @author Matthieu Napoli <matthieu@mnapoli.fr>
  */
-class ReflectedMethodCall extends MethodCall
+class ReflectedMethodCall extends MethodCall implements TypedNode
 {
     /**
      * @var Scope
@@ -49,20 +47,12 @@ class ReflectedMethodCall extends MethodCall
             return null;
         }
 
-        $variable = $this->var;
-
-        if (! $variable instanceof Variable) {
-            // TODO only support method call on variable
+        if (! $this->var instanceof TypedNode) {
+            // TODO only support method call on nodes that are typed
             return null;
         }
 
-        if (! is_string($variable->name)) {
-            // TODO no support for dynamic variable name
-            return null;
-        }
-
-        $variable = $this->currentScope->getVariable($variable->name);
-        $variableType = $variable->getType();
+        $variableType = $this->var->getNodeType();
 
         if (! $variableType instanceof ClassType) {
             // TODO log error: method call on non-object
@@ -81,12 +71,7 @@ class ReflectedMethodCall extends MethodCall
         return $this->method;
     }
 
-    /**
-     * Returns the method called, or null if unknown.
-     *
-     * @return Type
-     */
-    public function getReturnType()
+    public function getNodeType()
     {
         $method = $this->getMethod();
 

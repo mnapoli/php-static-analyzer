@@ -7,6 +7,7 @@ use PhpAnalyzer\Parser\Node\ReflectedClass;
 use PhpAnalyzer\Parser\Node\ReflectedInterface;
 use PhpAnalyzer\Parser\Node\ReflectedMethod;
 use PhpAnalyzer\Parser\Node\ReflectedMethodCall;
+use PhpAnalyzer\Parser\Node\ReflectedVariable;
 use PhpAnalyzer\Scope\LocalVariable;
 use PhpAnalyzer\Scope\Parameter;
 use PhpParser\NodeVisitorAbstract;
@@ -47,8 +48,9 @@ class TypeInferrerVisitor extends NodeVisitorAbstract
                 $this->processMethod($node);
                 break;
             case $node instanceof Variable:
-                $this->processVariable($node);
-                break;
+                $node = new ReflectedVariable($node, $this->context->getCurrentScope());
+                $this->registerVariableInScope($node);
+                return $node;
             case $node instanceof MethodCall:
                 return new ReflectedMethodCall($node, $this->context->getCurrentScope());
                 break;
@@ -59,9 +61,15 @@ class TypeInferrerVisitor extends NodeVisitorAbstract
     {
         switch (true) {
             case $node instanceof ReflectedClass:
+                $class = $this->context->getCurrentClass();
+                // Update sub nodes
+                $class->stmts = $node->stmts;
                 $this->context->leaveClass();
                 break;
             case $node instanceof ReflectedMethod:
+                $method = $this->context->getCurrentMethod();
+                // Update sub nodes
+                $method->stmts = $node->stmts;
                 $this->context->leaveMethod();
                 break;
         }
@@ -80,7 +88,7 @@ class TypeInferrerVisitor extends NodeVisitorAbstract
         }
     }
 
-    private function processVariable(Variable $node)
+    private function registerVariableInScope(ReflectedVariable $node)
     {
         // Variable name is dynamic
         if (! is_string($node->name)) {

@@ -2,6 +2,7 @@
 
 namespace PhpAnalyzer\Scope;
 
+use PhpAnalyzer\Parser\Node\ReflectedVariable;
 use PhpAnalyzer\Type\UnknownType;
 
 /**
@@ -12,11 +13,11 @@ use PhpAnalyzer\Type\UnknownType;
 class LocalVariable extends Variable
 {
     /**
-     * @var \PhpParser\Node\Expr\Variable
+     * @var ReflectedVariable
      */
     private $node;
 
-    public function __construct(\PhpParser\Node\Expr\Variable $node)
+    public function __construct(ReflectedVariable $node)
     {
         $this->node = $node;
     }
@@ -28,6 +29,8 @@ class LocalVariable extends Variable
 
     public function getType()
     {
+        // TODO guess with assignments?
+        // e.g. $foo = new Foo();
         return new UnknownType;
     }
 }
