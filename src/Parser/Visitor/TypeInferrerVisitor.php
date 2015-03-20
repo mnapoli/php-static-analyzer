@@ -7,9 +7,11 @@ use PhpAnalyzer\Parser\Node\ReflectedClass;
 use PhpAnalyzer\Parser\Node\ReflectedInterface;
 use PhpAnalyzer\Parser\Node\ReflectedMethod;
 use PhpAnalyzer\Parser\Node\ReflectedMethodCall;
+use PhpAnalyzer\Parser\Node\ReflectedStaticCall;
 use PhpAnalyzer\Parser\Node\ReflectedVariable;
 use PhpAnalyzer\Scope\LocalVariable;
 use PhpAnalyzer\Scope\Parameter;
+use PhpParser\Node\Expr\StaticCall;
 use PhpParser\NodeVisitorAbstract;
 use PhpAnalyzer\Scope\This;
 use PhpParser\Node;
@@ -47,17 +49,6 @@ class TypeInferrerVisitor extends NodeVisitorAbstract
                 $this->context->enterMethod($node);
                 $this->processMethod($node);
                 break;
-            case $node instanceof Variable:
-                if (!$this->context->getCurrentMethod()) {
-                    // TODO variables declared outside of methods
-                    return null;
-                }
-                $node = new ReflectedVariable($node, $this->context->getCurrentScope());
-                $this->registerVariableInScope($node);
-                return $node;
-            case $node instanceof MethodCall:
-                return new ReflectedMethodCall($node, $this->context->getCurrentScope());
-                break;
         }
 
         return null;
@@ -72,7 +63,21 @@ class TypeInferrerVisitor extends NodeVisitorAbstract
             case $node instanceof ReflectedMethod:
                 $this->context->leaveMethod();
                 break;
+            case $node instanceof Variable:
+                if (!$this->context->getCurrentMethod()) {
+                    // TODO variables declared outside of methods
+                    return null;
+                }
+                $node = new ReflectedVariable($node, $this->context->getCurrentScope());
+                $this->registerVariableInScope($node);
+                return $node;
+            case $node instanceof MethodCall:
+                return new ReflectedMethodCall($node, $this->context->getCurrentScope());
+            case $node instanceof StaticCall:
+                return new ReflectedStaticCall($node, $this->context->getCurrentScope());
         }
+
+        return null;
     }
 
     private function processClass(ReflectedClass $node)
