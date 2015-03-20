@@ -48,6 +48,10 @@ class TypeInferrerVisitor extends NodeVisitorAbstract
                 $this->processMethod($node);
                 break;
             case $node instanceof Variable:
+                if (!$this->context->getCurrentMethod()) {
+                    // TODO variables declared outside of methods
+                    return null;
+                }
                 $node = new ReflectedVariable($node, $this->context->getCurrentScope());
                 $this->registerVariableInScope($node);
                 return $node;

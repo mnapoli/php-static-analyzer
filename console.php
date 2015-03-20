@@ -7,10 +7,10 @@ require_once 'vendor/autoload.php';
 
 $app = new Silly\Application;
 
-$analyzer = new Analyzer;
-$scope = $analyzer->analyze(__DIR__ . '/src');
+$app->command('method class method', function ($class, $method, OutputInterface $output) {
+    $analyzer = new Analyzer;
+    $scope = $analyzer->analyze([__DIR__ . '/src', __DIR__ . '/vendor/nikic']);
 
-$app->command('method class method', function ($class, $method, OutputInterface $output) use ($scope) {
     $class = str_replace('.', '\\', $class);
     $class = $scope->getClass($class);
     $method = $class->getMethod($method);

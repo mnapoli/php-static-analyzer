@@ -11,6 +11,7 @@ use PhpParser\Lexer;
 use PhpParser\NodeVisitor\NameResolver;
 use PhpParser\Parser;
 use Symfony\Component\Finder\Finder;
+use Symfony\Component\Finder\SplFileInfo;
 
 /**
  * PHP analyzer.
@@ -29,17 +30,24 @@ class Analyzer
         $this->parser = new Parser(new Lexer);
     }
 
-    public function analyze($directory)
+    public function analyze($directories)
     {
         $finder = new Finder();
-        $finder->files()->in($directory);
+        $finder->files()->in($directories)
+            ->name('*.php');
 
         $nodes = [];
         foreach ($finder as $file) {
-            $nodes = array_merge(
-                $this->parser->parse(file_get_contents($file)),
-                $nodes
-            );
+            /** @var SplFileInfo $file */
+            try {
+                // TODO do not merge
+                $nodes = array_merge(
+                    $this->parser->parse(file_get_contents($file)),
+                    $nodes
+                );
+            } catch (\Exception $e) {
+                throw new \RuntimeException(sprintf('Error while parsing %s: %s', $file->getRelativePathname(), $e->getMessage()), 0, $e);
+            }
         }
 
         $rootScope = new Scope;

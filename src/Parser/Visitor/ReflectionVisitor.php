@@ -77,6 +77,10 @@ class ReflectionVisitor extends NodeVisitorAbstract
                 // TODO for now doesn't support properties declared as list
                 return new ReflectedProperty($node, $node->props[0], $this->context->getCurrentClass());
             case $node instanceof Param:
+                if (!$this->context->getCurrentMethod()) {
+                    // TODO functions
+                    return null;
+                }
                 return new ReflectedParameter($node, $this->context->getCurrentMethod());
         }
 
