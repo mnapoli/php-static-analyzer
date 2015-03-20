@@ -12,6 +12,11 @@ use PhpAnalyzer\Scope\Scope;
 interface ReflectedType
 {
     /**
+     * @return string
+     */
+    public function getFQN();
+
+    /**
      * @return ReflectedMethod
      */
     public function getMethods();

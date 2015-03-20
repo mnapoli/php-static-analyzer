@@ -2,7 +2,7 @@
 
 namespace PhpAnalyzer\Type;
 
-use PhpAnalyzer\Parser\Node\ReflectedClass;
+use PhpAnalyzer\Parser\Node\ReflectedType;
 
 /**
  * Class
@@ -12,11 +12,11 @@ use PhpAnalyzer\Parser\Node\ReflectedClass;
 class ClassType implements Type
 {
     /**
-     * @var ReflectedClass
+     * @var ReflectedType
      */
     private $class;
 
-    public function __construct(ReflectedClass $class)
+    public function __construct(ReflectedType $class)
     {
         $this->class = $class;
     }

@@ -3,6 +3,8 @@
 namespace PhpAnalyzer\Parser\Node;
 
 use PhpAnalyzer\Scope\Scope;
+use PhpAnalyzer\Type\Type;
+use PhpAnalyzer\Type\UnknownType;
 use PhpParser\Node\Expr\MethodCall;
 use PhpParser\Node\Param;
 use PhpParser\Node\Stmt\ClassMethod;
@@ -43,6 +45,15 @@ class ReflectedMethod extends ClassMethod
     public function getDeclaringClass()
     {
         return $this->class;
+    }
+
+    /**
+     * @return Type
+     */
+    public function getReturnType()
+    {
+        // TODO
+        return new UnknownType;
     }
 
     /**

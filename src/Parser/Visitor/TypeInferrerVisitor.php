@@ -2,14 +2,13 @@
 
 namespace PhpAnalyzer\Parser\Visitor;
 
-use PhpAnalyzer\Closure\CachedClosure;
 use PhpAnalyzer\Parser\Context;
 use PhpAnalyzer\Parser\Node\ReflectedClass;
 use PhpAnalyzer\Parser\Node\ReflectedInterface;
 use PhpAnalyzer\Parser\Node\ReflectedMethod;
+use PhpAnalyzer\Parser\Node\ReflectedMethodCall;
 use PhpAnalyzer\Scope\LocalVariable;
 use PhpAnalyzer\Scope\Parameter;
-use PhpAnalyzer\Type\UnknownType;
 use PhpParser\NodeVisitorAbstract;
 use PhpAnalyzer\Scope\This;
 use PhpParser\Node;
@@ -47,12 +46,11 @@ class TypeInferrerVisitor extends NodeVisitorAbstract
                 $this->context->enterMethod($node);
                 $this->processMethod($node);
                 break;
-            // Processing
             case $node instanceof Variable:
                 $this->processVariable($node);
                 break;
             case $node instanceof MethodCall:
-                $this->processMethodCall($node);
+                return new ReflectedMethodCall($node, $this->context->getCurrentScope());
                 break;
         }
     }
@@ -69,12 +67,12 @@ class TypeInferrerVisitor extends NodeVisitorAbstract
         }
     }
 
-    public function processClass(ReflectedClass $node)
+    private function processClass(ReflectedClass $node)
     {
         $node->getScope()->addVariable(new This($node));
     }
 
-    public function processMethod(ReflectedMethod $node)
+    private function processMethod(ReflectedMethod $node)
     {
         $scope = $node->getScope();
         foreach ($node->getParameters() as $parameter) {
@@ -82,7 +80,7 @@ class TypeInferrerVisitor extends NodeVisitorAbstract
         }
     }
 
-    public function processVariable(Variable $node)
+    private function processVariable(Variable $node)
     {
         // Variable name is dynamic
         if (! is_string($node->name)) {
@@ -96,26 +94,5 @@ class TypeInferrerVisitor extends NodeVisitorAbstract
         }
 
         $currentScope->addVariable(new LocalVariable($node));
-    }
-
-    public function processMethodCall(MethodCall $node)
-    {
-        // Method name is dynamic
-        if (! is_string($node->name)) {
-            return;
-        }
-
-        $node->typeResolver = new CachedClosure(function () use ($node) {
-            $varTypeResolver = $node->var->typeResolver;
-            $varType = $varTypeResolver();
-
-            // Unknown type
-            if (!$varType) {
-                return new UnknownType();
-            }
-
-            var_dump($varType);
-            die();
-        });
     }
 }
