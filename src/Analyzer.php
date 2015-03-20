@@ -4,6 +4,7 @@ namespace PhpAnalyzer;
 
 use PhpAnalyzer\Parser\Context;
 use PhpAnalyzer\Parser\NodeTraverser\NodeTraverser;
+use PhpAnalyzer\Parser\Visitor\CallLinkVisitor;
 use PhpAnalyzer\Parser\Visitor\ReflectionVisitor;
 use PhpAnalyzer\Parser\Visitor\TypeInferrerVisitor;
 use PhpAnalyzer\Scope\Scope;
@@ -65,6 +66,11 @@ class Analyzer
         // Type inference
         $traverser = new NodeTraverser;
         $traverser->addVisitor(new TypeInferrerVisitor($context));
+        $nodes = $traverser->traverse($nodes);
+
+        // Link method calls to called methods
+        $traverser = new NodeTraverser;
+        $traverser->addVisitor(new CallLinkVisitor);
         $traverser->traverse($nodes);
 
         return $rootScope;

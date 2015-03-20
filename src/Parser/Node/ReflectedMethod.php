@@ -13,7 +13,7 @@ use PhpParser\Node\Stmt\ClassMethod;
  *
  * @author Matthieu Napoli <matthieu@mnapoli.fr>
  */
-class ReflectedMethod extends ClassMethod
+class ReflectedMethod extends ClassMethod implements ReflectedCallable
 {
     /**
      * @var ReflectedType
@@ -28,7 +28,7 @@ class ReflectedMethod extends ClassMethod
     /**
      * @var MethodCall
      */
-    private $calls;
+    private $calls = [];
 
     public function __construct(ClassMethod $node, ReflectedType $class, Scope $scope)
     {
@@ -71,14 +71,15 @@ class ReflectedMethod extends ClassMethod
         return $this->params;
     }
 
-    public function addCall(MethodCall $call)
+    public function addCall(ReflectedCallableCall $call)
     {
+        if (! $call instanceof ReflectedMethodCall) {
+            // TODO log error: invalid call
+        }
+
         $this->calls[] = $call;
     }
 
-    /**
-     * @return MethodCall[]
-     */
     public function getCalls()
     {
         return $this->calls;

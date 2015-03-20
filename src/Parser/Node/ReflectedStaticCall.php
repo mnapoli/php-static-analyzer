@@ -12,7 +12,7 @@ use PhpParser\Node\Name;
  *
  * @author Matthieu Napoli <matthieu@mnapoli.fr>
  */
-class ReflectedStaticCall extends StaticCall implements TypedNode
+class ReflectedStaticCall extends StaticCall implements TypedNode, ReflectedCallableCall
 {
     /**
      * @var Scope
@@ -52,7 +52,7 @@ class ReflectedStaticCall extends StaticCall implements TypedNode
      *
      * @return ReflectedMethod|null
      */
-    public function getMethod()
+    public function getTargetCallable()
     {
         if (! is_string($this->name)) {
             // TODO no support for dynamic method name
@@ -70,7 +70,7 @@ class ReflectedStaticCall extends StaticCall implements TypedNode
 
     public function getNodeType()
     {
-        $method = $this->getMethod();
+        $method = $this->getTargetCallable();
 
         if (! $method) {
             return new UnknownType;

@@ -12,7 +12,7 @@ use PhpParser\Node\Expr\MethodCall;
  *
  * @author Matthieu Napoli <matthieu@mnapoli.fr>
  */
-class ReflectedMethodCall extends MethodCall implements TypedNode
+class ReflectedMethodCall extends MethodCall implements TypedNode, ReflectedCallableCall
 {
     /**
      * @var Scope
@@ -36,7 +36,7 @@ class ReflectedMethodCall extends MethodCall implements TypedNode
      *
      * @return ReflectedMethod|null
      */
-    public function getMethod()
+    public function getTargetCallable()
     {
         if ($this->method) {
             return $this->method;
@@ -73,7 +73,7 @@ class ReflectedMethodCall extends MethodCall implements TypedNode
 
     public function getNodeType()
     {
-        $method = $this->getMethod();
+        $method = $this->getTargetCallable();
 
         if (! $method) {
             return new UnknownType;

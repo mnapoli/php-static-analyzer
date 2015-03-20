@@ -41,11 +41,18 @@ $app->command('info [class] [method] [--directories=]*', function ($class, $meth
         foreach ($methods as $method) {
             /** @var ReflectedMethod $method */
             $output->writeln(sprintf("\t%s()", $method->getName()));
+
             foreach ($method->getScope()->getVariables() as $variable) {
                 $class = str_replace('PhpAnalyzer\Scope\\', '', get_class($variable));
                 $output->writeln(sprintf("\t\t$%s: %s (%s)", $variable->getName(), $variable->getType()->toString(), $class));
             }
+
+            foreach ($method->getCalls() as $call) {
+                $output->writeln(sprintf("\t\tCall at line %d", $call->getLine()));
+            }
         }
+
+        $output->writeln('');
     }
 });
 
