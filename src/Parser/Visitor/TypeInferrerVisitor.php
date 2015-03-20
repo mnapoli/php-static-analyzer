@@ -92,11 +92,9 @@ class TypeInferrerVisitor extends NodeVisitorAbstract
         }
 
         $currentScope = $this->context->getCurrentScope();
-
         if ($currentScope->hasVariable($node->name)) {
             return;
         }
-
         $currentScope->addVariable(new LocalVariable($node));
     }
 }
