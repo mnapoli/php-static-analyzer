@@ -8,29 +8,43 @@ require_once 'vendor/autoload.php';
 
 $app = new Silly\Application;
 
-$directories = [
+$defaultDirectories = [
     __DIR__ . '/src',
 //    __DIR__ . '/vendor/nikic',
 ];
 
-$app->command('info class [method]', function ($class, $method, OutputInterface $output) use ($directories) {
+$app->command('info [class] [method] [--directories=]*', function ($class, $method, array $directories, OutputInterface $output) use ($defaultDirectories) {
+    if (empty($directories)) {
+        $directories = $defaultDirectories;
+    }
+
     $analyzer = new Analyzer;
     $scope = $analyzer->analyze($directories);
 
-    $class = str_replace('.', '\\', $class);
-    $class = $scope->getClass($class);
-    if ($method) {
-        $methods = [$class->getMethod($method)];
+    if ($class) {
+        $class = str_replace('.', '\\', $class);
+        $classes = [$class];
     } else {
-        $methods = $class->getMethods();
+        $classes = $scope->getClasses();
     }
+    $methodName = $method;
 
-    foreach ($methods as $method) {
-        /** @var ReflectedMethod $method */
-        $output->writeln(sprintf('function %s()', $method->getName()));
-        foreach ($method->getScope()->getVariables() as $variable) {
-            $class = str_replace('PhpAnalyzer\Scope\\', '', get_class($variable));
-            $output->writeln(sprintf("\t$%s: %s (%s)", $variable->getName(), $variable->getType()->toString(), $class));
+    foreach ($classes as $class) {
+        $output->writeln($class->getFQN());
+
+        if ($methodName) {
+            $methods = [$class->getMethod($methodName)];
+        } else {
+            $methods = $class->getMethods();
+        }
+
+        foreach ($methods as $method) {
+            /** @var ReflectedMethod $method */
+            $output->writeln(sprintf("\t%s()", $method->getName()));
+            foreach ($method->getScope()->getVariables() as $variable) {
+                $class = str_replace('PhpAnalyzer\Scope\\', '', get_class($variable));
+                $output->writeln(sprintf("\t\t$%s: %s (%s)", $variable->getName(), $variable->getType()->toString(), $class));
+            }
         }
     }
 });
