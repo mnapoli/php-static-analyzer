@@ -6,11 +6,15 @@ use PhpAnalyzer\Parser\Context;
 use PhpAnalyzer\Parser\Node\ReflectedClass;
 use PhpAnalyzer\Parser\Node\ReflectedInterface;
 use PhpAnalyzer\Parser\Node\ReflectedMethod;
+use PhpAnalyzer\Parser\Node\ReflectedParameter;
 use PhpAnalyzer\Parser\Node\ReflectedProperty;
+use PhpAnalyzer\Parser\Node\ReflectedType;
 use PhpAnalyzer\Scope\Scope;
 use PhpParser\Node;
+use PhpParser\Node\Param;
 use PhpParser\Node\Stmt\Class_;
 use PhpParser\Node\Stmt\ClassMethod;
+use PhpParser\Node\Stmt\Interface_;
 use PhpParser\Node\Stmt\Property;
 use PhpParser\NodeVisitorAbstract;
 
@@ -45,14 +49,10 @@ class ReflectionVisitor extends NodeVisitorAbstract
                 $this->rootScope->addClass($newNode);
                 $this->context->enterClass($newNode);
                 return $newNode;
-            case $node instanceof Node\Stmt\Interface_:
+            case $node instanceof Interface_:
                 $newNode = new ReflectedInterface($node, $this->rootScope->enterSubScope());
                 $this->rootScope->addClass($newNode);
                 $this->context->enterClass($newNode);
-                return $newNode;
-            case $node instanceof Property:
-                // TODO for now doesn't support properties declared as list
-                $newNode = new ReflectedProperty($node, $node->props[0], $this->context->getCurrentClass());
                 return $newNode;
             case $node instanceof ClassMethod:
                 $class = $this->context->getCurrentClass();
@@ -60,20 +60,26 @@ class ReflectionVisitor extends NodeVisitorAbstract
                 $this->context->enterMethod($newNode);
                 return $newNode;
         }
+
+        return null;
     }
 
     public function leaveNode(Node $node)
     {
         switch (true) {
-            case $node instanceof Class_:
-                $class = $this->context->getCurrentClass();
-                // Update sub nodes
-                $class->stmts = $node->stmts;
+            case $node instanceof ReflectedType:
                 $this->context->leaveClass();
                 break;
-            case $node instanceof ClassMethod:
+            case $node instanceof ReflectedMethod:
                 $this->context->leaveMethod();
                 break;
+            case $node instanceof Property:
+                // TODO for now doesn't support properties declared as list
+                return new ReflectedProperty($node, $node->props[0], $this->context->getCurrentClass());
+            case $node instanceof Param:
+                return new ReflectedParameter($node, $this->context->getCurrentMethod());
         }
+
+        return null;
     }
 }

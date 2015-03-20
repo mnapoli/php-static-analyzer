@@ -44,11 +44,21 @@ class Scope
      */
     public function getClasses()
     {
-        return array_values($this->classes);
+        $classes = $this->classes;
+
+        if ($this->parentScope) {
+            $classes = array_merge($this->parentScope->getClasses(), $classes);
+        }
+
+        return array_values($classes);
     }
 
     public function hasClass($name)
     {
+        if ($this->parentScope && $this->parentScope->hasClass($name)) {
+            return true;
+        }
+
         return isset($this->classes[$name]);
     }
 
@@ -58,6 +68,10 @@ class Scope
      */
     public function getClass($name)
     {
+        if ($this->parentScope && $this->parentScope->hasClass($name)) {
+            return $this->parentScope->getClass($name);
+        }
+
         if (! $this->hasClass($name)) {
             throw new \LogicException(sprintf('Class %s not found', $name));
         }

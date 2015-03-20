@@ -3,11 +3,11 @@
 namespace PhpAnalyzer;
 
 use PhpAnalyzer\Parser\Context;
+use PhpAnalyzer\Parser\NodeTraverser\NodeTraverser;
 use PhpAnalyzer\Parser\Visitor\ReflectionVisitor;
 use PhpAnalyzer\Parser\Visitor\TypeInferrerVisitor;
 use PhpAnalyzer\Scope\Scope;
 use PhpParser\Lexer;
-use PhpParser\NodeTraverser;
 use PhpParser\NodeVisitor\NameResolver;
 use PhpParser\Parser;
 use Symfony\Component\Finder\Finder;
@@ -27,7 +27,6 @@ class Analyzer
     public function __construct()
     {
         $this->parser = new Parser(new Lexer);
-        $this->traverser = new NodeTraverser;
     }
 
     public function analyze($directory)

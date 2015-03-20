@@ -6,7 +6,6 @@ use PhpAnalyzer\Scope\Scope;
 use PhpAnalyzer\Type\Type;
 use PhpAnalyzer\Type\UnknownType;
 use PhpParser\Node\Expr\MethodCall;
-use PhpParser\Node\Param;
 use PhpParser\Node\Stmt\ClassMethod;
 
 /**
@@ -36,7 +35,7 @@ class ReflectedMethod extends ClassMethod
         $this->class = $class;
         $this->scope = $scope;
 
-        parent::__construct($node->name, $node->subNodes, $node->getAttributes());
+        parent::__construct($node->name, $node->subNodes, $node->attributes);
     }
 
     /**
@@ -65,7 +64,7 @@ class ReflectedMethod extends ClassMethod
     }
 
     /**
-     * @return Param[]
+     * @return ReflectedParameter[]
      */
     public function getParameters()
     {

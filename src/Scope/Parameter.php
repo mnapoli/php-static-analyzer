@@ -2,8 +2,7 @@
 
 namespace PhpAnalyzer\Scope;
 
-use PhpAnalyzer\Type\UnknownType;
-use PhpParser\Node\Param;
+use PhpAnalyzer\Parser\Node\ReflectedParameter;
 
 /**
  * Method or function parameter.
@@ -13,11 +12,11 @@ use PhpParser\Node\Param;
 class Parameter extends Variable
 {
     /**
-     * @var Param
+     * @var ReflectedParameter
      */
     private $node;
 
-    public function __construct(Param $node)
+    public function __construct(ReflectedParameter $node)
     {
         $this->node = $node;
     }
@@ -29,6 +28,6 @@ class Parameter extends Variable
 
     public function getType()
     {
-        return new UnknownType;
+        return $this->node->getNodeType();
     }
 }

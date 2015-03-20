@@ -55,21 +55,17 @@ class TypeInferrerVisitor extends NodeVisitorAbstract
                 return new ReflectedMethodCall($node, $this->context->getCurrentScope());
                 break;
         }
+
+        return null;
     }
 
     public function leaveNode(Node $node)
     {
         switch (true) {
             case $node instanceof ReflectedClass:
-                $class = $this->context->getCurrentClass();
-                // Update sub nodes
-                $class->stmts = $node->stmts;
                 $this->context->leaveClass();
                 break;
             case $node instanceof ReflectedMethod:
-                $method = $this->context->getCurrentMethod();
-                // Update sub nodes
-                $method->stmts = $node->stmts;
                 $this->context->leaveMethod();
                 break;
         }
