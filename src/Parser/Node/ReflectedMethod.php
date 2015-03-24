@@ -15,6 +15,8 @@ use PhpParser\Node\Stmt\ClassMethod;
  */
 class ReflectedMethod extends ClassMethod implements ReflectedCallable
 {
+    use SubNodeTraversing;
+
     /**
      * @var ReflectedType
      */
@@ -35,7 +37,7 @@ class ReflectedMethod extends ClassMethod implements ReflectedCallable
         $this->class = $class;
         $this->scope = $scope;
 
-        parent::__construct($node->name, $node->subNodes, $node->attributes);
+        parent::__construct($node->name, $this->getSubNodes($node), $node->attributes);
     }
 
     /**

@@ -12,6 +12,8 @@ use PhpParser\Node\Stmt\Class_;
  */
 class ReflectedClass extends Class_ implements ReflectedType
 {
+    use SubNodeTraversing;
+
     /**
      * @var Scope
      */
@@ -26,7 +28,7 @@ class ReflectedClass extends Class_ implements ReflectedType
     {
         $this->scope = new Scope($scope);
 
-        parent::__construct($node->name, $node->subNodes, $node->getAttributes());
+        parent::__construct($node->name, $this->getSubNodes($node), $node->getAttributes());
 
         $this->fqn = $node->namespacedName->toString();
     }

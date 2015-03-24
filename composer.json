@@ -16,7 +16,7 @@
     },
     "require": {
         "php": ">=5.5",
-        "nikic/php-parser": "~1.1",
+        "nikic/php-parser": "~1.2",
         "symfony/finder": "~2.6",
         "mnapoli/silly": "~1.0"
     },

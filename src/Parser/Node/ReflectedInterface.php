@@ -12,6 +12,8 @@ use PhpParser\Node\Stmt\Interface_;
  */
 class ReflectedInterface extends Interface_ implements ReflectedType
 {
+    use SubNodeTraversing;
+
     /**
      * @var string
      */
@@ -24,7 +26,7 @@ class ReflectedInterface extends Interface_ implements ReflectedType
 
     public function __construct(Interface_ $node, Scope $scope)
     {
-        parent::__construct($node->name, $node->subNodes, $node->getAttributes());
+        parent::__construct($node->name, $this->getSubNodes($node), $node->getAttributes());
 
         $this->fqn = $node->namespacedName->toString();
         $this->scope = $scope;
@@ -41,9 +43,7 @@ class ReflectedInterface extends Interface_ implements ReflectedType
     public function getMethods()
     {
         // TODO merge with parents
-        return array_filter($this->stmts, function ($stmt) {
-            return $stmt instanceof ReflectedMethod;
-        });
+        return parent::getMethods();
     }
 
     public function hasMethod($name)
