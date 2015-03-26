@@ -4,7 +4,6 @@ namespace PhpAnalyzer\Parser\Visitor;
 
 use PhpAnalyzer\File;
 use PhpAnalyzer\Parser\Context;
-use PhpAnalyzer\Parser\Node\BaseNode;
 use PhpAnalyzer\Parser\Node\ReflectedNode;
 use PhpAnalyzer\Visitor\ProjectVisitor;
 use PhpParser\Node;
