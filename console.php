@@ -23,7 +23,7 @@ $app->command('info [class] [method] [--directories=]*', function ($class, $meth
 
     if ($class) {
         $class = str_replace('.', '\\', $class);
-        $classes = [$class];
+        $classes = [$project->getClass($class)];
     } else {
         $classes = $project->getClasses();
     }

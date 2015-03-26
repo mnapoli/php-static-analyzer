@@ -9,7 +9,7 @@ class Logger
      *
      * @param string $message
      */
-    public static function warning($message)
+    public static function warning($message, \stdClass $infos)
     {
         echo $message;
     }
