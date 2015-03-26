@@ -47,8 +47,12 @@ $app->command('info [class] [method] [--directories=]*', function ($class, $meth
                 $output->writeln(sprintf("\t\t$%s: %s (%s)", $variable->getName(), $variable->getType()->toString(), $class));
             }
 
+            if ($method->getAttribute('deprecated', false)) {
+                $output->writeln("\t\t<info>Deprecated</info>");
+            }
+
             foreach ($method->getCalls() as $call) {
-                $output->writeln(sprintf("\t\tCall in %s at line %d", $call->getFile()->getRelativeFileName(), $call->getLine()));
+                $output->writeln(sprintf("\t\tCalled in %s at line %d", $call->getFile()->getRelativeFileName(), $call->getLine()));
             }
         }
 

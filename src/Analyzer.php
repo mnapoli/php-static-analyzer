@@ -3,6 +3,7 @@
 namespace PhpAnalyzer;
 
 use PhpAnalyzer\Parser\Visitor\CallLinkVisitor;
+use PhpAnalyzer\Parser\Visitor\DeprecationVisitor;
 use PhpAnalyzer\Parser\Visitor\LinkToFileVisitor;
 use PhpAnalyzer\Parser\Visitor\ReflectionVisitor;
 use PhpAnalyzer\Parser\Visitor\TypeInferrerVisitor;
@@ -64,6 +65,9 @@ class Analyzer
 
         // Link nodes to their file
         $traverser->traverse($project, [new LinkToFileVisitor]);
+
+        // Detect deprecated code
+        $traverser->traverse($project, [new DeprecationVisitor]);
 
         return $project;
     }
