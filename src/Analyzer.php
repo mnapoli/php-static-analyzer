@@ -60,14 +60,14 @@ class Analyzer
         // Type inference
         $traverser->traverse($project, [new TypeInferrerVisitor]);
 
-        // Link method calls to called methods
-        $traverser->traverse($project, [new CallLinkVisitor]);
-
-        // Link nodes to their file
-        $traverser->traverse($project, [new LinkToFileVisitor]);
-
-        // Detect deprecated code
-        $traverser->traverse($project, [new DeprecationVisitor]);
+        $traverser->traverse($project, [
+            // Link method calls to called methods
+            new CallLinkVisitor,
+            // Link nodes to their file
+            new LinkToFileVisitor,
+            // Detect deprecated code
+            new DeprecationVisitor,
+        ]);
 
         return $project;
     }
