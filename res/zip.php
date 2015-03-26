@@ -70,28 +70,28 @@ class ZipArchive  {
 	 * @link http://www.php.net/manual/en/class.ziparchive.php#ziparchive.props.statussys
 	 * @var int
 	 */
-	public $statusSys
+	public $statusSys;
 
 	/**
 	 * Number of files in archive
 	 * @link http://www.php.net/manual/en/class.ziparchive.php#ziparchive.props.numfiles
 	 * @var int
 	 */
-	public $numFiles
+	public $numFiles;
 
 	/**
 	 * File name in the file system
 	 * @link http://www.php.net/manual/en/class.ziparchive.php#ziparchive.props.filename
 	 * @var string
 	 */
-	public $filename
+	public $filename;
 
 	/**
 	 * Comment for the archive
 	 * @link http://www.php.net/manual/en/class.ziparchive.php#ziparchive.props.comment
 	 * @var string
 	 */
-	public $comment
+	public $comment;
 
 	/**
 	 * (PHP 5 &gt;= 5.2.0, PECL zip &gt;= 1.1.0)<br/>
