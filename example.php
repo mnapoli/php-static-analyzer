@@ -6,11 +6,11 @@ require_once 'vendor/autoload.php';
 
 $analyzer = new Analyzer;
 
-$scope = $analyzer->analyze(__DIR__ . '/src');
+$project = $analyzer->analyze(__DIR__ . '/src');
 
-printf("%d classes found\n", count($scope->getClasses()));
+printf("%d classes found\n", count($project->getClasses()));
 
-foreach ($scope->getClasses() as $class) {
+foreach ($project->getClasses() as $class) {
     printf("%s\n", $class->getFQN());
 
     foreach ($class->getProperties() as $property) {

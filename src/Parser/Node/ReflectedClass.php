@@ -15,19 +15,12 @@ class ReflectedClass extends Class_ implements ReflectedType
     use SubNodeTraversing;
 
     /**
-     * @var Scope
-     */
-    private $scope;
-
-    /**
      * @var string
      */
     private $fqn;
 
-    public function __construct(Class_ $node, Scope $scope)
+    public function __construct(Class_ $node)
     {
-        $this->scope = new Scope($scope);
-
         parent::__construct($node->name, $this->getSubNodes($node), $node->getAttributes());
 
         $this->fqn = $node->namespacedName->toString();
@@ -104,14 +97,6 @@ class ReflectedClass extends Class_ implements ReflectedType
             }
         }
         throw new \LogicException(sprintf('Method %s::%s() not found', $this->getFQN(), $name));
-    }
-
-    /**
-     * @return Scope
-     */
-    public function getScope()
-    {
-        return $this->scope;
     }
 
     // Methods from the PHP reflection

@@ -2,13 +2,10 @@
 
 namespace PhpAnalyzer;
 
-use PhpAnalyzer\Parser\Context;
 use PhpAnalyzer\Parser\Visitor\CallLinkVisitor;
 use PhpAnalyzer\Parser\Visitor\ReflectionVisitor;
 use PhpAnalyzer\Parser\Visitor\TypeInferrerVisitor;
-use PhpAnalyzer\Scope\Scope;
 use PhpParser\Lexer;
-use PhpParser\NodeTraverser;
 use PhpParser\NodeVisitor\NameResolver;
 use PhpParser\Parser;
 use Symfony\Component\Finder\Finder;
@@ -33,46 +30,37 @@ class Analyzer
 
     public function analyze($directories)
     {
+        $project = new Project;
+
         $finder = new Finder();
         $finder->files()->in($directories)
             ->name('*.php');
 
-        $nodes = [];
-        foreach ($finder as $file) {
-            /** @var SplFileInfo $file */
+        foreach ($finder as $fileInfo) {
+            /** @var SplFileInfo $fileInfo */
             try {
-                // TODO do not merge
-                $nodes = array_merge(
-                    $this->parser->parse(file_get_contents($file)),
-                    $nodes
-                );
+                $nodes = $this->parser->parse(file_get_contents($fileInfo));
             } catch (\Exception $e) {
-                throw new \RuntimeException(sprintf('Error while parsing %s: %s', $file->getRelativePathname(), $e->getMessage()), 0, $e);
+                throw new \RuntimeException(sprintf(
+                    'Error while parsing %s: %s', $fileInfo->getRelativePathname(), $e->getMessage()
+                ), 0, $e);
             }
+            $project->addFile(new File($project, $fileInfo, $nodes));
         }
 
-        $rootScope = new Scope;
-        $context = new Context($rootScope);
+        $traverser = new ProjectTraverser;
 
-        $traverser = new NodeTraverser(false);
-        $traverser->addVisitor(new NameResolver);
-        $nodes = $traverser->traverse($nodes);
+        $traverser->traverse($project, [new NameResolver]);
 
         // Create reflection objects
-        $traverser = new NodeTraverser(false);
-        $traverser->addVisitor(new ReflectionVisitor($rootScope, $context));
-        $nodes = $traverser->traverse($nodes);
+        $traverser->traverse($project, [new ReflectionVisitor]);
 
         // Type inference
-        $traverser = new NodeTraverser(false);
-        $traverser->addVisitor(new TypeInferrerVisitor($context));
-        $nodes = $traverser->traverse($nodes);
+        $traverser->traverse($project, [new TypeInferrerVisitor]);
 
         // Link method calls to called methods
-        $traverser = new NodeTraverser(false);
-        $traverser->addVisitor(new CallLinkVisitor);
-        $traverser->traverse($nodes);
+        $traverser->traverse($project, [new CallLinkVisitor]);
 
-        return $rootScope;
+        return $project;
     }
 }

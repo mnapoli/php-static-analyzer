@@ -2,8 +2,6 @@
 
 namespace PhpAnalyzer\Parser\Node;
 
-use PhpAnalyzer\Scope\Scope;
-
 /**
  * Interface, class or trait.
  *
@@ -32,9 +30,4 @@ interface ReflectedType
      * @return null|ReflectedMethod
      */
     public function getMethod($name);
-
-    /**
-     * @return Scope
-     */
-    public function getScope();
 }

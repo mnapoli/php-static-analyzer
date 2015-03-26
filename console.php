@@ -19,13 +19,13 @@ $app->command('info [class] [method] [--directories=]*', function ($class, $meth
     }
 
     $analyzer = new Analyzer;
-    $scope = $analyzer->analyze($directories);
+    $project = $analyzer->analyze($directories);
 
     if ($class) {
         $class = str_replace('.', '\\', $class);
         $classes = [$class];
     } else {
-        $classes = $scope->getClasses();
+        $classes = $project->getClasses();
     }
     $methodName = $method;
 

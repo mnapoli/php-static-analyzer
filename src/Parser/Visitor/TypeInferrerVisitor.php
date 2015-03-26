@@ -2,6 +2,7 @@
 
 namespace PhpAnalyzer\Parser\Visitor;
 
+use PhpAnalyzer\File;
 use PhpAnalyzer\Parser\Context;
 use PhpAnalyzer\Parser\Node\ReflectedClass;
 use PhpAnalyzer\Parser\Node\ReflectedInterface;
@@ -11,6 +12,7 @@ use PhpAnalyzer\Parser\Node\ReflectedStaticCall;
 use PhpAnalyzer\Parser\Node\ReflectedVariable;
 use PhpAnalyzer\Scope\LocalVariable;
 use PhpAnalyzer\Scope\Parameter;
+use PhpAnalyzer\Visitor\ProjectVisitor;
 use PhpParser\Node\Expr\StaticCall;
 use PhpParser\NodeVisitorAbstract;
 use PhpAnalyzer\Scope\This;
@@ -23,14 +25,18 @@ use PhpParser\Node\Expr\Variable;
  *
  * @author Matthieu Napoli <matthieu@mnapoli.fr>
  */
-class TypeInferrerVisitor extends NodeVisitorAbstract
+class TypeInferrerVisitor extends NodeVisitorAbstract implements ProjectVisitor
 {
     /**
      * @var Context
      */
     private $context;
 
-    public function __construct(Context $context)
+    public function setFile(File $file)
+    {
+    }
+
+    public function setContext(Context $context)
     {
         $this->context = $context;
     }
@@ -40,7 +46,6 @@ class TypeInferrerVisitor extends NodeVisitorAbstract
         switch (true) {
             case $node instanceof ReflectedClass:
                 $this->context->enterClass($node);
-                $this->processClass($node);
                 break;
             case $node instanceof ReflectedInterface:
                 $this->context->enterClass($node);
@@ -80,14 +85,12 @@ class TypeInferrerVisitor extends NodeVisitorAbstract
         return null;
     }
 
-    private function processClass(ReflectedClass $node)
-    {
-        $node->getScope()->addVariable(new This($node));
-    }
-
     private function processMethod(ReflectedMethod $node)
     {
         $scope = $node->getScope();
+
+        $scope->addVariable(new This($node->getDeclaringClass()));
+
         foreach ($node->getParameters() as $parameter) {
             $scope->addVariable(new Parameter($parameter));
         }

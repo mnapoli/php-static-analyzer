@@ -36,18 +36,17 @@ class Context
     public function __construct(Scope $rootScope)
     {
         $this->rootScope = $rootScope;
+        $this->currentScope = $rootScope;
     }
 
     public function enterClass(ReflectedType $class)
     {
         $this->currentClass = $class;
-        $this->currentScope = $class->getScope();
     }
 
     public function leaveClass()
     {
         $this->currentClass = null;
-        $this->currentScope = $this->rootScope;
     }
 
     /**
@@ -67,7 +66,7 @@ class Context
     public function leaveMethod()
     {
         $this->currentMethod = null;
-        $this->currentScope = $this->currentClass->getScope();
+        $this->currentScope = $this->rootScope;
     }
 
     /**
@@ -87,7 +86,7 @@ class Context
     }
 
     /**
-     * @return \PhpAnalyzer\Scope\Scope
+     * @return Scope
      */
     public function getRootScope()
     {

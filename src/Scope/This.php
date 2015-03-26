@@ -2,7 +2,7 @@
 
 namespace PhpAnalyzer\Scope;
 
-use PhpAnalyzer\Parser\Node\ReflectedClass;
+use PhpAnalyzer\Parser\Node\ReflectedType;
 use PhpAnalyzer\Type\ClassType;
 
 /**
@@ -13,11 +13,11 @@ use PhpAnalyzer\Type\ClassType;
 class This extends Variable
 {
     /**
-     * @var ReflectedClass
+     * @var ReflectedType
      */
     private $class;
 
-    public function __construct(ReflectedClass $class)
+    public function __construct(ReflectedType $class)
     {
         $this->class = $class;
     }

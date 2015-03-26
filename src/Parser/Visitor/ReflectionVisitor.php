@@ -2,6 +2,7 @@
 
 namespace PhpAnalyzer\Parser\Visitor;
 
+use PhpAnalyzer\File;
 use PhpAnalyzer\Parser\Context;
 use PhpAnalyzer\Parser\Node\ReflectedClass;
 use PhpAnalyzer\Parser\Node\ReflectedInterface;
@@ -9,7 +10,9 @@ use PhpAnalyzer\Parser\Node\ReflectedMethod;
 use PhpAnalyzer\Parser\Node\ReflectedParameter;
 use PhpAnalyzer\Parser\Node\ReflectedProperty;
 use PhpAnalyzer\Parser\Node\ReflectedType;
+use PhpAnalyzer\Scope\FunctionScope;
 use PhpAnalyzer\Scope\Scope;
+use PhpAnalyzer\Visitor\ProjectVisitor;
 use PhpParser\Node;
 use PhpParser\Node\Param;
 use PhpParser\Node\Stmt\Class_;
@@ -23,7 +26,7 @@ use PhpParser\NodeVisitorAbstract;
  *
  * @author Matthieu Napoli <matthieu@mnapoli.fr>
  */
-class ReflectionVisitor extends NodeVisitorAbstract
+class ReflectionVisitor extends NodeVisitorAbstract implements ProjectVisitor
 {
     /**
      * @var Scope
@@ -35,9 +38,13 @@ class ReflectionVisitor extends NodeVisitorAbstract
      */
     private $context;
 
-    public function __construct(Scope $rootScope, Context $context)
+    public function setFile(File $file)
     {
-        $this->rootScope = $rootScope;
+        $this->rootScope = $file;
+    }
+
+    public function setContext(Context $context)
+    {
         $this->context = $context;
     }
 
@@ -45,18 +52,19 @@ class ReflectionVisitor extends NodeVisitorAbstract
     {
         switch (true) {
             case $node instanceof Class_:
-                $newNode = new ReflectedClass($node, $this->rootScope->enterSubScope());
+                $newNode = new ReflectedClass($node);
                 $this->rootScope->addClass($newNode);
                 $this->context->enterClass($newNode);
                 return $newNode;
             case $node instanceof Interface_:
-                $newNode = new ReflectedInterface($node, $this->rootScope->enterSubScope());
+                $newNode = new ReflectedInterface($node);
                 $this->rootScope->addClass($newNode);
                 $this->context->enterClass($newNode);
                 return $newNode;
             case $node instanceof ClassMethod:
                 $class = $this->context->getCurrentClass();
-                $newNode = new ReflectedMethod($node, $class, $class->getScope()->enterSubScope());
+                $methodScope = new FunctionScope($this->rootScope);
+                $newNode = new ReflectedMethod($node, $class, $methodScope);
                 $this->context->enterMethod($newNode);
                 return $newNode;
         }
