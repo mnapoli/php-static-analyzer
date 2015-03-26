@@ -59,6 +59,14 @@ class File implements Scope
     }
 
     /**
+     * @return string
+     */
+    public function getRelativeFileName()
+    {
+        return $this->fileInfo->getRelativePathname();
+    }
+
+    /**
      * {@inheritdoc}
      */
     public function addClass(ReflectedType $class)

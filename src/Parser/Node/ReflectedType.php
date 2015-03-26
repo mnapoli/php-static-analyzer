@@ -7,7 +7,7 @@ namespace PhpAnalyzer\Parser\Node;
  *
  * @author Matthieu Napoli <matthieu@mnapoli.fr>
  */
-interface ReflectedType
+interface ReflectedType extends ReflectedNode
 {
     /**
      * @return string

@@ -48,7 +48,7 @@ $app->command('info [class] [method] [--directories=]*', function ($class, $meth
             }
 
             foreach ($method->getCalls() as $call) {
-                $output->writeln(sprintf("\t\tCall at line %d", $call->getLine()));
+                $output->writeln(sprintf("\t\tCall in %s at line %d", $call->getFile()->getRelativeFileName(), $call->getLine()));
             }
         }
 

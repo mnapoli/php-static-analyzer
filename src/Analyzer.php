@@ -3,6 +3,7 @@
 namespace PhpAnalyzer;
 
 use PhpAnalyzer\Parser\Visitor\CallLinkVisitor;
+use PhpAnalyzer\Parser\Visitor\LinkToFileVisitor;
 use PhpAnalyzer\Parser\Visitor\ReflectionVisitor;
 use PhpAnalyzer\Parser\Visitor\TypeInferrerVisitor;
 use PhpParser\Lexer;
@@ -60,6 +61,9 @@ class Analyzer
 
         // Link method calls to called methods
         $traverser->traverse($project, [new CallLinkVisitor]);
+
+        // Link nodes to their file
+        $traverser->traverse($project, [new LinkToFileVisitor]);
 
         return $project;
     }

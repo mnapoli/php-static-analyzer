@@ -13,6 +13,8 @@ use PhpParser\Node\Param;
  */
 class ReflectedParameter extends Param implements TypedNode
 {
+    use BaseNode;
+
     /**
      * @var ReflectedMethod
      */

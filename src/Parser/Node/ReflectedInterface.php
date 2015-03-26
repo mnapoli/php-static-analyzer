@@ -11,7 +11,7 @@ use PhpParser\Node\Stmt\Interface_;
  */
 class ReflectedInterface extends Interface_ implements ReflectedType
 {
-    use SubNodeTraversing;
+    use BaseNode;
 
     /**
      * @var string

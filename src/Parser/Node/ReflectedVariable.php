@@ -13,6 +13,8 @@ use PhpParser\Node\Expr\Variable;
  */
 class ReflectedVariable extends Variable implements TypedNode
 {
+    use BaseNode;
+
     /**
      * @var Scope
      */

@@ -12,7 +12,7 @@ use PhpParser\Node\Stmt\Class_;
  */
 class ReflectedClass extends Class_ implements ReflectedType
 {
-    use SubNodeTraversing;
+    use BaseNode;
 
     /**
      * @var string

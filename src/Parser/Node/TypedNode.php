@@ -9,7 +9,7 @@ use PhpAnalyzer\Type\Type;
  *
  * @author Matthieu Napoli <matthieu@mnapoli.fr>
  */
-interface TypedNode
+interface TypedNode extends ReflectedNode
 {
     /**
      * @return Type

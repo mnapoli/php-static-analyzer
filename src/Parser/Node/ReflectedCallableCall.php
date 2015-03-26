@@ -7,7 +7,7 @@ namespace PhpAnalyzer\Parser\Node;
  *
  * @author Matthieu Napoli <matthieu@mnapoli.fr>
  */
-interface ReflectedCallableCall
+interface ReflectedCallableCall extends ReflectedNode
 {
     /**
      * @return ReflectedCallable

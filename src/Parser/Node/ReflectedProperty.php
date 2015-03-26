@@ -11,8 +11,10 @@ use PhpParser\Node\Stmt\PropertyProperty;
  *
  * @author Matthieu Napoli <matthieu@mnapoli.fr>
  */
-class ReflectedProperty extends Stmt
+class ReflectedProperty extends Stmt implements ReflectedNode
 {
+    use BaseNode;
+
     /**
      * @var Property
      */

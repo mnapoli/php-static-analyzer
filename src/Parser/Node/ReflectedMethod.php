@@ -15,7 +15,7 @@ use PhpParser\Node\Stmt\ClassMethod;
  */
 class ReflectedMethod extends ClassMethod implements ReflectedCallable
 {
-    use SubNodeTraversing;
+    use BaseNode;
 
     /**
      * @var ReflectedType
@@ -28,7 +28,7 @@ class ReflectedMethod extends ClassMethod implements ReflectedCallable
     private $scope;
 
     /**
-     * @var MethodCall
+     * @var ReflectedCallableCall
      */
     private $calls = [];
 
@@ -82,6 +82,9 @@ class ReflectedMethod extends ClassMethod implements ReflectedCallable
         $this->calls[] = $call;
     }
 
+    /**
+     * @return ReflectedCallableCall[]
+     */
     public function getCalls()
     {
         return $this->calls;

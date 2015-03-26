@@ -14,6 +14,8 @@ use PhpParser\Node\Name;
  */
 class ReflectedStaticCall extends StaticCall implements TypedNode, ReflectedCallableCall
 {
+    use BaseNode;
+
     /**
      * @var Scope
      */

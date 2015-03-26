@@ -14,6 +14,8 @@ use PhpParser\Node\Expr\MethodCall;
  */
 class ReflectedMethodCall extends MethodCall implements TypedNode, ReflectedCallableCall
 {
+    use BaseNode;
+
     /**
      * @var Scope
      */
