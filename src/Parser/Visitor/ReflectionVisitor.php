@@ -63,6 +63,10 @@ class ReflectionVisitor extends NodeVisitorAbstract implements ProjectVisitor
                 return $newNode;
             case $node instanceof ClassMethod:
                 $class = $this->context->getCurrentClass();
+                if (!$class) {
+                    // TODO support traits
+                    return null;
+                }
                 $methodScope = new FunctionScope($this->rootScope);
                 $newNode = new ReflectedMethod($node, $class, $methodScope);
                 $this->context->enterMethod($newNode);
@@ -82,8 +86,13 @@ class ReflectionVisitor extends NodeVisitorAbstract implements ProjectVisitor
                 $this->context->leaveMethod();
                 break;
             case $node instanceof Property:
+                $class = $this->context->getCurrentClass();
+                if (!$class) {
+                    // TODO support traits
+                    return null;
+                }
                 // TODO for now doesn't support properties declared as list
-                return new ReflectedProperty($node, $node->props[0], $this->context->getCurrentClass());
+                return new ReflectedProperty($node, $node->props[0], $class);
             case $node instanceof Param:
                 if (!$this->context->getCurrentMethod()) {
                     // TODO functions
