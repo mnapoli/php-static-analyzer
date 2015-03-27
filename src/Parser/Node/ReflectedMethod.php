@@ -2,9 +2,11 @@
 
 namespace PhpAnalyzer\Parser\Node;
 
+use PhpAnalyzer\Parser\Node\DocBlock\FunctionDocBlock;
 use PhpAnalyzer\Scope\Scope;
 use PhpAnalyzer\Type\Type;
 use PhpAnalyzer\Type\UnknownType;
+use phpDocumentor\Reflection\DocBlock;
 use PhpParser\Node\Expr\MethodCall;
 use PhpParser\Node\Stmt\ClassMethod;
 
@@ -32,6 +34,11 @@ class ReflectedMethod extends ClassMethod implements ReflectedCallable
      */
     private $calls = [];
 
+    /**
+     * @var FunctionDocBlock
+     */
+    private $docBlock;
+
     public function __construct(ClassMethod $node, ReflectedType $class, Scope $scope)
     {
         $this->class = $class;
@@ -53,8 +60,7 @@ class ReflectedMethod extends ClassMethod implements ReflectedCallable
      */
     public function getReturnType()
     {
-        // TODO
-        return new UnknownType;
+        return $this->getDocBlock()->getReturnType();
     }
 
     /**
@@ -112,5 +118,20 @@ class ReflectedMethod extends ClassMethod implements ReflectedCallable
     public function isDestructor()
     {
         return $this->name === '__destruct';
+    }
+
+    /**
+     * @return FunctionDocBlock
+     */
+    protected function getDocBlock()
+    {
+        if (! $this->docBlock) {
+            $docComment = $this->getDocComment();
+            $docCommentString = $docComment ? $docComment->getText() : '';
+
+            $this->docBlock = new FunctionDocBlock(new DocBlock($docCommentString), $this->getScope());
+        }
+
+        return $this->docBlock;
     }
 }

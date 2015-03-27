@@ -47,6 +47,8 @@ $app->command('info [class] [method] [--directories=]*', function ($class, $meth
                 $output->writeln(sprintf("\t\t$%s: %s (%s)", $variable->getName(), $variable->getType()->toString(), $class));
             }
 
+            $output->writeln(sprintf("\t\t@return: %s", $method->getReturnType()->toString()));
+
             if ($method->getAttribute('deprecated', false)) {
                 $output->writeln("\t\t<info>Deprecated</info>");
             }

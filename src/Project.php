@@ -59,6 +59,8 @@ class Project implements Scope
      */
     public function hasClass($name)
     {
+        $name = $this->normalizeClassName($name);
+
         return isset($this->classes[$name]);
     }
 
@@ -67,6 +69,8 @@ class Project implements Scope
      */
     public function getClass($name)
     {
+        $name = $this->normalizeClassName($name);
+
         if (! $this->hasClass($name)) {
             throw new \LogicException(sprintf('Class %s not found', $name));
         }
@@ -120,5 +124,14 @@ class Project implements Scope
     public function getVariables()
     {
         return $this->variables;
+    }
+
+    /**
+     * @param string $name
+     * @return string
+     */
+    private function normalizeClassName($name)
+    {
+        return trim($name, '\\');
     }
 }
