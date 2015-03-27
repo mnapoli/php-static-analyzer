@@ -5,9 +5,7 @@ namespace PhpAnalyzer\Parser\Node;
 use PhpAnalyzer\Parser\Node\DocBlock\FunctionDocBlock;
 use PhpAnalyzer\Scope\Scope;
 use PhpAnalyzer\Type\Type;
-use PhpAnalyzer\Type\UnknownType;
 use phpDocumentor\Reflection\DocBlock;
-use PhpParser\Node\Expr\MethodCall;
 use PhpParser\Node\Stmt\ClassMethod;
 
 /**
