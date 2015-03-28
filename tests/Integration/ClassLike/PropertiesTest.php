@@ -42,7 +42,7 @@ class PropertiesTest extends \PHPUnit_Framework_TestCase
     /**
      * @test
      */
-    public function should_include_parent_properties_in_property_list()
+    public function properties_should_include_parent_properties()
     {
         $class = $this->analyzeClass(SubClass::class);
 
@@ -54,6 +54,22 @@ class PropertiesTest extends \PHPUnit_Framework_TestCase
         $this->assertProperty($properties, 'public2');
         $this->assertProperty($properties, 'protected2');
         $this->assertProperty($properties, 'private2');
+    }
+
+    /**
+     * @test
+     */
+    public function properties_should_include_trait_properties()
+    {
+        $this->markTestIncomplete('TODO');
+    }
+
+    /**
+     * @test
+     */
+    public function properties_should_override_parent_properties()
+    {
+        $this->markTestIncomplete('TODO');
     }
 
     public function visibilityProvider()
