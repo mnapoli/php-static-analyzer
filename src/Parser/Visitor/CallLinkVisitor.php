@@ -18,7 +18,9 @@ class CallLinkVisitor extends NodeVisitorAbstract
         switch (true) {
             case $node instanceof ReflectedCallableCall:
                 $callable = $node->getTargetCallable();
-                $callable->addCall($node);
+                if ($callable) {
+                    $callable->addCall($node);
+                }
                 break;
         }
     }
