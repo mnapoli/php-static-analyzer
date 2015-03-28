@@ -5,6 +5,7 @@ namespace PhpAnalyzer\Test\Integration\ClassLike;
 use PhpAnalyzer\Analyzer;
 use PhpAnalyzer\Parser\Node\ReflectedProperty;
 use PhpAnalyzer\Test\Integration\ClassLike\Properties\BasicClass;
+use PhpAnalyzer\Test\Integration\ClassLike\Properties\SubClass;
 use PhpParser\Node\Stmt\Class_;
 
 class PropertiesTest extends \PHPUnit_Framework_TestCase
@@ -20,6 +21,8 @@ class PropertiesTest extends \PHPUnit_Framework_TestCase
 
         $this->assertCount(3, $properties);
         $this->assertProperty($properties, 'public');
+        $this->assertProperty($properties, 'protected');
+        $this->assertProperty($properties, 'private');
     }
 
     /**
@@ -34,6 +37,23 @@ class PropertiesTest extends \PHPUnit_Framework_TestCase
 
         $this->assertCount(1, $properties);
         $this->assertProperty($properties, $propertyName);
+    }
+
+    /**
+     * @test
+     */
+    public function should_include_parent_properties_in_property_list()
+    {
+        $class = $this->analyzeClass(SubClass::class);
+
+        $properties = $class->getProperties();
+
+        $this->assertCount(5, $properties);
+        $this->assertProperty($properties, 'public');
+        $this->assertProperty($properties, 'protected');
+        $this->assertProperty($properties, 'public2');
+        $this->assertProperty($properties, 'protected2');
+        $this->assertProperty($properties, 'private2');
     }
 
     public function visibilityProvider()

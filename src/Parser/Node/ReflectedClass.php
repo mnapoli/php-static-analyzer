@@ -49,7 +49,7 @@ class ReflectedClass extends Class_ implements ReflectedType
             return null;
         }
 
-        return $this->scope->getClass($this->extends->namespacedName->toString());
+        return $this->scope->getClass($this->extends->toString());
     }
 
     /**
