@@ -43,7 +43,6 @@ class FunctionDocBlock
 
         try {
             // TODO internal types (string, ...)
-            var_dump($tag->getContent());
             $class = $this->scope->getClass($tag->getContent());
         } catch (\LogicException $e) {
             return new UnknownType;
