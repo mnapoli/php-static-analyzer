@@ -72,6 +72,14 @@ class PropertiesTest extends \PHPUnit_Framework_TestCase
         $this->markTestIncomplete('TODO');
     }
 
+    /**
+     * @test
+     */
+    public function properties_should_override_trait_properties()
+    {
+        $this->markTestIncomplete('TODO');
+    }
+
     public function visibilityProvider()
     {
         return [
