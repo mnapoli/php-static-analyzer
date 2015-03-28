@@ -15,15 +15,21 @@ class ReflectedClass extends Class_ implements ReflectedType
     use BaseNode;
 
     /**
+     * @var Scope
+     */
+    private $scope;
+
+    /**
      * @var string
      */
     private $fqn;
 
-    public function __construct(Class_ $node)
+    public function __construct(Class_ $node, Scope $scope)
     {
-        parent::__construct($node->name, $this->getSubNodes($node), $node->getAttributes());
-
+        $this->scope = $scope;
         $this->fqn = $node->namespacedName->toString();
+
+        parent::__construct($node->name, $this->getSubNodes($node), $node->getAttributes());
     }
 
     /**
@@ -35,14 +41,43 @@ class ReflectedClass extends Class_ implements ReflectedType
     }
 
     /**
+     * @return ReflectedClass|null
+     */
+    public function getParentClass()
+    {
+        if (! $this->extends) {
+            return null;
+        }
+
+        return $this->scope->getClass($this->extends->namespacedName->toString());
+    }
+
+    /**
+     * @param int $visibility
      * @return ReflectedProperty[]
      */
-    public function getProperties()
+    public function getProperties($visibility = null)
     {
-        // TODO merge with parent & traits
-        return array_filter($this->stmts, function ($stmt) {
-            return $stmt instanceof ReflectedProperty;
-        });
+        // TODO merge with traits
+        $properties = [];
+        foreach ($this->stmts as $stmt) {
+            if (! $stmt instanceof ReflectedProperty) {
+                continue;
+            }
+            if ($visibility === null || ($visibility & $stmt->getVisibility())) {
+                $properties[$stmt->getName()] = $stmt;
+            }
+        }
+
+        $parentClass = $this->getParentClass();
+        if (! $parentClass) {
+            return $properties;
+        }
+
+        return array_merge(
+            $parentClass->getProperties(self::MODIFIER_PROTECTED | self::MODIFIER_PUBLIC),
+            $properties
+        );
     }
 
     /**

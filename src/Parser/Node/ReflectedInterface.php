@@ -2,6 +2,7 @@
 
 namespace PhpAnalyzer\Parser\Node;
 
+use PhpAnalyzer\Scope\Scope;
 use PhpParser\Node\Stmt\Interface_;
 
 /**
@@ -14,15 +15,21 @@ class ReflectedInterface extends Interface_ implements ReflectedType
     use BaseNode;
 
     /**
+     * @var Scope
+     */
+    private $scope;
+
+    /**
      * @var string
      */
     private $fqn;
 
-    public function __construct(Interface_ $node)
+    public function __construct(Interface_ $node, Scope $scope)
     {
-        parent::__construct($node->name, $this->getSubNodes($node), $node->getAttributes());
-
         $this->fqn = $node->namespacedName->toString();
+        $this->scope = $scope;
+
+        parent::__construct($node->name, $this->getSubNodes($node), $node->getAttributes());
     }
 
     /**
@@ -57,5 +64,15 @@ class ReflectedInterface extends Interface_ implements ReflectedType
             }
         }
         throw new \LogicException(sprintf('Method %s::%s() not found', $this->getFQN(), $name));
+    }
+
+    public function getProperties()
+    {
+        return [];
+    }
+
+    public function getProperty($name)
+    {
+        throw new \LogicException('No properties defined in an interface');
     }
 }

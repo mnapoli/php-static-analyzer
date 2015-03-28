@@ -27,7 +27,18 @@ interface ReflectedType extends ReflectedNode
 
     /**
      * @param string $name
-     * @return null|ReflectedMethod
+     * @return ReflectedMethod|null
      */
     public function getMethod($name);
+
+    /**
+     * @return ReflectedProperty[]
+     */
+    public function getProperties();
+
+    /**
+     * @param string $name
+     * @return ReflectedProperty|null
+     */
+    public function getProperty($name);
 }

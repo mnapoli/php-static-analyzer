@@ -55,19 +55,31 @@ class ReflectedProperty extends Stmt implements ReflectedNode
         return $this->property->name;
     }
 
-    public function isPublic() {
+    /**
+     * @return int
+     */
+    public function getVisibility()
+    {
+        return $this->propertyBlock->type;
+    }
+
+    public function isPublic()
+    {
         return $this->propertyBlock->isPublic();
     }
 
-    public function isProtected() {
+    public function isProtected()
+    {
         return $this->propertyBlock->isProtected();
     }
 
-    public function isPrivate() {
+    public function isPrivate()
+    {
         return $this->propertyBlock->isPrivate();
     }
 
-    public function isStatic() {
+    public function isStatic()
+    {
         return $this->propertyBlock->isStatic();
     }
 }

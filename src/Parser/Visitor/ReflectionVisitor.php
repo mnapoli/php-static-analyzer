@@ -52,12 +52,12 @@ class ReflectionVisitor extends NodeVisitorAbstract implements ProjectVisitor
     {
         switch (true) {
             case $node instanceof Class_:
-                $newNode = new ReflectedClass($node);
+                $newNode = new ReflectedClass($node, $this->context->getCurrentScope());
                 $this->rootScope->addClass($newNode);
                 $this->context->enterClass($newNode);
                 return $newNode;
             case $node instanceof Interface_:
-                $newNode = new ReflectedInterface($node);
+                $newNode = new ReflectedInterface($node, $this->context->getCurrentScope());
                 $this->rootScope->addClass($newNode);
                 $this->context->enterClass($newNode);
                 return $newNode;

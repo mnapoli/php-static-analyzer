@@ -10,7 +10,7 @@ namespace PhpAnalyzer\Parser\Node;
 interface ReflectedCallableCall extends ReflectedNode
 {
     /**
-     * @return ReflectedCallable
+     * @return ReflectedCallable|null
      */
     public function getTargetCallable();
 }
