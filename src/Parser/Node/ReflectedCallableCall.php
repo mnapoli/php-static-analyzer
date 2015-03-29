@@ -13,4 +13,9 @@ interface ReflectedCallableCall extends ReflectedNode
      * @return ReflectedCallable|null
      */
     public function getTargetCallable();
+
+    /**
+     * @return int
+     */
+    public function getLine();
 }
