@@ -27,6 +27,11 @@ class ReflectedParameter extends Param implements TypedNode
         parent::__construct($node->name, $node->default, $node->type, $node->byRef, $node->variadic, $node->attributes);
     }
 
+    public function getName()
+    {
+        return $this->name;
+    }
+
     public function getNodeType()
     {
         $typeHint = $this->type;
