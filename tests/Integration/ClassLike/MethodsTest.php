@@ -5,6 +5,7 @@ namespace PhpAnalyzer\Test\Integration\ClassLike;
 use PhpAnalyzer\Analyzer;
 use PhpAnalyzer\Parser\Node\ReflectedMethod;
 use PhpAnalyzer\Test\Integration\ClassLike\Methods\BasicClass;
+use PhpAnalyzer\Test\Integration\ClassLike\Methods\SubClass;
 use PhpParser\Node\Stmt\Class_;
 
 class MethodsTest extends \PHPUnit_Framework_TestCase
@@ -52,7 +53,16 @@ class MethodsTest extends \PHPUnit_Framework_TestCase
      */
     public function methods_should_include_parent_methods()
     {
-        $this->markTestIncomplete('TODO');
+        $class = $this->analyzeClass(SubClass::class);
+
+        $methods = $class->getMethods();
+
+        $this->assertCount(5, $methods);
+        $this->assertMethod($methods, 'publicMethod');
+        $this->assertMethod($methods, 'protectedMethod');
+        $this->assertMethod($methods, 'publicMethod2');
+        $this->assertMethod($methods, 'protectedMethod2');
+        $this->assertMethod($methods, 'privateMethod2');
     }
 
     /**

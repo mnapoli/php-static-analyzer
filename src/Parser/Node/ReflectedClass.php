@@ -100,7 +100,7 @@ class ReflectedClass extends Class_ implements ReflectedType
      */
     public function getMethods($visibility = null)
     {
-        // TODO merge with parent & traits
+        // TODO merge with traits
         $methods = [];
         foreach ($this->stmts as $stmt) {
             if (! $stmt instanceof ReflectedMethod) {
@@ -110,7 +110,16 @@ class ReflectedClass extends Class_ implements ReflectedType
                 $methods[$stmt->getName()] = $stmt;
             }
         }
-        return $methods;
+
+        $parentClass = $this->getParentClass();
+        if (! $parentClass) {
+            return $methods;
+        }
+
+        return array_merge(
+            $parentClass->getMethods(self::MODIFIER_PROTECTED | self::MODIFIER_PUBLIC),
+            $methods
+        );
     }
 
     /**
