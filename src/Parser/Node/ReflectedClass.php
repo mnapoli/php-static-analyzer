@@ -100,7 +100,7 @@ class ReflectedClass extends Class_ implements ReflectedType
      */
     public function getMethods($visibility = null)
     {
-        // TODO merge with traits
+        // TODO merge with traits and parent interfaces
         $methods = [];
         foreach ($this->stmts as $stmt) {
             if (! $stmt instanceof ReflectedMethod) {

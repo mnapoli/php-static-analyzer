@@ -68,6 +68,14 @@ class MethodsTest extends \PHPUnit_Framework_TestCase
     /**
      * @test
      */
+    public function methods_should_include_interfaces_methods()
+    {
+        $this->markTestIncomplete('TODO');
+    }
+
+    /**
+     * @test
+     */
     public function methods_should_include_trait_methods()
     {
         $this->markTestIncomplete('TODO');

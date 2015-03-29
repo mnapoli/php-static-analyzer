@@ -40,10 +40,19 @@ class ReflectedInterface extends Interface_ implements ReflectedType
         return $this->fqn;
     }
 
-    public function getMethods()
+    public function getMethods($visibility = null)
     {
-        // TODO merge with parents
-        return parent::getMethods();
+        // TODO merge with traits and parent interfaces
+        $methods = [];
+        foreach ($this->stmts as $stmt) {
+            if (! $stmt instanceof ReflectedMethod) {
+                continue;
+            }
+            if ($visibility === null || ($visibility & $stmt->getVisibility())) {
+                $methods[$stmt->getName()] = $stmt;
+            }
+        }
+        return $methods;
     }
 
     public function hasMethod($name)
@@ -66,7 +75,7 @@ class ReflectedInterface extends Interface_ implements ReflectedType
         throw new \LogicException(sprintf('Method %s::%s() not found', $this->getFQN(), $name));
     }
 
-    public function getProperties()
+    public function getProperties($visibility = null)
     {
         return [];
     }
