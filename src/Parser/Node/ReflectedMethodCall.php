@@ -68,7 +68,12 @@ class ReflectedMethodCall extends MethodCall implements TypedNode, ReflectedCall
             return null;
         }
 
-        $this->method = $class->getMethod($this->name);
+        try {
+            $this->method = $class->getMethod($this->name);
+        } catch (\LogicException $e) {
+            // TODO log error: unknown method
+            return null;
+        }
 
         return $this->method;
     }
