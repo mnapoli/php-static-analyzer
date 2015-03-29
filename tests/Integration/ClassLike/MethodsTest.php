@@ -2,20 +2,20 @@
 
 namespace PhpAnalyzer\Test\Integration\ClassLike;
 
-use PhpAnalyzer\Analyzer;
 use PhpAnalyzer\Parser\Node\ReflectedMethod;
+use PhpAnalyzer\Test\Integration\BaseAnalyzerTest;
 use PhpAnalyzer\Test\Integration\ClassLike\Methods\BasicClass;
 use PhpAnalyzer\Test\Integration\ClassLike\Methods\SubClass;
 use PhpParser\Node\Stmt\Class_;
 
-class MethodsTest extends \PHPUnit_Framework_TestCase
+class MethodsTest extends BaseAnalyzerTest
 {
     /**
      * @test
      */
     public function should_list_class_methods()
     {
-        $class = $this->analyzeClass(BasicClass::class);
+        $class = $this->analyzeClass(__DIR__ . '/Methods', BasicClass::class);
 
         $methods = $class->getMethods();
 
@@ -31,7 +31,7 @@ class MethodsTest extends \PHPUnit_Framework_TestCase
      */
     public function should_list_class_methods_filtered_by_visibility($visibility, $methodName)
     {
-        $class = $this->analyzeClass(BasicClass::class);
+        $class = $this->analyzeClass(__DIR__ . '/Methods', BasicClass::class);
 
         $methods = $class->getMethods($visibility);
 
@@ -53,7 +53,7 @@ class MethodsTest extends \PHPUnit_Framework_TestCase
      */
     public function methods_should_include_parent_methods()
     {
-        $class = $this->analyzeClass(SubClass::class);
+        $class = $this->analyzeClass(__DIR__ . '/Methods', SubClass::class);
 
         $methods = $class->getMethods();
 
@@ -95,11 +95,6 @@ class MethodsTest extends \PHPUnit_Framework_TestCase
     public function methods_should_override_trait_methods()
     {
         $this->markTestIncomplete('TODO');
-    }
-
-    private function analyzeClass($class)
-    {
-        return (new Analyzer)->analyze(__DIR__ . '/Methods')->getClass($class);
     }
 
     /**

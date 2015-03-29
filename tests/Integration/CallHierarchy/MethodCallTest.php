@@ -2,20 +2,20 @@
 
 namespace PhpAnalyzer\Test\Integration\CallHierarchy;
 
-use PhpAnalyzer\Analyzer;
 use PhpAnalyzer\Parser\Node\ReflectedMethodCall;
 use PhpAnalyzer\Parser\Node\ReflectedStaticCall;
+use PhpAnalyzer\Test\Integration\BaseAnalyzerTest;
 use PhpAnalyzer\Test\Integration\CallHierarchy\MethodCall\Callee;
 use PhpAnalyzer\Test\Integration\CallHierarchy\MethodCall\StaticCallee;
 
-class MethodCallTest extends \PHPUnit_Framework_TestCase
+class MethodCallTest extends BaseAnalyzerTest
 {
     /**
      * @test
      */
     public function methods_should_know_their_callers()
     {
-        $class = $this->analyzeClass(Callee::class);
+        $class = $this->analyzeClass(__DIR__ . '/MethodCall', Callee::class);
         $method = $class->getMethod('bar');
 
         $calls = $method->getCalls();
@@ -34,7 +34,7 @@ class MethodCallTest extends \PHPUnit_Framework_TestCase
      */
     public function static_methods_should_know_their_callers()
     {
-        $class = $this->analyzeClass(StaticCallee::class);
+        $class = $this->analyzeClass(__DIR__ . '/MethodCall', StaticCallee::class);
         $method = $class->getMethod('staticMethod');
 
         $calls = $method->getCalls();
@@ -46,10 +46,5 @@ class MethodCallTest extends \PHPUnit_Framework_TestCase
         $this->assertEquals(10, $call->getLine());
         $this->assertEquals('Caller.php', $call->getFile()->getRelativeFileName());
         $this->assertSame($method, $call->getTargetCallable());
-    }
-
-    private function analyzeClass($class)
-    {
-        return (new Analyzer)->analyze(__DIR__ . '/MethodCall')->getClass($class);
     }
 }

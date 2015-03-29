@@ -2,20 +2,20 @@
 
 namespace PhpAnalyzer\Test\Integration\ClassLike;
 
-use PhpAnalyzer\Analyzer;
 use PhpAnalyzer\Parser\Node\ReflectedProperty;
+use PhpAnalyzer\Test\Integration\BaseAnalyzerTest;
 use PhpAnalyzer\Test\Integration\ClassLike\Properties\BasicClass;
 use PhpAnalyzer\Test\Integration\ClassLike\Properties\SubClass;
 use PhpParser\Node\Stmt\Class_;
 
-class PropertiesTest extends \PHPUnit_Framework_TestCase
+class PropertiesTest extends BaseAnalyzerTest
 {
     /**
      * @test
      */
     public function should_list_class_properties()
     {
-        $class = $this->analyzeClass(BasicClass::class);
+        $class = $this->analyzeClass(__DIR__ . '/Properties', BasicClass::class);
 
         $properties = $class->getProperties();
 
@@ -31,7 +31,7 @@ class PropertiesTest extends \PHPUnit_Framework_TestCase
      */
     public function should_list_class_properties_filtered_by_visibility($visibility, $propertyName)
     {
-        $class = $this->analyzeClass(BasicClass::class);
+        $class = $this->analyzeClass(__DIR__ . '/Properties', BasicClass::class);
 
         $properties = $class->getProperties($visibility);
 
@@ -44,7 +44,7 @@ class PropertiesTest extends \PHPUnit_Framework_TestCase
      */
     public function properties_should_include_parent_properties()
     {
-        $class = $this->analyzeClass(SubClass::class);
+        $class = $this->analyzeClass(__DIR__ . '/Properties', SubClass::class);
 
         $properties = $class->getProperties();
 
@@ -87,11 +87,6 @@ class PropertiesTest extends \PHPUnit_Framework_TestCase
             'protected' => [Class_::MODIFIER_PROTECTED, 'protected'],
             'private'   => [Class_::MODIFIER_PRIVATE, 'private'],
         ];
-    }
-
-    private function analyzeClass($class)
-    {
-        return (new Analyzer)->analyze(__DIR__ . '/Properties')->getClass($class);
     }
 
     /**
