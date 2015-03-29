@@ -119,6 +119,14 @@ class ReflectedMethod extends ClassMethod implements ReflectedCallable
     }
 
     /**
+     * @return int
+     */
+    public function getVisibility()
+    {
+        return $this->type;
+    }
+
+    /**
      * @return FunctionDocBlock
      */
     protected function getDocBlock()

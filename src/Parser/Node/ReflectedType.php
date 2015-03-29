@@ -15,9 +15,10 @@ interface ReflectedType extends ReflectedNode
     public function getFQN();
 
     /**
-     * @return ReflectedMethod
+     * @param int|null $visibility Allows to filter the visibility of the properties to return.
+     * @return ReflectedMethod[]
      */
-    public function getMethods();
+    public function getMethods($visibility = null);
 
     /**
      * @param string $name
@@ -32,9 +33,10 @@ interface ReflectedType extends ReflectedNode
     public function getMethod($name);
 
     /**
+     * @param int|null $visibility Allows to filter the visibility of the properties to return.
      * @return ReflectedProperty[]
      */
-    public function getProperties();
+    public function getProperties($visibility = null);
 
     /**
      * @param string $name

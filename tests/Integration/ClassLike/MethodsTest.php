@@ -3,6 +3,8 @@
 namespace PhpAnalyzer\Test\Integration\ClassLike;
 
 use PhpAnalyzer\Analyzer;
+use PhpAnalyzer\Parser\Node\ReflectedMethod;
+use PhpAnalyzer\Test\Integration\ClassLike\Methods\BasicClass;
 use PhpParser\Node\Stmt\Class_;
 
 class MethodsTest extends \PHPUnit_Framework_TestCase
@@ -12,7 +14,14 @@ class MethodsTest extends \PHPUnit_Framework_TestCase
      */
     public function should_list_class_methods()
     {
-        $this->markTestIncomplete('TODO');
+        $class = $this->analyzeClass(BasicClass::class);
+
+        $methods = $class->getMethods();
+
+        $this->assertCount(3, $methods);
+        $this->assertMethod($methods, 'publicMethod');
+        $this->assertMethod($methods, 'protectedMethod');
+        $this->assertMethod($methods, 'privateMethod');
     }
 
     /**
@@ -21,15 +30,20 @@ class MethodsTest extends \PHPUnit_Framework_TestCase
      */
     public function should_list_class_methods_filtered_by_visibility($visibility, $methodName)
     {
-        $this->markTestIncomplete('TODO');
+        $class = $this->analyzeClass(BasicClass::class);
+
+        $methods = $class->getMethods($visibility);
+
+        $this->assertCount(1, $methods);
+        $this->assertMethod($methods, $methodName);
     }
 
     public function visibilityProvider()
     {
         return [
-            'public'    => [Class_::MODIFIER_PUBLIC, 'public'],
-            'protected' => [Class_::MODIFIER_PROTECTED, 'protected'],
-            'private'   => [Class_::MODIFIER_PRIVATE, 'private'],
+            'public'    => [Class_::MODIFIER_PUBLIC, 'publicMethod'],
+            'protected' => [Class_::MODIFIER_PROTECTED, 'protectedMethod'],
+            'private'   => [Class_::MODIFIER_PRIVATE, 'privateMethod'],
         ];
     }
 
@@ -68,5 +82,16 @@ class MethodsTest extends \PHPUnit_Framework_TestCase
     private function analyzeClass($class)
     {
         return (new Analyzer)->analyze(__DIR__ . '/Methods')->getClass($class);
+    }
+
+    /**
+     * @param ReflectedMethod[] $methods
+     * @param string $name
+     */
+    private function assertMethod(array $methods, $name)
+    {
+        $this->assertArrayHasKey($name, $methods);
+        $this->assertInstanceOf(ReflectedMethod::class, $methods[$name]);
+        $this->assertEquals($name, $methods[$name]->getName());
     }
 }

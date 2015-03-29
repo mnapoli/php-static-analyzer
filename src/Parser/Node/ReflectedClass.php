@@ -33,7 +33,7 @@ class ReflectedClass extends Class_ implements ReflectedType
     }
 
     /**
-     * @return string
+     * {@inheritdoc}
      */
     public function getFQN()
     {
@@ -53,8 +53,7 @@ class ReflectedClass extends Class_ implements ReflectedType
     }
 
     /**
-     * @param int $visibility
-     * @return ReflectedProperty[]
+     * {@inheritdoc}
      */
     public function getProperties($visibility = null)
     {
@@ -81,8 +80,7 @@ class ReflectedClass extends Class_ implements ReflectedType
     }
 
     /**
-     * @param string $name
-     * @return null|ReflectedProperty
+     * {@inheritdoc}
      */
     public function getProperty($name)
     {
@@ -98,17 +96,25 @@ class ReflectedClass extends Class_ implements ReflectedType
     }
 
     /**
-     * @return ReflectedMethod[]
+     * {@inheritdoc}
      */
-    public function getMethods()
+    public function getMethods($visibility = null)
     {
         // TODO merge with parent & traits
-        return parent::getMethods();
+        $methods = [];
+        foreach ($this->stmts as $stmt) {
+            if (! $stmt instanceof ReflectedMethod) {
+                continue;
+            }
+            if ($visibility === null || ($visibility & $stmt->getVisibility())) {
+                $methods[$stmt->getName()] = $stmt;
+            }
+        }
+        return $methods;
     }
 
     /**
-     * @param string $name
-     * @return bool
+     * {@inheritdoc}
      */
     public function hasMethod($name)
     {
@@ -121,8 +127,7 @@ class ReflectedClass extends Class_ implements ReflectedType
     }
 
     /**
-     * @param string $name
-     * @return null|ReflectedMethod
+     * {@inheritdoc}
      */
     public function getMethod($name)
     {

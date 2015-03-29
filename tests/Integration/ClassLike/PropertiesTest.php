@@ -98,7 +98,7 @@ class PropertiesTest extends \PHPUnit_Framework_TestCase
      * @param ReflectedProperty[] $properties
      * @param string              $name
      */
-    private function assertProperty($properties, $name)
+    private function assertProperty(array $properties, $name)
     {
         $this->assertArrayHasKey($name, $properties);
         $this->assertInstanceOf(ReflectedProperty::class, $properties[$name]);
