@@ -20,4 +20,6 @@ abstract class Variable
      * @return Type
      */
     abstract public function getType();
+
+    abstract public function addType(Type $type);
 }

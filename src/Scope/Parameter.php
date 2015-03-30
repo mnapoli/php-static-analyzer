@@ -9,7 +9,7 @@ use PhpAnalyzer\Parser\Node\ReflectedParameter;
  *
  * @author Matthieu Napoli <matthieu@mnapoli.fr>
  */
-class Parameter extends Variable
+class Parameter extends LocalVariable
 {
     /**
      * @var ReflectedParameter
@@ -28,6 +28,7 @@ class Parameter extends Variable
 
     public function getType()
     {
+        // TODO merge with parent::getType()
         return $this->node->getNodeType();
     }
 }

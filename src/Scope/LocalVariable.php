@@ -3,6 +3,7 @@
 namespace PhpAnalyzer\Scope;
 
 use PhpAnalyzer\Parser\Node\ReflectedVariable;
+use PhpAnalyzer\Type\Type;
 use PhpAnalyzer\Type\UnknownType;
 
 /**
@@ -17,6 +18,11 @@ class LocalVariable extends Variable
      */
     private $node;
 
+    /**
+     * @var Type[]
+     */
+    protected $types = [];
+
     public function __construct(ReflectedVariable $node)
     {
         $this->node = $node;
@@ -29,8 +35,20 @@ class LocalVariable extends Variable
 
     public function getType()
     {
-        // TODO guess with assignments?
-        // e.g. $foo = new Foo();
-        return new UnknownType;
+        if (empty($this->types)) {
+            return new UnknownType;
+        }
+
+        // TODO handle more than one type detected
+        if (count($this->types) > 1) {
+            throw new \LogicException('TODO');
+        }
+
+        return $this->types[0];
+    }
+
+    public function addType(Type $type)
+    {
+        $this->types[] = $type;
     }
 }

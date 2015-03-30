@@ -4,6 +4,7 @@ namespace PhpAnalyzer\Scope;
 
 use PhpAnalyzer\Parser\Node\ReflectedType;
 use PhpAnalyzer\Type\ClassType;
+use PhpAnalyzer\Type\Type;
 
 /**
  * `$this` variable representing the current class.
@@ -30,5 +31,10 @@ class This extends Variable
     public function getType()
     {
         return new ClassType($this->class);
+    }
+
+    public function addType(Type $type)
+    {
+        // ignore, we can't change the type of '$this'
     }
 }
