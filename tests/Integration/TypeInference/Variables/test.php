@@ -7,3 +7,5 @@ class Foo
 }
 
 $assignmentNew = new Foo();
+
+$assignmentVariable = $assignmentNew;
