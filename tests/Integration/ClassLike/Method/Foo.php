@@ -14,4 +14,11 @@ class Foo
     public function returnNamespacedClass()
     {
     }
+
+    /**
+     * @return string
+     */
+    public function returnString()
+    {
+    }
 }

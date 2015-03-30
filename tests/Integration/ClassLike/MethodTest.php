@@ -6,6 +6,7 @@ use PhpAnalyzer\Parser\Node\ReflectedParameter;
 use PhpAnalyzer\Test\Integration\BaseAnalyzerTest;
 use PhpAnalyzer\Test\Integration\ClassLike\Method\Foo;
 use PhpAnalyzer\Type\ClassType;
+use PhpAnalyzer\Type\PrimitiveType;
 
 class MethodTest extends BaseAnalyzerTest
 {
@@ -34,6 +35,20 @@ class MethodTest extends BaseAnalyzerTest
         $method = $class->getMethod('returnNamespacedClass');
 
         $this->assertInstanceOf(ClassType::class, $method->getReturnType());
+        $this->assertEquals(Foo::class, $method->getReturnType()->toString());
+    }
+
+    /**
+     * @test
+     */
+    public function should_detect_return_type_with_primitive_type()
+    {
+        $class = $this->analyzeClass(__DIR__ . '/Method', Foo::class);
+
+        $method = $class->getMethod('returnString');
+
+        $this->assertInstanceOf(PrimitiveType::class, $method->getReturnType());
+        $this->assertEquals('string', $method->getReturnType()->toString());
     }
 
     /**

@@ -4,6 +4,7 @@ namespace PhpAnalyzer\Parser\Node\DocBlock;
 
 use PhpAnalyzer\Scope\Scope;
 use PhpAnalyzer\Type\ClassType;
+use PhpAnalyzer\Type\PrimitiveType;
 use PhpAnalyzer\Type\Type;
 use PhpAnalyzer\Type\UnknownType;
 use phpDocumentor\Reflection\DocBlock;
@@ -41,9 +42,16 @@ class FunctionDocBlock
         $tag = $this->parser->getTagsByName('return');
         $tag = reset($tag);
 
+        $typeName = $tag->getContent();
+
+        // Internal types
+        if (PrimitiveType::isPrimitiveType($typeName)) {
+            return PrimitiveType::get($typeName);
+        }
+
         try {
             // TODO internal types (string, ...)
-            $class = $this->scope->getClass($tag->getContent());
+            $class = $this->scope->getClass($typeName);
         } catch (\LogicException $e) {
             return new UnknownType;
         }
