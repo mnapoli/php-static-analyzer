@@ -8,11 +8,13 @@ use PhpAnalyzer\Parser\Node\ReflectedClass;
 use PhpAnalyzer\Parser\Node\ReflectedInterface;
 use PhpAnalyzer\Parser\Node\ReflectedMethod;
 use PhpAnalyzer\Parser\Node\ReflectedMethodCall;
+use PhpAnalyzer\Parser\Node\ReflectedNew;
 use PhpAnalyzer\Parser\Node\ReflectedStaticCall;
 use PhpAnalyzer\Parser\Node\ReflectedVariable;
+use PhpAnalyzer\Parser\Node\TypedNode;
 use PhpAnalyzer\Scope\LocalVariable;
 use PhpAnalyzer\Scope\Parameter;
-use PhpAnalyzer\Type\ClassType;
+use PhpAnalyzer\Type\UnknownType;
 use PhpAnalyzer\Visitor\ProjectVisitor;
 use PhpParser\Node\Expr\StaticCall;
 use PhpParser\NodeVisitorAbstract;
@@ -77,6 +79,8 @@ class TypeInferrerVisitor extends NodeVisitorAbstract implements ProjectVisitor
                 return new ReflectedMethodCall($node, $this->context->getCurrentScope());
             case $node instanceof StaticCall:
                 return new ReflectedStaticCall($node, $this->context->getCurrentScope());
+            case $node instanceof Node\Expr\New_:
+                return new ReflectedNew($node, $this->context->getCurrentScope());
             case $node instanceof Node\Expr\Assign;
                 $this->processAssignment($node);
                 break;
@@ -116,32 +120,28 @@ class TypeInferrerVisitor extends NodeVisitorAbstract implements ProjectVisitor
             return;
         }
 
-        $expression = $node->expr;
+        if (! $node->expr instanceof TypedNode) {
+            return;
+        }
 
-        // $foo = new Class()
-        if ($expression instanceof Node\Expr\New_) {
-            if (! is_string($node->var->name)) {
-                // Dynamic variable name
-                return;
-            }
+        if (! is_string($node->var->name)) {
+            // Dynamic variable name
+            return;
+        }
 
-            $variableName = (string) $node->var->name;
+        $variableName = (string) $node->var->name;
 
-            $scope = $this->context->getCurrentScope();
-            $variable = $scope->getVariable($variableName);
+        $scope = $this->context->getCurrentScope();
+        $variable = $scope->getVariable($variableName);
 
-            if (! $variable) {
-                return;
-            }
+        if (! $variable) {
+            return;
+        }
 
-            if (! $expression->class instanceof Node\Name) {
-                // Dynamic class name
-                return;
-            }
+        $expressionType = $node->expr->getNodeType();
 
-            $class = $scope->getClass($expression->class->toString());
-
-            $variable->addType(new ClassType($class));
+        if (! $expressionType instanceof UnknownType) {
+            $variable->addType($expressionType);
         }
     }
 }
