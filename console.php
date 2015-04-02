@@ -1,7 +1,9 @@
 <?php
 
 use PhpAnalyzer\Analyzer;
+use PhpAnalyzer\Log\Logger;
 use PhpAnalyzer\Parser\Node\ReflectedMethod;
+use Symfony\Component\Console\Logger\ConsoleLogger;
 use Symfony\Component\Console\Output\OutputInterface;
 
 require_once 'vendor/autoload.php';
@@ -16,6 +18,8 @@ $defaultDirectories = [
 ];
 
 $app->command('info [class] [method] [--directories=]*', function ($class, $method, array $directories, OutputInterface $output) use ($defaultDirectories) {
+    Logger::setLogger(new ConsoleLogger($output));
+
     if (empty($directories)) {
         $directories = $defaultDirectories;
     }

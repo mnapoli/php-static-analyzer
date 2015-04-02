@@ -2,6 +2,7 @@
 
 namespace PhpAnalyzer\Parser\Node;
 
+use PhpAnalyzer\Log\Logger;
 use PhpAnalyzer\Parser\Node\DocBlock\FunctionDocBlock;
 use PhpAnalyzer\Scope\Scope;
 use PhpAnalyzer\Type\Type;
@@ -80,7 +81,8 @@ class ReflectedMethod extends ClassMethod implements ReflectedCallable
     public function addCall(ReflectedCallableCall $call)
     {
         if (! $call instanceof ReflectedMethodCall) {
-            // TODO log error: invalid call
+            Logger::warning('Static call to a non-static method');
+            return;
         }
 
         $this->calls[] = $call;

@@ -3,6 +3,7 @@
 namespace PhpAnalyzer\Parser\Visitor;
 
 use PhpAnalyzer\File;
+use PhpAnalyzer\Log\Logger;
 use PhpAnalyzer\Parser\Context;
 use PhpAnalyzer\Parser\Node\ReflectedClass;
 use PhpAnalyzer\Parser\Node\ReflectedInterface;
@@ -29,7 +30,7 @@ use PhpParser\NodeVisitorAbstract;
 class ReflectionVisitor extends NodeVisitorAbstract implements ProjectVisitor
 {
     /**
-     * @var Scope
+     * @var File
      */
     private $rootScope;
 
@@ -52,11 +53,25 @@ class ReflectionVisitor extends NodeVisitorAbstract implements ProjectVisitor
     {
         switch (true) {
             case $node instanceof Class_:
+                if ($this->rootScope->hasClass($node->namespacedName->toString())) {
+                    Logger::warning('Duplicate class {name} found in file {file}, skipping', [
+                        'name' => $node->namespacedName->toString(),
+                        'file' => $this->rootScope->getRelativeFileName(),
+                    ]);
+                    return null;
+                }
                 $newNode = new ReflectedClass($node, $this->context->getCurrentScope());
                 $this->rootScope->addClass($newNode);
                 $this->context->enterClass($newNode);
                 return $newNode;
             case $node instanceof Interface_:
+                if ($this->rootScope->hasClass($node->namespacedName->toString())) {
+                    Logger::warning('Duplicate interface {name} found in file {file}, skipping', [
+                        'name' => $node->namespacedName->toString(),
+                        'file' => $this->rootScope->getRelativeFileName(),
+                    ]);
+                    return null;
+                }
                 $newNode = new ReflectedInterface($node, $this->context->getCurrentScope());
                 $this->rootScope->addClass($newNode);
                 $this->context->enterClass($newNode);
@@ -65,6 +80,7 @@ class ReflectionVisitor extends NodeVisitorAbstract implements ProjectVisitor
                 $class = $this->context->getCurrentClass();
                 if (!$class) {
                     // TODO support traits
+                    Logger::warning('Method declared outside of a class');
                     return null;
                 }
                 $methodScope = new FunctionScope($this->rootScope);
@@ -89,6 +105,7 @@ class ReflectionVisitor extends NodeVisitorAbstract implements ProjectVisitor
                 $class = $this->context->getCurrentClass();
                 if (!$class) {
                     // TODO support traits
+                    Logger::warning('Property declared outside of a class');
                     return null;
                 }
                 // TODO for now doesn't support properties declared as list

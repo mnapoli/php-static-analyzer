@@ -2,6 +2,7 @@
 
 namespace PhpAnalyzer\Parser\Node;
 
+use PhpAnalyzer\Log\Logger;
 use PhpAnalyzer\Scope\Scope;
 use PhpAnalyzer\Type\ClassType;
 use PhpAnalyzer\Type\UnknownType;
@@ -57,21 +58,25 @@ class ReflectedMethodCall extends MethodCall implements TypedNode, ReflectedCall
         $variableType = $this->var->getNodeType();
 
         if (! $variableType instanceof ClassType) {
-            // TODO log error: method call on non-object
+            Logger::warning('Method call on non-object');
             return null;
         }
 
         try {
             $class = $this->currentScope->getClass($variableType->toString());
         } catch (\LogicException $e) {
-            // TODO log error: unknown class
+            Logger::warning('Method call on unknown class {class}', ['class' => $variableType->toString()]);
             return null;
         }
 
         try {
+            // TODO check the method is not static
             $this->method = $class->getMethod($this->name);
         } catch (\LogicException $e) {
-            // TODO log error: unknown method
+            Logger::warning('Method call on unknown method {class}::{method}()', [
+                'class'  => $class->getFQN(),
+                'method' => $this->name,
+            ]);
             return null;
         }
 

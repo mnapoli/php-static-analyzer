@@ -2,6 +2,7 @@
 
 namespace PhpAnalyzer\Scope;
 
+use PhpAnalyzer\Log\Logger;
 use PhpAnalyzer\Parser\Node\ReflectedVariable;
 use PhpAnalyzer\Type\Type;
 use PhpAnalyzer\Type\UnknownType;
@@ -41,7 +42,7 @@ class LocalVariable extends Variable
 
         // TODO handle more than one type detected
         if (count($this->types) > 1) {
-            throw new \LogicException('TODO');
+            Logger::error('No support for multi-type yet');
         }
 
         return $this->types[0];

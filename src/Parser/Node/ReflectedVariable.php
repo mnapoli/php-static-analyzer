@@ -2,6 +2,7 @@
 
 namespace PhpAnalyzer\Parser\Node;
 
+use PhpAnalyzer\Log\Logger;
 use PhpAnalyzer\Scope\Scope;
 use PhpAnalyzer\Type\UnknownType;
 use PhpParser\Node\Expr\Variable;
@@ -38,7 +39,8 @@ class ReflectedVariable extends Variable implements TypedNode
         $variable = $this->currentScope->getVariable($this->name);
 
         if (! $variable) {
-            // TODO unknown variable?
+            Logger::warning('Unknown variable {name} in the current scope', ['name' => $this->name]);
+
             return new UnknownType;
         }
 

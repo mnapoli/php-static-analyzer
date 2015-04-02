@@ -2,6 +2,7 @@
 
 namespace PhpAnalyzer;
 
+use PhpAnalyzer\Log\Logger;
 use PhpAnalyzer\Parser\Visitor\CallLinkVisitor;
 use PhpAnalyzer\Parser\Visitor\DeprecationVisitor;
 use PhpAnalyzer\Parser\Visitor\LinkToFileVisitor;
@@ -38,6 +39,8 @@ class Analyzer
         $finder->files()->in($directories)
             ->name('*.php');
 
+        Logger::info('Parsing {count} files', ['count' => count($finder)]);
+
         foreach ($finder as $fileInfo) {
             /** @var SplFileInfo $fileInfo */
             try {
@@ -52,14 +55,18 @@ class Analyzer
 
         $traverser = new ProjectTraverser;
 
+        Logger::info('Resolving fully qualified names');
         $traverser->traverse($project, [new NameResolver]);
 
         // Create reflection objects
+        Logger::info('Creating reflection objects');
         $traverser->traverse($project, [new ReflectionVisitor]);
 
         // Type inference
+        Logger::info('Inferring types');
         $traverser->traverse($project, [new TypeInferrerVisitor]);
 
+        Logger::info('Linking nodes');
         $traverser->traverse($project, [
             // Link method calls to called methods
             new CallLinkVisitor,

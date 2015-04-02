@@ -2,6 +2,7 @@
 
 namespace PhpAnalyzer\Parser\Node;
 
+use PhpAnalyzer\Log\Logger;
 use PhpAnalyzer\Scope\Scope;
 use PhpParser\Node\Stmt\Class_;
 
@@ -49,7 +50,12 @@ class ReflectedClass extends Class_ implements ReflectedType
             return null;
         }
 
-        return $this->scope->getClass($this->extends->toString());
+        try {
+            return $this->scope->getClass($this->extends->toString());
+        } catch (\LogicException $e) {
+            Logger::warning('Unknown parent class {class}', ['class' => $this->extends->toString()]);
+            return null;
+        }
     }
 
     /**

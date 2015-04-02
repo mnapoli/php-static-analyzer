@@ -2,6 +2,7 @@
 
 namespace PhpAnalyzer\Parser\Node;
 
+use PhpAnalyzer\Log\Logger;
 use PhpAnalyzer\Scope\Scope;
 use PhpAnalyzer\Type\UnknownType;
 use PhpParser\Node\Expr\StaticCall;
@@ -44,7 +45,7 @@ class ReflectedStaticCall extends StaticCall implements TypedNode, ReflectedCall
             return $this->currentScope->getClass($className);
         } catch (\LogicException $e) {
             // TODO add support for static and self
-            // TODO log error: unknown class
+            Logger::warning('Static method call on unknown class {class}', ['class' => $className]);
             return null;
         }
     }
@@ -67,7 +68,17 @@ class ReflectedStaticCall extends StaticCall implements TypedNode, ReflectedCall
             return null;
         }
 
-        return $class->getMethod($this->name);
+
+        try {
+            // TODO check the method is indeed static
+            return $class->getMethod($this->name);
+        } catch (\LogicException $e) {
+            Logger::warning('Static call on unknown method {class}::{method}()', [
+                'class'  => $class->getFQN(),
+                'method' => $this->name,
+            ]);
+            return null;
+        }
     }
 
     public function getNodeType()

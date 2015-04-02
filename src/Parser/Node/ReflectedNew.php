@@ -2,6 +2,7 @@
 
 namespace PhpAnalyzer\Parser\Node;
 
+use PhpAnalyzer\Log\Logger;
 use PhpAnalyzer\Scope\Scope;
 use PhpAnalyzer\Type\ClassType;
 use PhpAnalyzer\Type\UnknownType;
@@ -36,7 +37,12 @@ class ReflectedNew extends New_ implements TypedNode
             return new UnknownType;
         }
 
-        $class = $this->currentScope->getClass($this->class->toString());
+        try {
+            $class = $this->currentScope->getClass($this->class->toString());
+        } catch (\LogicException $e) {
+            Logger::warning('Creation with "new" of an unknown class {class}', ['class' => $this->class->toString()]);
+            return new UnknownType;
+        }
 
         return new ClassType($class);
     }
