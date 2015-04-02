@@ -6,6 +6,8 @@ use Symfony\Component\Console\Output\OutputInterface;
 
 require_once 'vendor/autoload.php';
 
+gc_disable();
+
 $app = new Silly\Application;
 
 $defaultDirectories = [
