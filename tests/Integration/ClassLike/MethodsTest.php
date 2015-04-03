@@ -83,6 +83,16 @@ class MethodsTest extends BaseAnalyzerTest
 
     /**
      * @test
+     *
+     * @link http://php.net/manual/en/language.oop5.traits.php#language.oop5.traits.precedence
+     */
+    public function methods_should_follow_php_precedence_rules()
+    {
+        $this->markTestIncomplete('TODO');
+    }
+
+    /**
+     * @test
      */
     public function methods_should_override_parent_methods()
     {
