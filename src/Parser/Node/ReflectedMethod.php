@@ -80,8 +80,8 @@ class ReflectedMethod extends ClassMethod implements ReflectedCallable
 
     public function addCall(ReflectedCallableCall $call)
     {
-        if (! $call instanceof ReflectedMethodCall) {
-            Logger::warning('Static call to a non-static method');
+        if (! $call instanceof ReflectedCallableCall) {
+            Logger::error('Unexpected situation');
             return;
         }
 
