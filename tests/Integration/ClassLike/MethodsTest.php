@@ -5,6 +5,7 @@ namespace PhpAnalyzer\Test\Integration\ClassLike;
 use PhpAnalyzer\Parser\Node\ReflectedMethod;
 use PhpAnalyzer\Test\Integration\BaseAnalyzerTest;
 use PhpAnalyzer\Test\Integration\ClassLike\Methods\BasicClass;
+use PhpAnalyzer\Test\Integration\ClassLike\Methods\Implementation;
 use PhpAnalyzer\Test\Integration\ClassLike\Methods\SubClass;
 use PhpParser\Node\Stmt\Class_;
 
@@ -70,7 +71,13 @@ class MethodsTest extends BaseAnalyzerTest
      */
     public function methods_should_include_interfaces_methods()
     {
-        $this->markTestIncomplete('TODO');
+        $class = $this->analyzeClass(__DIR__ . '/Methods', Implementation::class);
+
+        $methods = $class->getMethods();
+
+        $this->assertCount(2, $methods);
+        $this->assertMethod($methods, 'publicMethod');
+        $this->assertMethod($methods, 'publicMethod2');
     }
 
     /**

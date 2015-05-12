@@ -59,6 +59,24 @@ class ReflectedClass extends Class_ implements ReflectedType
     }
 
     /**
+     * @return ReflectedInterface[]
+     */
+    public function getImplementedInterfaces()
+    {
+        $interfaces = [];
+        foreach ($this->implements as $interfaceName) {
+            try {
+                $interfaces[] = $this->scope->getClass($interfaceName->toString());
+            } catch (\LogicException $e) {
+                Logger::warning('Unknown implemented interface {interface}', [
+                    'interface' => $interfaceName->toString()
+                ]);
+            }
+        }
+        return $interfaces;
+    }
+
+    /**
      * {@inheritdoc}
      */
     public function getProperties($visibility = null)
@@ -117,15 +135,7 @@ class ReflectedClass extends Class_ implements ReflectedType
             }
         }
 
-        $parentClass = $this->getParentClass();
-        if (! $parentClass) {
-            return $methods;
-        }
-
-        return array_merge(
-            $parentClass->getMethods(self::MODIFIER_PROTECTED | self::MODIFIER_PUBLIC),
-            $methods
-        );
+        return array_merge($this->getParentMethods(), $methods);
     }
 
     /**
@@ -152,6 +162,31 @@ class ReflectedClass extends Class_ implements ReflectedType
             }
         }
         throw new \LogicException(sprintf('Method %s::%s() not found', $this->getFQN(), $name));
+    }
+
+    /**
+     * Returns the methods defined in parent classes and implemented interfaces.
+     *
+     * @return ReflectedMethod[]
+     */
+    private function getParentMethods()
+    {
+        $parentMethods = [];
+
+        $interfaces = $this->getImplementedInterfaces();
+        foreach ($interfaces as $interface) {
+            $parentMethods = array_merge($parentMethods, $interface->getMethods());
+        }
+
+        $parentClass = $this->getParentClass();
+        if ($parentClass) {
+            $parentMethods = array_merge(
+                $parentMethods,
+                $parentClass->getMethods(self::MODIFIER_PROTECTED | self::MODIFIER_PUBLIC)
+            );
+        }
+
+        return $parentMethods;
     }
 
     // Methods from the PHP reflection
