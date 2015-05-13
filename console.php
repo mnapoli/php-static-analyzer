@@ -12,60 +12,58 @@ gc_disable();
 
 $app = new Silly\Application;
 
-$defaultDirectories = [
-    __DIR__ . '/src',
-//    __DIR__ . '/vendor/nikic',
-];
+$app->command(
+    'info [class] [method] [--directories=]* [--save=]',
+    function ($class, $method, array $directories, $save, OutputInterface $output) {
+        Logger::setLogger(new ConsoleLogger($output));
 
-$app->command('info [class] [method] [--directories=]*', function ($class, $method, array $directories, OutputInterface $output) use ($defaultDirectories) {
-    Logger::setLogger(new ConsoleLogger($output));
+        if (empty($directories)) {
+            $directories = [__DIR__ . '/src'];
+        }
 
-    if (empty($directories)) {
-        $directories = $defaultDirectories;
-    }
+        $analyzer = new Analyzer;
+        $project = $analyzer->analyze($directories, $save);
 
-    $analyzer = new Analyzer;
-    $project = $analyzer->analyze($directories);
-
-    if ($class) {
-        $class = str_replace('.', '\\', $class);
-        $classes = [$project->getClass($class)];
-    } else {
-        $classes = $project->getClasses();
-    }
-    $methodName = $method;
-
-    foreach ($classes as $class) {
-        $output->writeln($class->getFQN());
-
-        if ($methodName) {
-            $methods = [$class->getMethod($methodName)];
+        if ($class) {
+            $class = str_replace('.', '\\', $class);
+            $classes = [$project->getClass($class)];
         } else {
-            $methods = $class->getMethods();
+            $classes = $project->getClasses();
         }
+        $methodName = $method;
 
-        foreach ($methods as $method) {
-            /** @var ReflectedMethod $method */
-            $output->writeln(sprintf("\t%s()", $method->getName()));
+        foreach ($classes as $class) {
+            $output->writeln($class->getFQN());
 
-            foreach ($method->getScope()->getVariables() as $variable) {
-                $class = str_replace('PhpAnalyzer\Scope\\', '', get_class($variable));
-                $output->writeln(sprintf("\t\t$%s: %s (%s)", $variable->getName(), $variable->getType()->toString(), $class));
+            if ($methodName) {
+                $methods = [$class->getMethod($methodName)];
+            } else {
+                $methods = $class->getMethods();
             }
 
-            $output->writeln(sprintf("\t\t@return: %s", $method->getReturnType()->toString()));
+            foreach ($methods as $method) {
+                /** @var ReflectedMethod $method */
+                $output->writeln(sprintf("\t%s()", $method->getName()));
 
-            if ($method->getAttribute('deprecated', false)) {
-                $output->writeln("\t\t<info>Deprecated</info>");
+                foreach ($method->getScope()->getVariables() as $variable) {
+                    $class = str_replace('PhpAnalyzer\Scope\\', '', get_class($variable));
+                    $output->writeln(sprintf("\t\t$%s: %s (%s)", $variable->getName(), $variable->getType()->toString(), $class));
+                }
+
+                $output->writeln(sprintf("\t\t@return: %s", $method->getReturnType()->toString()));
+
+                if ($method->getAttribute('deprecated', false)) {
+                    $output->writeln("\t\t<info>Deprecated</info>");
+                }
+
+                foreach ($method->getCalls() as $call) {
+                    $output->writeln(sprintf("\t\tCalled in %s at line %d", $call->getFile()->getRelativeFileName(), $call->getLine()));
+                }
             }
 
-            foreach ($method->getCalls() as $call) {
-                $output->writeln(sprintf("\t\tCalled in %s at line %d", $call->getFile()->getRelativeFileName(), $call->getLine()));
-            }
+            $output->writeln('');
         }
-
-        $output->writeln('');
     }
-});
+);
 
 $app->run();

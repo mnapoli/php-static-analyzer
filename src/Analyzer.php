@@ -31,8 +31,12 @@ class Analyzer
         $this->parser = new Parser(new Lexer);
     }
 
-    public function analyze($directories)
+    public function analyze($directories, $cacheFile)
     {
+        if ($cacheFile && file_exists($cacheFile)) {
+            return unserialize(file_get_contents($cacheFile));
+        }
+
         $project = new Project;
 
         $finder = new Finder();
@@ -50,7 +54,7 @@ class Analyzer
                     'Error while parsing %s: %s', $fileInfo->getRelativePathname(), $e->getMessage()
                 ), 0, $e);
             }
-            $project->addFile(new File($project, $fileInfo, $nodes));
+            $project->addFile(new File($project, $fileInfo->getRelativePathname(), $nodes));
         }
 
         $traverser = new ProjectTraverser;
@@ -75,6 +79,12 @@ class Analyzer
             // Detect deprecated code
             new DeprecationVisitor,
         ]);
+
+        if ($cacheFile) {
+            Logger::info('Caching the project');
+            $serialized = serialize($project);
+            file_put_contents($cacheFile, $serialized);
+        }
 
         return $project;
     }

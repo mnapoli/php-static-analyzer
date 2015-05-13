@@ -6,7 +6,6 @@ use PhpAnalyzer\Parser\Node\ReflectedType;
 use PhpAnalyzer\Scope\Scope;
 use PhpAnalyzer\Scope\Variable;
 use PhpParser\Node;
-use Symfony\Component\Finder\SplFileInfo;
 
 /**
  * A PHP file contains PHP code, i.e. an AST.
@@ -21,9 +20,9 @@ class File implements Scope
     private $project;
 
     /**
-     * @var SplFileInfo
+     * @var string
      */
-    private $fileInfo;
+    private $relativeFilename;
 
     /**
      * @var Node[]
@@ -32,13 +31,13 @@ class File implements Scope
 
     /**
      * @param Project $project
-     * @param SplFileInfo $fileInfo
-     * @param Node[] $nodes
+     * @param string  $relativeFilename
+     * @param Node[]  $nodes
      */
-    public function __construct(Project $project, SplFileInfo $fileInfo, array $nodes = [])
+    public function __construct(Project $project, $relativeFilename, array $nodes = [])
     {
         $this->project = $project;
-        $this->fileInfo = $fileInfo;
+        $this->relativeFilename = $relativeFilename;
         $this->nodes = $nodes;
     }
 
@@ -63,7 +62,7 @@ class File implements Scope
      */
     public function getRelativeFileName()
     {
-        return $this->fileInfo->getRelativePathname();
+        return $this->relativeFilename;
     }
 
     /**
