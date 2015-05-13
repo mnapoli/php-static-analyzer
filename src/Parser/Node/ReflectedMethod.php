@@ -137,7 +137,12 @@ class ReflectedMethod extends ClassMethod implements ReflectedCallable
             $docComment = $this->getDocComment();
             $docCommentString = $docComment ? $docComment->getText() : '';
 
-            $this->docBlock = new FunctionDocBlock(new DocBlock($docCommentString), $this->getScope());
+            try {
+                $this->docBlock = new FunctionDocBlock(new DocBlock($docCommentString), $this->getScope());
+            } catch (\Exception $e) {
+                Logger::error('Invalid method docblock: ' . $e->getMessage());
+                $this->docBlock = new FunctionDocBlock(new DocBlock(''), $this->getScope());
+            }
         }
 
         return $this->docBlock;
