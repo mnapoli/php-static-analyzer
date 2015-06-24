@@ -31,7 +31,7 @@ class Analyzer
         $this->parser = new Parser(new Lexer);
     }
 
-    public function analyze($directories, $cacheFile)
+    public function analyze($directories, $cacheFile = null)
     {
         if ($cacheFile && file_exists($cacheFile)) {
             return unserialize(file_get_contents($cacheFile));
