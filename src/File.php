@@ -1,131 +1,78 @@
 <?php
+declare(strict_types = 1);
 
 namespace PhpAnalyzer;
 
-use PhpAnalyzer\Parser\Node\ReflectedType;
-use PhpAnalyzer\Scope\Scope;
-use PhpAnalyzer\Scope\Variable;
-use PhpParser\Node;
+use PhpAnalyzer\Node\Class_;
+use PhpAnalyzer\Node\Namespace_;
+use PhpAnalyzer\Node\Node;
+use PhpAnalyzer\Node\NodeList;
 
 /**
- * A PHP file contains PHP code, i.e. an AST.
- *
  * @author Matthieu Napoli <matthieu@mnapoli.fr>
  */
-class File implements Scope
+class File
 {
-    /**
-     * @var Project
-     */
-    private $project;
-
     /**
      * @var string
      */
-    private $relativeFilename;
+    private $filename;
 
     /**
-     * @var Node[]
+     * @var NodeList
      */
-    private $nodes = [];
+    private $tree;
 
-    /**
-     * @param Project $project
-     * @param string  $relativeFilename
-     * @param Node[]  $nodes
-     */
-    public function __construct(Project $project, $relativeFilename, array $nodes = [])
+    public function __construct(string $filename, Node $tree = null)
     {
-        $this->project = $project;
-        $this->relativeFilename = $relativeFilename;
-        $this->nodes = $nodes;
+        $this->filename = $filename;
+        $this->tree = $tree ?: NodeList::fromAstNode(\ast\parse_file($this->filename, 35));
+    }
+
+    public function getNamespace() : Namespace_
+    {
+        // Returns the first namespace found
+        foreach ($this->tree->getChildren() as $node) {
+            if ($node instanceof Namespace_) {
+                return $node;
+            }
+        }
+        return Namespace_::globalNamespace();
     }
 
     /**
-     * @return Node[]
+     * @return Class_[]
      */
-    public function getNodes()
+    public function getClasses() : array
     {
-        return $this->nodes;
+        return array_filter($this->tree->getChildren(), function (Node $node) {
+            return $node instanceof Class_;
+        });
     }
 
-    /**
-     * @param Node[] $nodes
-     */
-    public function replaceNodes(array $nodes = [])
+    public function getClass(string $name) : Class_
     {
-        $this->nodes = $nodes;
+        foreach ($this->getClasses() as $class) {
+            if ($class->getName() === $name) {
+                return $class;
+            }
+        }
+        throw new \Exception("Class $name not found in this file");
     }
 
-    /**
-     * @return string
-     */
-    public function getRelativeFileName()
+    public function toArray() : array
     {
-        return $this->relativeFilename;
+        return [
+            'filename' => $this->filename,
+            'children' => $this->tree->toArray(),
+        ];
     }
 
-    /**
-     * {@inheritdoc}
-     */
-    public function addClass(ReflectedType $class)
+    public static function fromArray(array $data) : self
     {
-        $this->project->addClass($class);
-    }
-
-    /**
-     * {@inheritdoc}
-     */
-    public function hasClass($name)
-    {
-        return $this->project->hasClass($name);
-    }
-
-    /**
-     * {@inheritdoc}
-     */
-    public function getClass($name)
-    {
-        return $this->project->getClass($name);
-    }
-
-    /**
-     * {@inheritdoc}
-     */
-    public function getClasses()
-    {
-        return $this->project->getClasses();
-    }
-
-    /**
-     * {@inheritdoc}
-     */
-    public function addVariable(Variable $variable)
-    {
-        $this->project->addVariable($variable);
-    }
-
-    /**
-     * {@inheritdoc}
-     */
-    public function hasVariable($name)
-    {
-        return $this->project->hasVariable($name);
-    }
-
-    /**
-     * {@inheritdoc}
-     */
-    public function getVariable($name)
-    {
-        return $this->project->getVariable($name);
-    }
-
-    /**
-     * {@inheritdoc}
-     */
-    public function getVariables()
-    {
-        return $this->project->getVariables();
+        if (isset($data['children'])) {
+            $tree = Node::fromArray($data['children']);
+        }
+        return new self($data['filename'], $tree ?? null);
     }
 }

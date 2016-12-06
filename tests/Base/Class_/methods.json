@@ -1,0 +1,35 @@
+{
+    "filename": "Class_\/methods.php",
+    "children": {
+        "type": "list",
+        "children": [
+            {
+                "type": "namespace",
+                "name": "PhpAnalyzer\\Test\\Class_"
+            },
+            {
+                "type": "class",
+                "name": "Test",
+                "docComment": null,
+                "properties": [],
+                "methods": [
+                    {
+                        "name": "publicMethod",
+                        "docComment": "\/**\n     * test\n     *\/",
+                        "visibility": 0
+                    },
+                    {
+                        "name": "protectedMethod",
+                        "docComment": null,
+                        "visibility": 1
+                    },
+                    {
+                        "name": "privateMethod",
+                        "docComment": null,
+                        "visibility": 2
+                    }
+                ]
+            }
+        ]
+    }
+}

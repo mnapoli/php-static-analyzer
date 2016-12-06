@@ -1,0 +1,19 @@
+{
+    "filename": "Class_\/base.php",
+    "children": {
+        "type": "list",
+        "children": [
+            {
+                "type": "namespace",
+                "name": "PhpAnalyzer\\Test\\Class_"
+            },
+            {
+                "type": "class",
+                "name": "Test",
+                "docComment": "\/**\n * This is a doc comment.\n *\/",
+                "properties": [],
+                "methods": []
+            }
+        ]
+    }
+}
