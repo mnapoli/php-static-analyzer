@@ -5,7 +5,7 @@
         "children": [
             {
                 "type": "namespace",
-                "name": "PhpAnalyzer\\Test\\Class_"
+                "name": "Foo"
             },
             {
                 "type": "class",

@@ -1,6 +1,6 @@
 <?php
 
-namespace PhpAnalyzer\Test\Class_;
+namespace Foo;
 
 class Test
 {

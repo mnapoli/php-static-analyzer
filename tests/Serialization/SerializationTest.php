@@ -1,7 +1,7 @@
 <?php
 declare(strict_types = 1);
 
-namespace PhpAnalyzer\Test;
+namespace PhpAnalyzer\Test\Serialization;
 
 use PhpAnalyzer\File;
 use PHPUnit\Framework\TestCase;
@@ -9,13 +9,15 @@ use PHPUnit\Framework\TestCase;
 /**
  * @author Matthieu Napoli <matthieu@mnapoli.fr>
  */
-class FunctionalTest extends TestCase
+class SerializationTest extends TestCase
 {
     /**
      * @dataProvider provideTestFiles
      */
     public function test serialize(string $filename)
     {
+        chdir(__DIR__);
+
         $file = new File($filename . '.php');
         $expectedJson = file_get_contents($filename . '.json');
 
