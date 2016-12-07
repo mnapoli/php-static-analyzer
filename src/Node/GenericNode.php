@@ -36,4 +36,9 @@ class GenericNode extends Node
     {
         return new self($astNode->kind);
     }
+
+    public static function getKind() : int
+    {
+        return 0; // special case
+    }
 }

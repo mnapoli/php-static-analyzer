@@ -62,4 +62,9 @@ class NodeList extends Node
 
         return new self($children);
     }
+
+    public static function getKind() : int
+    {
+        return \ast\AST_STMT_LIST;
+    }
 }

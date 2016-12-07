@@ -9,40 +9,52 @@ use PhpAnalyzer\Node\Operation\Assign;
  */
 abstract class Node
 {
+    const AST_TO_NODES = [
+        \ast\AST_STMT_LIST => NodeList::class,
+        \ast\AST_CLASS => Class_::class,
+        \ast\AST_NAMESPACE => Namespace_::class,
+        \ast\AST_ASSIGN => Assign::class,
+    ];
+    const TYPE_TO_NODES = [
+        'list' => NodeList::class,
+        'class' => Class_::class,
+        'namespace' => Namespace_::class,
+        'assign' => Assign::class,
+    ];
+
     /**
      * Used to serialize the node.
      */
     abstract public function toArray() : array;
 
+    /**
+     * The "kind" of node as defined by the PHP-AST extension.
+     */
+    abstract public static function getKind() : int;
+
     public static function fromArray(array $data) : Node
     {
-        switch ($data['type']) {
-            case 'list':
-                return NodeList::fromArray($data);
-            case 'class':
-                return Class_::fromArray($data);
-            case 'namespace':
-                return Namespace_::fromArray($data);
-            case 'assign':
-                return Assign::fromArray($data);
-            default:
-                throw new \Exception('Unknown node type ' . $data['type']);
+        $allNodes = self::TYPE_TO_NODES;
+
+        if (!isset($allNodes[$data['type']])) {
+            $class = GenericNode::class;
+        } else {
+            $class = $allNodes[$data['type']];
         }
+
+        return $class::fromArray($data);
     }
 
     public static function fromAstNode(\ast\Node $astNode) : Node
     {
-        switch ($astNode->kind) {
-            case \ast\AST_STMT_LIST:
-                return NodeList::fromAstNode($astNode);
-            case \ast\AST_CLASS:
-                return Class_::fromAstNode($astNode);
-            case \ast\AST_NAMESPACE:
-                return Namespace_::fromAstNode($astNode);
-            case \ast\AST_ASSIGN:
-                return Assign::fromAstNode($astNode);
-            default:
-                return GenericNode::fromAstNode($astNode);
+        $allNodes = self::AST_TO_NODES;
+
+        if (!isset($allNodes[$astNode->kind])) {
+            $class = GenericNode::class;
+        } else {
+            $class = $allNodes[$astNode->kind];
         }
+
+        return $class::fromAstNode($astNode);
     }
 }

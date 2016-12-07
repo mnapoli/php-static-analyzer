@@ -34,4 +34,9 @@ class Assign extends Node
 
         return new self();
     }
+
+    public static function getKind() : int
+    {
+        return \ast\AST_ASSIGN;
+    }
 }
