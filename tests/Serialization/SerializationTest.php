@@ -38,11 +38,4 @@ class SerializationTest extends TestCase
             ];
         }, $files);
     }
-
-    private function assertJsonSerialization($expectedFile, File $file)
-    {
-        $json = json_encode($file->toArray(), JSON_PRETTY_PRINT) . "\n";
-
-        self::assertEquals(file_get_contents($expectedFile), $json);
-    }
 }
