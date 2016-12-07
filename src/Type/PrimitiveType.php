@@ -10,14 +10,15 @@ namespace PhpAnalyzer\Type;
 class PrimitiveType implements Type
 {
     private static $map = [
-        'string'  => 'string',
-        'int'     => 'int',
+        'string' => 'string',
+        'int' => 'int',
         'integer' => 'int',
-        'float'   => 'float',
-        'double'  => 'float',
-        'bool'    => 'bool',
+        'float' => 'float',
+        'double' => 'float',
+        'bool' => 'bool',
         'boolean' => 'bool',
-        'array'   => 'array',
+        'array' => 'array',
+        'null' => 'null',
     ];
 
     /**
@@ -42,7 +43,7 @@ class PrimitiveType implements Type
         return isset(self::$map[$name]);
     }
 
-    public static function get(string $name) : string
+    public static function get(string $name) : self
     {
         $name = strtolower($name);
 
