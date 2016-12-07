@@ -3,12 +3,14 @@ declare(strict_types = 1);
 
 namespace PhpAnalyzer\Node;
 
+use PhpAnalyzer\Type\Type;
+use PhpAnalyzer\Type\UnknownType;
 use PhpAnalyzer\Visibility\Visibility;
 
 /**
  * @author Matthieu Napoli <matthieu@mnapoli.fr>
  */
-class ClassProperty extends Node
+class ClassProperty extends Node implements HasType
 {
     /**
      * @var string
@@ -35,6 +37,12 @@ class ClassProperty extends Node
     public function getName() : string
     {
         return $this->name;
+    }
+
+    public function getReturnType() : Type
+    {
+        // TODO read type from phpdoc
+        return new UnknownType();
     }
 
     public function toArray() : array

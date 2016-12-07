@@ -4,7 +4,7 @@ namespace PhpAnalyzer\Parser\Node;
 
 use PhpAnalyzer\Log\Logger;
 use PhpAnalyzer\Scope\Scope;
-use PhpAnalyzer\Type\ClassType;
+use PhpAnalyzer\Type\ObjectType;
 use PhpAnalyzer\Type\UnknownType;
 use PhpParser\Node\Expr\MethodCall;
 
@@ -57,7 +57,7 @@ class ReflectedMethodCall extends MethodCall implements TypedNode, ReflectedCall
 
         $variableType = $this->var->getNodeType();
 
-        if (! $variableType instanceof ClassType) {
+        if (! $variableType instanceof ObjectType) {
             Logger::warning('Method call on non-object');
             return null;
         }

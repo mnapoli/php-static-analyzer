@@ -2,7 +2,7 @@
 
 namespace PhpAnalyzer\Parser\Node;
 
-use PhpAnalyzer\Type\ClassType;
+use PhpAnalyzer\Type\ObjectType;
 use PhpAnalyzer\Type\UnknownType;
 use PhpParser\Node\Param;
 
@@ -55,6 +55,6 @@ class ReflectedParameter extends Param implements TypedNode
             return new UnknownType;
         }
 
-        return new ClassType($class);
+        return new ObjectType($class);
     }
 }

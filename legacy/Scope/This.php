@@ -3,7 +3,7 @@
 namespace PhpAnalyzer\Scope;
 
 use PhpAnalyzer\Parser\Node\ReflectedType;
-use PhpAnalyzer\Type\ClassType;
+use PhpAnalyzer\Type\ObjectType;
 use PhpAnalyzer\Type\Type;
 
 /**
@@ -30,7 +30,7 @@ class This extends Variable
 
     public function getType()
     {
-        return new ClassType($this->class);
+        return new ObjectType($this->class);
     }
 
     public function addType(Type $type)

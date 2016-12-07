@@ -9,5 +9,5 @@ namespace PhpAnalyzer\Type;
  */
 interface Type
 {
-    public function toString();
+    public function toString() : string;
 }

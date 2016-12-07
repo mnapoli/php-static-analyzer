@@ -25,27 +25,24 @@ class PrimitiveType implements Type
      */
     private $name;
 
-    /**
-     * @param string $name
-     */
-    private function __construct($name)
+    private function __construct(string $name)
     {
-        $this->name = (string) $name;
+        $this->name = $name;
     }
 
-    public function toString()
+    public function toString() : string
     {
         return $this->name;
     }
 
-    public static function isPrimitiveType($name)
+    public static function isPrimitiveType(string $name) : bool
     {
         $name = strtolower($name);
 
         return isset(self::$map[$name]);
     }
 
-    public static function get($name)
+    public static function get(string $name) : string
     {
         $name = strtolower($name);
 

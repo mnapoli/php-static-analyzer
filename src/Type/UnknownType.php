@@ -9,7 +9,7 @@ namespace PhpAnalyzer\Type;
  */
 class UnknownType implements Type
 {
-    public function toString()
+    public function toString() : string
     {
         return '';
     }

@@ -4,12 +4,14 @@ declare(strict_types = 1);
 namespace PhpAnalyzer\Node;
 
 use ast\Node\Decl;
+use PhpAnalyzer\Type\Type;
+use PhpAnalyzer\Type\UnknownType;
 use PhpAnalyzer\Visibility\Visibility;
 
 /**
  * @author Matthieu Napoli <matthieu@mnapoli.fr>
  */
-class ClassMethod extends Node
+class ClassMethod extends Node implements HasType
 {
     /**
      * @var string
@@ -36,6 +38,12 @@ class ClassMethod extends Node
     public function getName() : string
     {
         return $this->name;
+    }
+
+    public function getReturnType() : Type
+    {
+        // TODO read type from type-hint or phpdoc
+        return new UnknownType();
     }
 
     public function toArray() : array

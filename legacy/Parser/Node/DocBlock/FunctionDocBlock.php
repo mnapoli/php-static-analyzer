@@ -3,7 +3,7 @@
 namespace PhpAnalyzer\Parser\Node\DocBlock;
 
 use PhpAnalyzer\Scope\Scope;
-use PhpAnalyzer\Type\ClassType;
+use PhpAnalyzer\Type\ObjectType;
 use PhpAnalyzer\Type\PrimitiveType;
 use PhpAnalyzer\Type\Type;
 use PhpAnalyzer\Type\UnknownType;
@@ -57,6 +57,6 @@ class FunctionDocBlock
         }
 
         // TODO
-        return new ClassType($class);
+        return new ObjectType($class);
     }
 }
