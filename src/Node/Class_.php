@@ -133,9 +133,4 @@ class Class_ extends Node
 
         return new self($astNode->name, $astNode->docComment, $properties, $methods);
     }
-
-    public static function getKind() : int
-    {
-        return \ast\AST_CLASS;
-    }
 }

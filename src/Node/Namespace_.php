@@ -47,11 +47,6 @@ class Namespace_ extends Node
         return new self($astNode->children['name']);
     }
 
-    public static function getKind() : int
-    {
-        return \ast\AST_NAMESPACE;
-    }
-
     /**
      * Factory to create a instance representing the global (root) namespace.
      */

@@ -20,17 +20,13 @@ abstract class Node
         'class' => Class_::class,
         'namespace' => Namespace_::class,
         'assign' => Assign::class,
+        'primitive_value' => PrimitiveValue::class,
     ];
 
     /**
      * Used to serialize the node.
      */
     abstract public function toArray() : array;
-
-    /**
-     * The "kind" of node as defined by the PHP-AST extension.
-     */
-    abstract public static function getKind() : int;
 
     public static function fromArray(array $data) : Node
     {

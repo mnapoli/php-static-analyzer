@@ -63,9 +63,4 @@ class ClassProperty extends Node
 
         return new self($name, $docComment, $visibility);
     }
-
-    public static function getKind() : int
-    {
-        return \ast\AST_PROP_DECL;
-    }
 }

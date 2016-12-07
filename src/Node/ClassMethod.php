@@ -68,9 +68,4 @@ class ClassMethod extends Node
 
         return new self($name, $docComment, $visibility);
     }
-
-    public static function getKind() : int
-    {
-        return \ast\AST_METHOD;
-    }
 }

@@ -56,8 +56,13 @@ class NodeList extends Node
             throw new \Exception('Wrong type');
         }
 
-        $children = array_map(function (\ast\Node $astNode) {
-            return Node::fromAstNode($astNode);
+        $children = array_map(function ($node) {
+            if ($node instanceof \ast\Node) {
+                return Node::fromAstNode($node);
+            } elseif (is_scalar($node)) {
+                return new PrimitiveValue($node);
+            }
+            throw new \Exception('Unknown node');
         }, $astNode->children);
 
         return new self($children);
