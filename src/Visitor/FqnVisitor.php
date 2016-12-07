@@ -14,7 +14,7 @@ use PhpAnalyzer\File;
  *
  * @author Matthieu Napoli <matthieu@mnapoli.fr>
  */
-class FqnVisitor
+class FqnVisitor implements Visitor
 {
     public function visit(File $file)
     {

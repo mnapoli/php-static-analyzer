@@ -30,6 +30,11 @@ class Class_ extends Node
      */
     private $methods;
 
+    /**
+     * @var bool
+     */
+    private $deprecated = false;
+
     public function __construct(string $name, string $docComment = null, array $properties, array $methods)
     {
         $this->name = $name;
@@ -50,12 +55,31 @@ class Class_ extends Node
         $this->name = $namespaceName . end($parts);
     }
 
+    /**
+     * @return null|string
+     */
+    public function getDocComment()
+    {
+        return $this->docComment;
+    }
+
+    public function isDeprecated() : bool
+    {
+        return $this->deprecated;
+    }
+
+    public function setDeprecated(bool $deprecated)
+    {
+        $this->deprecated = $deprecated;
+    }
+
     public function toArray() : array
     {
         return [
             'type' => 'class',
-            'name' => $this->name,
-            'docComment' => $this->docComment,
+            'name' => $this->getName(),
+            'docComment' => $this->getDocComment(),
+            'deprecated' => $this->isDeprecated(),
             'properties' => array_map(function (ClassProperty $property) {
                 return $property->toArray();
             }, $this->properties),
@@ -74,7 +98,13 @@ class Class_ extends Node
             return ClassMethod::fromArray($data);
         }, $data['methods']);
 
-        return new self($data['name'], $data['docComment'], $properties, $methods);
+        $class = new self($data['name'], $data['docComment'], $properties, $methods);
+
+        if ($data['deprecated']) {
+            $class->setDeprecated(true);
+        }
+
+        return $class;
     }
 
     public static function fromAstNode(\ast\Node $astNode) : Node

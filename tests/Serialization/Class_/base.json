@@ -11,6 +11,7 @@
                 "type": "class",
                 "name": "Test",
                 "docComment": "\/**\n * This is a doc comment.\n *\/",
+                "deprecated": false,
                 "properties": [],
                 "methods": []
             }

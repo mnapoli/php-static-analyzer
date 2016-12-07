@@ -11,6 +11,7 @@
                 "type": "class",
                 "name": "Test",
                 "docComment": null,
+                "deprecated": false,
                 "properties": [],
                 "methods": [
                     {
