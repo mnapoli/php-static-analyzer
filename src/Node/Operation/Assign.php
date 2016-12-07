@@ -6,24 +6,47 @@ namespace PhpAnalyzer\Node\Operation;
 use PhpAnalyzer\Node\Node;
 
 /**
+ * Assignment of the result of an expression to a variable.
+ *
  * @author Matthieu Napoli <matthieu@mnapoli.fr>
  */
 class Assign extends Node
 {
-    public function __construct()
+    /**
+     * Can be null if the name is unknown (dynamic).
+     *
+     * @var string|null
+     */
+    private $variableName;
+
+    /**
+     * The result of the expression is assigned to the variable.
+     *
+     * @var Node
+     */
+    private $expression;
+
+    /**
+     * @param string|null $variableName
+     */
+    public function __construct($variableName, Node $expression)
     {
+        $this->variableName = $variableName;
+        $this->expression = $expression;
     }
 
     public function toArray() : array
     {
         return [
             'type' => 'assign',
+            'variableName' => $this->variableName,
+            'expression' => $this->expression->toArray(),
         ];
     }
 
     public static function fromArray(array $data) : Node
     {
-        return new self();
+        return new self($data['variableName'], Node::fromArray($data['expression']));
     }
 
     public static function fromAstNode(\ast\Node $astNode) : Node
@@ -32,7 +55,9 @@ class Assign extends Node
             throw new \Exception('Wrong type: ' . \ast\get_kind_name($astNode->kind));
         }
 
-        return new self();
+        $variableName = $astNode->children['var']->children['name'] ?? null;
+
+        return new self($variableName, Node::fromAst($astNode->children['expr']));
     }
 
     public static function getKind() : int

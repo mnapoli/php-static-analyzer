@@ -38,4 +38,9 @@ class PrimitiveValue extends Node
     {
         return new self($data['value']);
     }
+
+    public static function fromAstNode(\ast\Node $astNode) : Node
+    {
+        throw new \Exception('Invalid case');
+    }
 }

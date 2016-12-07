@@ -4,7 +4,12 @@
         "type": "list",
         "children": [
             {
-                "type": "assign"
+                "type": "assign",
+                "variableName": "a",
+                "expression": {
+                    "type": "primitive_value",
+                    "value": 1
+                }
             }
         ]
     }

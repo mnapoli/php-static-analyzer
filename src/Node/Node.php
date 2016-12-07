@@ -41,16 +41,30 @@ abstract class Node
         return $class::fromArray($data);
     }
 
-    public static function fromAstNode(\ast\Node $astNode) : Node
-    {
-        $allNodes = self::AST_TO_NODES;
+    abstract public static function fromAstNode(\ast\Node $astNode) : Node;
 
-        if (!isset($allNodes[$astNode->kind])) {
-            $class = GenericNode::class;
-        } else {
-            $class = $allNodes[$astNode->kind];
+    /**
+     * Create a node from anything found in the AST of the PHP-AST extension.
+     *
+     * @param mixed $anything
+     */
+    public static function fromAst($anything) : Node
+    {
+        if (is_scalar($anything)) {
+            return new PrimitiveValue($anything);
+        }
+        if (! $anything instanceof \ast\Node) {
+            throw new \Exception('Unknown node');
         }
 
-        return $class::fromAstNode($astNode);
+        $allNodes = self::AST_TO_NODES;
+
+        if (! isset($allNodes[$anything->kind])) {
+            $class = GenericNode::class;
+        } else {
+            $class = $allNodes[$anything->kind];
+        }
+
+        return $class::fromAstNode($anything);
     }
 }
