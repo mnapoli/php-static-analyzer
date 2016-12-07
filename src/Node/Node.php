@@ -51,7 +51,7 @@ abstract class Node
     public static function fromAst($anything) : Node
     {
         if (is_scalar($anything)) {
-            return new PrimitiveValue($anything);
+            return PrimitiveValue::fromValue($anything);
         }
         if (! $anything instanceof \ast\Node) {
             throw new \Exception('Unknown node');

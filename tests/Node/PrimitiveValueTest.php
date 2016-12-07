@@ -11,9 +11,9 @@ class PrimitiveValueTest extends \PHPUnit_Framework_TestCase
      * @test
      * @dataProvider primitiveTypeProvider
      */
-    public function inherits type from value($value, string $expectedType)
+    public function guesses type from value($value, string $expectedType)
     {
-        self::assertEquals($expectedType, (new PrimitiveValue($value))->getReturnType()->toString());
+        self::assertEquals($expectedType, PrimitiveValue::fromValue($value)->getReturnType()->toString());
     }
 
     public function primitiveTypeProvider()

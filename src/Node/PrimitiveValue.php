@@ -16,9 +16,15 @@ class PrimitiveValue extends Node implements HasType
      */
     private $value;
 
-    public function __construct($value)
+    /**
+     * @var PrimitiveType
+     */
+    private $returnType;
+
+    public function __construct($value, Type $returnType)
     {
         $this->value = $value;
+        $this->returnType = $returnType;
     }
 
     /**
@@ -31,18 +37,7 @@ class PrimitiveValue extends Node implements HasType
 
     public function getReturnType() : Type
     {
-        $type = gettype($this->value);
-        switch ($type) {
-            case 'integer':
-            case 'string':
-            case 'double':
-            case 'array':
-            case 'NULL':
-            case 'boolean':
-                return PrimitiveType::get($type);
-            default:
-                throw new \Exception('Unsupported primitive type ' . $type);
-        }
+        return $this->returnType;
     }
 
     public function toArray() : array
@@ -50,12 +45,18 @@ class PrimitiveValue extends Node implements HasType
         return [
             'type' => 'primitive_value',
             'value' => $this->getValue(),
+            'returnType' => $this->getReturnType()->toString(),
         ];
     }
 
     public static function fromArray(array $data) : Node
     {
-        return new self($data['value']);
+        return new self($data['value'], PrimitiveType::get($data['returnType']));
+    }
+
+    public static function fromValue($value) : PrimitiveValue
+    {
+        return new self($value, PrimitiveType::getFromValue($value));
     }
 
     public static function fromAstNode(\ast\Node $astNode) : Node

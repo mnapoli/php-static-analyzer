@@ -49,4 +49,20 @@ class PrimitiveType implements Type
 
         return new self(self::$map[$name]);
     }
+
+    public static function getFromValue($value) : Type
+    {
+        $type = gettype($value);
+        switch ($type) {
+            case 'integer':
+            case 'string':
+            case 'double':
+            case 'array':
+            case 'NULL':
+            case 'boolean':
+                return PrimitiveType::get($type);
+            default:
+                throw new \Exception('Unsupported primitive type ' . $type);
+        }
+    }
 }
