@@ -3,6 +3,7 @@
 namespace PhpAnalyzer\Node;
 
 use PhpAnalyzer\Node\Operation\Assign;
+use PhpAnalyzer\Node\Operation\MethodCall;
 use PhpAnalyzer\Node\Operation\Operation;
 
 /**
@@ -16,6 +17,8 @@ abstract class Node
         \ast\AST_NAMESPACE => Namespace_::class,
         \ast\AST_ASSIGN => Assign::class,
         \ast\AST_BINARY_OP => Operation::class,
+        \ast\AST_VAR => Variable::class,
+        \ast\AST_METHOD_CALL => MethodCall::class,
     ];
     const TYPE_TO_NODES = [
         'list' => NodeList::class,
@@ -24,6 +27,8 @@ abstract class Node
         'assign' => Assign::class,
         'primitive_value' => PrimitiveValue::class,
         'operation' => Operation::class,
+        'variable' => Variable::class,
+        'method_call' => MethodCall::class,
     ];
 
     /**

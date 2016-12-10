@@ -1,0 +1,27 @@
+{
+    "filename": "Code\/method-call.php",
+    "children": {
+        "type": "list",
+        "children": [
+            {
+                "type": "method_call",
+                "expression": {
+                    "type": "variable",
+                    "name": "foo"
+                },
+                "methodName": "bar",
+                "arguments": [
+                    {
+                        "type": "primitive_value",
+                        "value": 1,
+                        "returnType": "int"
+                    },
+                    {
+                        "type": "variable",
+                        "name": "bar"
+                    }
+                ]
+            }
+        ]
+    }
+}

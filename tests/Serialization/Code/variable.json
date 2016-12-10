@@ -1,0 +1,12 @@
+{
+    "filename": "Code\/variable.php",
+    "children": {
+        "type": "list",
+        "children": [
+            {
+                "type": "variable",
+                "name": "foo"
+            }
+        ]
+    }
+}
