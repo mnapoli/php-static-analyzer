@@ -19,13 +19,14 @@ How it works:
     The [PHP-AST](https://github.com/nikic/php-ast) extension is used as a base to parse the PHP code (requires PHP 7).
     
     However this project does not reuse nodes from PHP-AST: it implements new nodes. The reasons are:
+
         - our nodes are strictly typed, i.e. they are all different PHP classes which allows to write custom logic/rules for each node
         - our nodes are higher level: they are not meant to represent 1:1 the code, but rather provide a simpler (and more semantic) representation of the code (in short, it's simpler)
         - our nodes are extensible: they are meant to contain more data than just "the code", e.g. they can contain information contained in docblocks (e.g. the computed return type of a method, store if a method or a class is "deprecated", etc.)
         
 2. apply "visitors" on the AST
 
-    Visitors add logic to the "dumb" AST. They can, for example, resolve fully qualified name of classes or functions based on the namespace of the file. They can also detect errors in the code. Or again they can try to guess the types of all variables and methods (type inference).
+    Visitors traverse the tree to enrich it with more data and logic. They can, for example, resolve fully qualified name of classes or functions based on the namespace of the file. They can also detect errors in the code. Or again they can try to guess the types of all variables and methods (type inference).
     
     Some default "visitors" are (will be) implemented to cover most use cases. However this package is intended as a framework: you can write custom visitors to enrich even more the information on a codebase (e.g. to add support for framework specific stuff like Laravel facades, Doctrine's entity manager, etc.).
 
