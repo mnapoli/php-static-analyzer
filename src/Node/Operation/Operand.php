@@ -18,6 +18,19 @@ use MyCLabs\Enum\Enum;
  * @method static Operand POW()
  * @method static Operand SHIFT_LEFT()
  * @method static Operand SHIFT_RIGHT()
+ * @method static Operand BOOL_AND()
+ * @method static Operand BOOL_OR()
+ * @method static Operand BOOL_XOR()
+ * @method static Operand IS_IDENTICAL()
+ * @method static Operand IS_NOT_IDENTICAL()
+ * @method static Operand IS_EQUAL()
+ * @method static Operand IS_NOT_EQUAL()
+ * @method static Operand IS_SMALLER()
+ * @method static Operand IS_SMALLER_OR_EQUAL()
+ * @method static Operand IS_GREATER()
+ * @method static Operand IS_GREATER_OR_EQUAL()
+ * @method static Operand SPACESHIP()
+ * @method static Operand COALESCE()
  *
  * @author Matthieu Napoli <matthieu@mnapoli.fr>
  */
