@@ -14,7 +14,7 @@ To summarize it in a few sentences:
 
 How it works:
 
-1. model a codebase using an [Abstract Syntax Tree](https://en.wikipedia.org/wiki/Abstract_syntax_tree) (aka **AST**)
+1. **model a codebase using an [Abstract Syntax Tree](https://en.wikipedia.org/wiki/Abstract_syntax_tree) (aka *AST*)**
 
     The [PHP-AST](https://github.com/nikic/php-ast) extension is used as a base to parse the PHP code (requires PHP 7).
     
@@ -24,13 +24,13 @@ How it works:
     - our nodes are higher level: they are not meant to represent 1:1 the code, but rather provide a simpler (and more semantic) representation of the code (in short, it's simpler)
     - our nodes are extensible: they are meant to contain more data than just "the code", e.g. they can contain information contained in docblocks (e.g. the computed return type of a method, store if a method or a class is "deprecated", etc.)
         
-2. apply "visitors" on the AST
+2. **apply "visitors" on the AST**
 
     Visitors traverse the tree to enrich it with more data and logic. They can, for example, resolve fully qualified name of classes or functions based on the namespace of the file. They can also detect errors in the code. Or again they can try to guess the types of all variables and methods (type inference).
     
     Some default "visitors" are (will be) implemented to cover most use cases. However this package is intended as a framework: you can write custom visitors to enrich even more the information on a codebase (e.g. to add support for framework specific stuff like Laravel facades, Doctrine's entity manager, etc.).
 
-3. Serialize the AST
+3. **Serialize the AST**
 
     The AST (enriched with more data by visitors, or not) can be entirely serialized to JSON.
     
@@ -38,7 +38,7 @@ How it works:
     
     That also allows 3rd party tools to read the AST, e.g. to improve the autocompletion of an editor/IDE, or to build a code browser in HTML/Javascript that understands the code (e.g. `Ctrl+Click` in a browser).
 
-4. Build "real" applications on top of the AST
+4. **Build "real" applications on top of the AST**
 
     This project is meant as a base to write more useful applications for end users, as such it's just a library. If you are interested, open an issue.
 
