@@ -3,6 +3,7 @@
 namespace PhpAnalyzer\Node;
 
 use PhpAnalyzer\Node\Operation\Assign;
+use PhpAnalyzer\Node\Operation\Operation;
 
 /**
  * @author Matthieu Napoli <matthieu@mnapoli.fr>
@@ -14,6 +15,7 @@ abstract class Node
         \ast\AST_CLASS => Class_::class,
         \ast\AST_NAMESPACE => Namespace_::class,
         \ast\AST_ASSIGN => Assign::class,
+        \ast\AST_BINARY_OP => Operation::class,
     ];
     const TYPE_TO_NODES = [
         'list' => NodeList::class,
@@ -21,6 +23,7 @@ abstract class Node
         'namespace' => Namespace_::class,
         'assign' => Assign::class,
         'primitive_value' => PrimitiveValue::class,
+        'operation' => Operation::class,
     ];
 
     /**
@@ -60,6 +63,7 @@ abstract class Node
         $allNodes = self::AST_TO_NODES;
 
         if (! isset($allNodes[$anything->kind])) {
+            throw new \Exception(\ast\get_kind_name($anything->kind));
             $class = GenericNode::class;
         } else {
             $class = $allNodes[$anything->kind];

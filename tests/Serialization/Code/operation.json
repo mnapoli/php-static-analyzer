@@ -1,0 +1,36 @@
+{
+    "filename": "Code\/operation.php",
+    "children": {
+        "type": "list",
+        "children": [
+            {
+                "type": "operation",
+                "operand": "ADD",
+                "left": {
+                    "type": "primitive_value",
+                    "value": 1,
+                    "returnType": "int"
+                },
+                "right": {
+                    "type": "primitive_value",
+                    "value": 1,
+                    "returnType": "int"
+                }
+            },
+            {
+                "type": "operation",
+                "operand": "CONCAT",
+                "left": {
+                    "type": "primitive_value",
+                    "value": "abc",
+                    "returnType": "string"
+                },
+                "right": {
+                    "type": "primitive_value",
+                    "value": "def",
+                    "returnType": "string"
+                }
+            }
+        ]
+    }
+}

@@ -19,10 +19,18 @@ class SerializationTest extends TestCase
         chdir(__DIR__);
 
         $file = new File($filename . '.php');
+
+        $generatedJson = json_encode($file->toArray(), JSON_PRETTY_PRINT) . "\n";
+
+        // Update JSON file containing expected result if we are in "update" mode
+        if (self::isUpdate()) {
+            file_put_contents($filename . '.json', $generatedJson);
+        }
+
         $expectedJson = file_get_contents($filename . '.json');
 
         // Test serialization
-        self::assertEquals($expectedJson, json_encode($file->toArray(), JSON_PRETTY_PRINT) . "\n");
+        self::assertEquals($expectedJson, $generatedJson);
 
         // Test deserialization
         self::assertEquals($file, File::fromArray(json_decode($expectedJson, true)));
@@ -37,5 +45,10 @@ class SerializationTest extends TestCase
                 substr($file, 0, strlen($file) - 4),
             ];
         }, $files);
+    }
+
+    public static function isUpdate()
+    {
+        return in_array('--update', $_SERVER['argv'], true);
     }
 }
