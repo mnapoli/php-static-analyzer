@@ -20,9 +20,9 @@ How it works:
     
     However this project does not reuse nodes from PHP-AST: it implements new nodes. The reasons are:
 
-        - our nodes are strictly typed, i.e. they are all different PHP classes which allows to write custom logic/rules for each node
-        - our nodes are higher level: they are not meant to represent 1:1 the code, but rather provide a simpler (and more semantic) representation of the code (in short, it's simpler)
-        - our nodes are extensible: they are meant to contain more data than just "the code", e.g. they can contain information contained in docblocks (e.g. the computed return type of a method, store if a method or a class is "deprecated", etc.)
+    - our nodes are strictly typed, i.e. they are all different PHP classes which allows to write custom logic/rules for each node
+    - our nodes are higher level: they are not meant to represent 1:1 the code, but rather provide a simpler (and more semantic) representation of the code (in short, it's simpler)
+    - our nodes are extensible: they are meant to contain more data than just "the code", e.g. they can contain information contained in docblocks (e.g. the computed return type of a method, store if a method or a class is "deprecated", etc.)
         
 2. apply "visitors" on the AST
 
