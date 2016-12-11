@@ -3,7 +3,7 @@ declare(strict_types = 1);
 
 namespace PhpAnalyzer\Node\Operation;
 
-use PhpAnalyzer\Node\HasType;
+use PhpAnalyzer\Node\TypedNode;
 use PhpAnalyzer\Node\Node;
 use PhpAnalyzer\Type\PrimitiveType;
 use PhpAnalyzer\Type\Type;
@@ -11,7 +11,7 @@ use PhpAnalyzer\Type\Type;
 /**
  * @author Matthieu Napoli <matthieu@mnapoli.fr>
  */
-class PrimitiveValue extends Node implements HasType
+class PrimitiveValue extends Node implements TypedNode
 {
     /**
      * @var mixed

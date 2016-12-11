@@ -4,7 +4,7 @@ declare(strict_types = 1);
 namespace PhpAnalyzer\Node\Declaration;
 
 use ast\Node\Decl;
-use PhpAnalyzer\Node\HasType;
+use PhpAnalyzer\Node\TypedNode;
 use PhpAnalyzer\Node\Node;
 use PhpAnalyzer\Type\Type;
 use PhpAnalyzer\Type\UnknownType;
@@ -13,7 +13,7 @@ use PhpAnalyzer\Visibility\Visibility;
 /**
  * @author Matthieu Napoli <matthieu@mnapoli.fr>
  */
-class ClassMethod extends Node implements HasType
+class ClassMethod extends Node implements TypedNode
 {
     /**
      * @var string

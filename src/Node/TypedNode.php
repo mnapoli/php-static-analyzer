@@ -10,7 +10,7 @@ use PhpAnalyzer\Type\Type;
  *
  * @author Matthieu Napoli <matthieu@mnapoli.fr>
  */
-interface HasType
+interface TypedNode
 {
     public function getReturnType() : Type;
 }
