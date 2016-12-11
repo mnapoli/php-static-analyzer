@@ -112,7 +112,7 @@ PHP-AST node types to support (list taken from [here](https://github.com/nikic/p
 - [ ] AST_PROP
 - [ ] AST_PROP_ELEM
 - [ ] AST_REF
-- [ ] AST_RETURN
+- [x] AST_RETURN
 - [ ] AST_SHELL_EXEC
 - [ ] AST_STATIC
 - [ ] AST_STATIC_CALL

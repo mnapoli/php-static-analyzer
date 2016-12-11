@@ -1,0 +1,16 @@
+{
+    "filename": "Code\/return.php",
+    "children": {
+        "type": "list",
+        "children": [
+            {
+                "type": "return",
+                "expression": {
+                    "type": "primitive_value",
+                    "value": 1,
+                    "returnType": "int"
+                }
+            }
+        ]
+    }
+}

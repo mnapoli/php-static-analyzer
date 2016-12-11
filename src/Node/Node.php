@@ -5,6 +5,7 @@ namespace PhpAnalyzer\Node;
 use PhpAnalyzer\Node\Operation\Assign;
 use PhpAnalyzer\Node\Operation\MethodCall;
 use PhpAnalyzer\Node\Operation\Operation;
+use PhpAnalyzer\Node\Operation\Return_;
 
 /**
  * @author Matthieu Napoli <matthieu@mnapoli.fr>
@@ -19,6 +20,7 @@ abstract class Node
         \ast\AST_BINARY_OP => Operation::class,
         \ast\AST_VAR => Variable::class,
         \ast\AST_METHOD_CALL => MethodCall::class,
+        \ast\AST_RETURN => Return_::class,
     ];
     const TYPE_TO_NODES = [
         'list' => NodeList::class,
@@ -29,6 +31,7 @@ abstract class Node
         'operation' => Operation::class,
         'variable' => Variable::class,
         'method_call' => MethodCall::class,
+        'return' => Return_::class,
     ];
 
     /**
