@@ -108,7 +108,7 @@ PHP-AST node types to support (list taken from [here](https://github.com/nikic/p
 - [ ] AST_POST_INC
 - [ ] AST_PRE_DEC
 - [ ] AST_PRE_INC
-- [ ] AST_PRINT
+- [x] AST_PRINT
 - [ ] AST_PROP
 - [ ] AST_PROP_ELEM
 - [ ] AST_REF

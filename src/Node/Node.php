@@ -5,6 +5,7 @@ namespace PhpAnalyzer\Node;
 use PhpAnalyzer\Node\Operation\Assign;
 use PhpAnalyzer\Node\Operation\MethodCall;
 use PhpAnalyzer\Node\Operation\Operation;
+use PhpAnalyzer\Node\Operation\Print_;
 use PhpAnalyzer\Node\Operation\Return_;
 use PhpAnalyzer\Node\Operation\Throw_;
 
@@ -23,6 +24,7 @@ abstract class Node
         \ast\AST_METHOD_CALL => MethodCall::class,
         \ast\AST_RETURN => Return_::class,
         \ast\AST_THROW => Throw_::class,
+        \ast\AST_PRINT => Print_::class,
     ];
     const TYPE_TO_NODES = [
         'list' => NodeList::class,
@@ -35,6 +37,7 @@ abstract class Node
         'method_call' => MethodCall::class,
         'return' => Return_::class,
         'throw' => Throw_::class,
+        'print' => Print_::class,
     ];
 
     /**
