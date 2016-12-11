@@ -2,12 +2,16 @@
 
 namespace PhpAnalyzer\Node;
 
+use PhpAnalyzer\Node\Declaration\Class_;
+use PhpAnalyzer\Node\Declaration\Namespace_;
 use PhpAnalyzer\Node\Operation\Assign;
 use PhpAnalyzer\Node\Operation\MethodCall;
 use PhpAnalyzer\Node\Operation\Operation;
+use PhpAnalyzer\Node\Operation\PrimitiveValue;
 use PhpAnalyzer\Node\Operation\Print_;
 use PhpAnalyzer\Node\Operation\Return_;
 use PhpAnalyzer\Node\Operation\Throw_;
+use PhpAnalyzer\Node\Operation\Variable;
 
 /**
  * @author Matthieu Napoli <matthieu@mnapoli.fr>

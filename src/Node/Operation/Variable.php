@@ -1,7 +1,9 @@
 <?php
 declare(strict_types = 1);
 
-namespace PhpAnalyzer\Node;
+namespace PhpAnalyzer\Node\Operation;
+
+use PhpAnalyzer\Node\Node;
 
 /**
  * @author Matthieu Napoli <matthieu@mnapoli.fr>

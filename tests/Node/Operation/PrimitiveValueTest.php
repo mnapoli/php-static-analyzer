@@ -1,9 +1,9 @@
 <?php
 declare(strict_types = 1);
 
-namespace PhpAnalyzer\Test\Node;
+namespace PhpAnalyzer\Test\Node\Operation;
 
-use PhpAnalyzer\Node\PrimitiveValue;
+use PhpAnalyzer\Node\Operation\PrimitiveValue;
 
 class PrimitiveValueTest extends \PHPUnit_Framework_TestCase
 {

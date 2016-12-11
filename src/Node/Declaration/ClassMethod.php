@@ -1,9 +1,11 @@
 <?php
 declare(strict_types = 1);
 
-namespace PhpAnalyzer\Node;
+namespace PhpAnalyzer\Node\Declaration;
 
 use ast\Node\Decl;
+use PhpAnalyzer\Node\HasType;
+use PhpAnalyzer\Node\Node;
 use PhpAnalyzer\Type\Type;
 use PhpAnalyzer\Type\UnknownType;
 use PhpAnalyzer\Visibility\Visibility;

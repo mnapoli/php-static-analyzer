@@ -3,8 +3,8 @@ declare(strict_types = 1);
 
 namespace PhpAnalyzer;
 
-use PhpAnalyzer\Node\Class_;
-use PhpAnalyzer\Node\Namespace_;
+use PhpAnalyzer\Node\Declaration\Class_;
+use PhpAnalyzer\Node\Declaration\Namespace_;
 use PhpAnalyzer\Node\Node;
 use PhpAnalyzer\Node\NodeList;
 

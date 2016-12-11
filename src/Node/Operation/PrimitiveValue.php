@@ -1,8 +1,10 @@
 <?php
 declare(strict_types = 1);
 
-namespace PhpAnalyzer\Node;
+namespace PhpAnalyzer\Node\Operation;
 
+use PhpAnalyzer\Node\HasType;
+use PhpAnalyzer\Node\Node;
 use PhpAnalyzer\Type\PrimitiveType;
 use PhpAnalyzer\Type\Type;
 

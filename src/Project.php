@@ -3,7 +3,7 @@ declare(strict_types = 1);
 
 namespace PhpAnalyzer;
 
-use PhpAnalyzer\Node\Class_;
+use PhpAnalyzer\Node\Declaration\Class_;
 use PhpAnalyzer\Visitor\Visitor;
 use Symfony\Component\Finder\Finder;
 
