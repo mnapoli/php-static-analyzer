@@ -119,7 +119,7 @@ PHP-AST node types to support (list taken from [here](https://github.com/nikic/p
 - [ ] AST_STATIC_PROP
 - [ ] AST_SWITCH
 - [ ] AST_SWITCH_CASE
-- [ ] AST_THROW
+- [x] AST_THROW
 - [ ] AST_TRAIT_ALIAS
 - [ ] AST_TRAIT_PRECEDENCE
 - [ ] AST_TRY

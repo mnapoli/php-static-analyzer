@@ -1,0 +1,15 @@
+{
+    "filename": "Code\/throw.php",
+    "children": {
+        "type": "list",
+        "children": [
+            {
+                "type": "throw",
+                "expression": {
+                    "type": "variable",
+                    "name": "a"
+                }
+            }
+        ]
+    }
+}

@@ -6,6 +6,7 @@ use PhpAnalyzer\Node\Operation\Assign;
 use PhpAnalyzer\Node\Operation\MethodCall;
 use PhpAnalyzer\Node\Operation\Operation;
 use PhpAnalyzer\Node\Operation\Return_;
+use PhpAnalyzer\Node\Operation\Throw_;
 
 /**
  * @author Matthieu Napoli <matthieu@mnapoli.fr>
@@ -21,6 +22,7 @@ abstract class Node
         \ast\AST_VAR => Variable::class,
         \ast\AST_METHOD_CALL => MethodCall::class,
         \ast\AST_RETURN => Return_::class,
+        \ast\AST_THROW => Throw_::class,
     ];
     const TYPE_TO_NODES = [
         'list' => NodeList::class,
@@ -32,6 +34,7 @@ abstract class Node
         'variable' => Variable::class,
         'method_call' => MethodCall::class,
         'return' => Return_::class,
+        'throw' => Throw_::class,
     ];
 
     /**
