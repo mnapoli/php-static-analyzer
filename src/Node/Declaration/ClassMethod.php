@@ -30,11 +30,20 @@ class ClassMethod extends Node implements TypedNode
      */
     private $visibility;
 
-    public function __construct(string $name, string $docComment = null, Visibility $visibility)
+    /**
+     * @var Argument[]
+     */
+    private $arguments;
+
+    /**
+     * @param Argument[] $arguments
+     */
+    public function __construct(string $name, string $docComment = null, Visibility $visibility, array $arguments)
     {
         $this->name = $name;
         $this->docComment = $docComment;
         $this->visibility = $visibility;
+        $this->arguments = $arguments;
     }
 
     public function getName() : string
@@ -54,6 +63,9 @@ class ClassMethod extends Node implements TypedNode
             'name' => $this->getName(),
             'docComment' => $this->docComment,
             'visibility' => $this->visibility->getValue(),
+            'arguments' => array_map(function (Argument $argument) {
+                return $argument->toArray();
+            }, $this->arguments),
         ];
     }
 
@@ -62,7 +74,10 @@ class ClassMethod extends Node implements TypedNode
         return new self(
             $data['name'],
             $data['docComment'],
-            new Visibility($data['visibility'])
+            new Visibility($data['visibility']),
+            array_map(function (array $data) {
+                return Argument::fromArray($data);
+            }, $data['arguments'])
         );
     }
 
@@ -76,6 +91,10 @@ class ClassMethod extends Node implements TypedNode
         $docComment = $astNode->docComment;
         $visibility = Visibility::fromFlags($astNode->flags);
 
-        return new self($name, $docComment, $visibility);
+        $arguments = array_map(function (\ast\Node $astNode) {
+            return new Argument($astNode->children['name']);
+        }, $astNode->children['params']->children);
+
+        return new self($name, $docComment, $visibility, $arguments);
     }
 }

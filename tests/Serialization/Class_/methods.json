@@ -17,17 +17,20 @@
                     {
                         "name": "publicMethod",
                         "docComment": "\/**\n     * test\n     *\/",
-                        "visibility": 0
+                        "visibility": 0,
+                        "arguments": []
                     },
                     {
                         "name": "protectedMethod",
                         "docComment": null,
-                        "visibility": 1
+                        "visibility": 1,
+                        "arguments": []
                     },
                     {
                         "name": "privateMethod",
                         "docComment": null,
-                        "visibility": 2
+                        "visibility": 2,
+                        "arguments": []
                     }
                 ]
             }

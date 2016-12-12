@@ -103,7 +103,7 @@ PHP-AST node types to support (list taken from [here](https://github.com/nikic/p
 - [x] AST_NAMESPACE
 - [ ] AST_NEW
 - [ ] AST_NULLABLE_TYPE
-- [ ] AST_PARAM
+- [x] AST_PARAM
 - [ ] AST_POST_DEC
 - [ ] AST_POST_INC
 - [ ] AST_PRE_DEC
@@ -144,7 +144,7 @@ PHP-AST node types to support (list taken from [here](https://github.com/nikic/p
 - [ ] ZEND_AST_IF
 - [ ] ZEND_AST_LIST
 - [ ] ZEND_AST_NAME_LIST
-- [ ] ZEND_AST_PARAM_LIST
+- [x] ZEND_AST_PARAM_LIST
 - [ ] ZEND_AST_PROP_DECL
 - [x] ZEND_AST_STMT_LIST
 - [ ] ZEND_AST_SWITCH_LIST

@@ -1,0 +1,27 @@
+{
+    "filename": "Class_\/method-parameters.php",
+    "children": {
+        "type": "list",
+        "children": [
+            {
+                "type": "class",
+                "name": "Test",
+                "docComment": null,
+                "deprecated": false,
+                "properties": [],
+                "methods": [
+                    {
+                        "name": "foo",
+                        "docComment": null,
+                        "visibility": 0,
+                        "arguments": [
+                            {
+                                "name": "argument"
+                            }
+                        ]
+                    }
+                ]
+            }
+        ]
+    }
+}
