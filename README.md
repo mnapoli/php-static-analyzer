@@ -78,7 +78,7 @@ PHP-AST node types to support (list taken from [here](https://github.com/nikic/p
 - [ ] AST_CLOSURE_VAR
 - [ ] AST_COALESCE (will be removed in v>=40)
 - [ ] AST_CONDITIONAL
-- [ ] AST_CONST
+- [x] AST_CONST
 - [ ] AST_CONST_ELEM
 - [ ] AST_CONTINUE
 - [ ] AST_DECLARE
