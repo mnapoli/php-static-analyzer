@@ -5,6 +5,7 @@ namespace PhpAnalyzer\Node;
 use PhpAnalyzer\Node\Declaration\Class_;
 use PhpAnalyzer\Node\Declaration\Namespace_;
 use PhpAnalyzer\Node\Operation\Assign;
+use PhpAnalyzer\Node\Operation\ConstantUsage;
 use PhpAnalyzer\Node\Operation\MethodCall;
 use PhpAnalyzer\Node\Operation\Operation;
 use PhpAnalyzer\Node\Operation\PrimitiveValue;
@@ -29,6 +30,7 @@ abstract class Node
         \ast\AST_RETURN => Return_::class,
         \ast\AST_THROW => Throw_::class,
         \ast\AST_PRINT => Print_::class,
+        \ast\AST_CONST => ConstantUsage::class,
     ];
     const TYPE_TO_NODES = [
         'list' => NodeList::class,
@@ -42,6 +44,7 @@ abstract class Node
         'return' => Return_::class,
         'throw' => Throw_::class,
         'print' => Print_::class,
+        'constant_usage' => ConstantUsage::class,
     ];
 
     /**

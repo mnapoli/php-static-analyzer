@@ -1,0 +1,12 @@
+{
+    "filename": "Code\/constant.php",
+    "children": {
+        "type": "list",
+        "children": [
+            {
+                "type": "constant_usage",
+                "name": "FOO"
+            }
+        ]
+    }
+}
