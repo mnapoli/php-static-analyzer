@@ -1,0 +1,23 @@
+{
+    "filename": "Code\/new.php",
+    "children": {
+        "type": "list",
+        "children": [
+            {
+                "type": "new",
+                "class": {
+                    "type": "primitive_value",
+                    "value": "Foo",
+                    "returnType": "string"
+                },
+                "arguments": [
+                    {
+                        "type": "primitive_value",
+                        "value": 123,
+                        "returnType": "int"
+                    }
+                ]
+            }
+        ]
+    }
+}

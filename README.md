@@ -101,7 +101,7 @@ PHP-AST node types to support (list taken from [here](https://github.com/nikic/p
 - [ ] AST_METHOD_REFERENCE
 - [x] AST_NAME
 - [x] AST_NAMESPACE
-- [ ] AST_NEW
+- [x] AST_NEW
 - [ ] AST_NULLABLE_TYPE
 - [x] AST_PARAM
 - [ ] AST_POST_DEC

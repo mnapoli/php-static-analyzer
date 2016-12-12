@@ -17,9 +17,7 @@
     "require": {
         "php": ">=7.0",
         "ext-ast": "*",
-        "nikic/php-parser": "~1.2",
         "symfony/finder": "^3.2",
-        "mnapoli/silly": "~1.1",
         "phpdocumentor/reflection-docblock": "~2.0",
         "psr/log": "~1.0",
         "symfony/monolog-bridge": "~2.6",

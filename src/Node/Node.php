@@ -7,6 +7,7 @@ use PhpAnalyzer\Node\Declaration\Namespace_;
 use PhpAnalyzer\Node\Operation\Assign;
 use PhpAnalyzer\Node\Operation\ConstantUsage;
 use PhpAnalyzer\Node\Operation\MethodCall;
+use PhpAnalyzer\Node\Operation\New_;
 use PhpAnalyzer\Node\Operation\Operation;
 use PhpAnalyzer\Node\Operation\PrimitiveValue;
 use PhpAnalyzer\Node\Operation\Print_;
@@ -32,6 +33,7 @@ abstract class Node implements Traversable
         \ast\AST_THROW => Throw_::class,
         \ast\AST_PRINT => Print_::class,
         \ast\AST_CONST => ConstantUsage::class,
+        \ast\AST_NEW => New_::class,
     ];
     const TYPE_TO_NODES = [
         'list' => NodeList::class,
@@ -46,6 +48,7 @@ abstract class Node implements Traversable
         'throw' => Throw_::class,
         'print' => Print_::class,
         'constant_usage' => ConstantUsage::class,
+        'new' => New_::class,
     ];
 
     /**

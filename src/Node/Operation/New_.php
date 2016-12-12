@@ -8,43 +8,34 @@ use PhpAnalyzer\Node\Node;
 /**
  * @author Matthieu Napoli <matthieu@mnapoli.fr>
  */
-class MethodCall extends Node
+class New_ extends Node
 {
     /**
-     * The expression on which we call the method.
-     *
      * @var Node
      */
-    private $expression;
-
-    /**
-     * @var string
-     */
-    private $methodName;
+    private $class;
 
     /**
      * @var Node[]
      */
     private $arguments;
 
-    public function __construct(Node $expression, string $methodName, array $arguments)
+    public function __construct(Node $class, array $arguments)
     {
-        $this->expression = $expression;
-        $this->methodName = $methodName;
+        $this->class = $class;
         $this->arguments = $arguments;
     }
 
     public function getChildren() : array
     {
-        return $this->arguments;
+        return array_merge([$this->class], $this->arguments);
     }
 
     public function toArray() : array
     {
         return [
-            'type' => 'method_call',
-            'expression' => $this->expression->toArray(),
-            'methodName' => $this->methodName,
+            'type' => 'new',
+            'class' => $this->class->toArray(),
             'arguments' => array_map(function (Node $argument) {
                 return $argument->toArray();
             }, $this->arguments),
@@ -56,26 +47,20 @@ class MethodCall extends Node
         $arguments = array_map(function (array $argument) {
             return Node::fromArray($argument);
         }, $data['arguments']);
-        return new self(Node::fromArray($data['expression']), $data['methodName'], $arguments);
+        return new self(Node::fromArray($data['class']), $arguments);
     }
 
     public static function fromAstNode(\ast\Node $astNode) : Node
     {
-        if ($astNode->kind !== self::getKind()) {
+        if ($astNode->kind !== \ast\AST_NEW) {
             throw new \Exception('Wrong type: ' . \ast\get_kind_name($astNode->kind));
         }
 
-        $expression = Node::fromAst($astNode->children['expr']);
-        $methodName = $astNode->children['method'];
+        $class = $astNode->children['class']->children['name'];
         $arguments = array_map(function ($astNode) {
             return Node::fromAst($astNode);
         }, $astNode->children['args']->children);
 
-        return new self($expression, $methodName, $arguments);
-    }
-
-    public static function getKind() : int
-    {
-        return \ast\AST_METHOD_CALL;
+        return new self(Node::fromAst($class), $arguments);
     }
 }
