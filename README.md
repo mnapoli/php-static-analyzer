@@ -80,7 +80,7 @@ PHP-AST node types to support (list taken from [here](https://github.com/nikic/p
 - [ ] AST_DECLARE
 - [ ] AST_DIM
 - [ ] AST_DO_WHILE
-- [ ] AST_ECHO
+- [x] AST_ECHO
 - [ ] AST_EMPTY
 - [ ] AST_EXIT
 - [ ] AST_FOR

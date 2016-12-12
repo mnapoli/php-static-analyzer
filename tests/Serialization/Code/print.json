@@ -5,7 +5,7 @@
         "children": [
             {
                 "type": "print",
-                "parameter": {
+                "argument": {
                     "type": "primitive_value",
                     "value": "hello",
                     "returnType": "string"

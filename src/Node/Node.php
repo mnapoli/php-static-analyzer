@@ -6,6 +6,7 @@ use PhpAnalyzer\Node\Declaration\Class_;
 use PhpAnalyzer\Node\Declaration\Namespace_;
 use PhpAnalyzer\Node\Operation\Assign;
 use PhpAnalyzer\Node\Operation\ConstantUsage;
+use PhpAnalyzer\Node\Operation\Echo_;
 use PhpAnalyzer\Node\Operation\MethodCall;
 use PhpAnalyzer\Node\Operation\New_;
 use PhpAnalyzer\Node\Operation\Operation;
@@ -32,6 +33,7 @@ abstract class Node implements Traversable
         \ast\AST_RETURN => Return_::class,
         \ast\AST_THROW => Throw_::class,
         \ast\AST_PRINT => Print_::class,
+        \ast\AST_ECHO => Echo_::class,
         \ast\AST_CONST => ConstantUsage::class,
         \ast\AST_NEW => New_::class,
     ];
@@ -47,6 +49,7 @@ abstract class Node implements Traversable
         'return' => Return_::class,
         'throw' => Throw_::class,
         'print' => Print_::class,
+        'echo' => Echo_::class,
         'constant_usage' => ConstantUsage::class,
         'new' => New_::class,
     ];

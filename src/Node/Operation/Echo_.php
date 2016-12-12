@@ -8,7 +8,7 @@ use PhpAnalyzer\Node\Node;
 /**
  * @author Matthieu Napoli <matthieu@mnapoli.fr>
  */
-class Print_ extends Node
+class Echo_ extends Node
 {
     /**
      * @var Node
@@ -28,7 +28,7 @@ class Print_ extends Node
     public function toArray() : array
     {
         return [
-            'type' => 'print',
+            'type' => 'echo',
             'argument' => $this->argument->toArray(),
         ];
     }
@@ -40,7 +40,7 @@ class Print_ extends Node
 
     public static function fromAstNode(\ast\Node $astNode) : Node
     {
-        if ($astNode->kind !== \ast\AST_PRINT) {
+        if ($astNode->kind !== \ast\AST_ECHO) {
             throw new \Exception('Wrong type: ' . \ast\get_kind_name($astNode->kind));
         }
 
