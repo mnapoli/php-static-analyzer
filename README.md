@@ -99,7 +99,7 @@ PHP-AST node types to support (list taken from [here](https://github.com/nikic/p
 - [x] AST_METHOD
 - [x] AST_METHOD_CALL
 - [ ] AST_METHOD_REFERENCE
-- [ ] AST_NAME
+- [x] AST_NAME
 - [x] AST_NAMESPACE
 - [ ] AST_NEW
 - [ ] AST_NULLABLE_TYPE

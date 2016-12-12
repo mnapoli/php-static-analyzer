@@ -62,7 +62,7 @@ class PrimitiveType implements Type
             case 'boolean':
                 return PrimitiveType::get($type);
             default:
-                throw new \Exception('Unsupported primitive type ' . $type);
+                throw new \Exception('Unsupported primitive type ' . gettype($value));
         }
     }
 }

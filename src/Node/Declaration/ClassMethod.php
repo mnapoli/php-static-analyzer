@@ -92,7 +92,7 @@ class ClassMethod extends Node implements TypedNode
         $visibility = Visibility::fromFlags($astNode->flags);
 
         $arguments = array_map(function (\ast\Node $astNode) {
-            return new Argument($astNode->children['name']);
+            return Argument::fromAstNode($astNode);
         }, $astNode->children['params']->children);
 
         return new self($name, $docComment, $visibility, $arguments);

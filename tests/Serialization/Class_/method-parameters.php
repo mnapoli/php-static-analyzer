@@ -2,7 +2,7 @@
 
 class Test
 {
-    public function foo($argument)
+    public function foo($argument, $defaultValue = 123)
     {
     }
 }

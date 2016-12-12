@@ -16,7 +16,16 @@
                         "visibility": 0,
                         "arguments": [
                             {
-                                "name": "argument"
+                                "name": "argument",
+                                "defaultValue": null
+                            },
+                            {
+                                "name": "defaultValue",
+                                "defaultValue": {
+                                    "type": "primitive_value",
+                                    "value": 123,
+                                    "returnType": "int"
+                                }
                             }
                         ]
                     }
