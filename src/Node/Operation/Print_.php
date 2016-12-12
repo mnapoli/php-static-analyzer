@@ -20,6 +20,11 @@ class Print_ extends Node
         $this->parameter = $parameter;
     }
 
+    public function getChildren() : array
+    {
+        return [$this->parameter];
+    }
+
     public function toArray() : array
     {
         return [

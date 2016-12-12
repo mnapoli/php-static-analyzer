@@ -33,6 +33,11 @@ class Argument extends Node
         return $this->name;
     }
 
+    public function getChildren() : array
+    {
+        return [$this->defaultValue];
+    }
+
     public function toArray() : array
     {
         return [

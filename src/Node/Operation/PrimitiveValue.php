@@ -37,6 +37,11 @@ class PrimitiveValue extends Node implements TypedNode
         return $this->value;
     }
 
+    public function getChildren() : array
+    {
+        return [];
+    }
+
     public function getReturnType() : Type
     {
         return $this->returnType;

@@ -22,6 +22,11 @@ class ConstantUsage extends Node
         $this->name = $name;
     }
 
+    public function getChildren() : array
+    {
+        return [];
+    }
+
     public function toArray() : array
     {
         return [

@@ -20,6 +20,11 @@ class Return_ extends Node
         $this->expression = $expression;
     }
 
+    public function getChildren() : array
+    {
+        return [$this->expression];
+    }
+
     public function toArray() : array
     {
         return [

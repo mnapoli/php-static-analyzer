@@ -6,13 +6,14 @@ namespace PhpAnalyzer;
 use PhpAnalyzer\Node\Declaration\Class_;
 use PhpAnalyzer\Scope\GlobalScope;
 use PhpAnalyzer\Scope\Scope;
+use PhpAnalyzer\Visitor\Traversable;
 use PhpAnalyzer\Visitor\Visitor;
 use Symfony\Component\Finder\Finder;
 
 /**
  * @author Matthieu Napoli <matthieu@mnapoli.fr>
  */
-class Project
+class Project implements Traversable
 {
     /**
      * @var string[]
@@ -62,6 +63,11 @@ class Project
     public function getGlobalScope() : Scope
     {
         return $this->globalScope;
+    }
+
+    public function getChildren() : array
+    {
+        return $this->files;
     }
 
     private function parseDirectories()

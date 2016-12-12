@@ -41,6 +41,11 @@ class ClassProperty extends Node implements TypedNode
         return $this->name;
     }
 
+    public function getChildren() : array
+    {
+        return [];
+    }
+
     public function getReturnType() : Type
     {
         // TODO read type from phpdoc

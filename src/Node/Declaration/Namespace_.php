@@ -25,6 +25,11 @@ class Namespace_ extends Node
         return $this->name;
     }
 
+    public function getChildren() : array
+    {
+        return [];
+    }
+
     public function toArray() : array
     {
         return [

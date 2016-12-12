@@ -34,6 +34,11 @@ class MethodCall extends Node
         $this->arguments = $arguments;
     }
 
+    public function getChildren() : array
+    {
+        return $this->arguments;
+    }
+
     public function toArray() : array
     {
         return [

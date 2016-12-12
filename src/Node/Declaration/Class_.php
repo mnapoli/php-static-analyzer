@@ -74,6 +74,11 @@ class Class_ extends Node
         $this->deprecated = $deprecated;
     }
 
+    public function getChildren() : array
+    {
+        return array_merge($this->properties, $this->methods);
+    }
+
     public function toArray() : array
     {
         return [

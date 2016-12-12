@@ -13,11 +13,12 @@ use PhpAnalyzer\Node\Operation\Print_;
 use PhpAnalyzer\Node\Operation\Return_;
 use PhpAnalyzer\Node\Operation\Throw_;
 use PhpAnalyzer\Node\Operation\Variable;
+use PhpAnalyzer\Visitor\Traversable;
 
 /**
  * @author Matthieu Napoli <matthieu@mnapoli.fr>
  */
-abstract class Node
+abstract class Node implements Traversable
 {
     const AST_TO_NODES = [
         \ast\AST_STMT_LIST => NodeList::class,

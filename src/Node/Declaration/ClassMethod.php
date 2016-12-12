@@ -51,6 +51,11 @@ class ClassMethod extends Node implements TypedNode
         return $this->name;
     }
 
+    public function getChildren() : array
+    {
+        return $this->arguments;
+    }
+
     public function getReturnType() : Type
     {
         // TODO read type from type-hint or phpdoc

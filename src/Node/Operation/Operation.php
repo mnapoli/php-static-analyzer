@@ -49,6 +49,11 @@ class Operation extends Node
         return $this->right;
     }
 
+    public function getChildren() : array
+    {
+        return [$this->left, $this->right];
+    }
+
     public function toArray() : array
     {
         return [

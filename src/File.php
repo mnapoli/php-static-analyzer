@@ -7,11 +7,12 @@ use PhpAnalyzer\Node\Declaration\Class_;
 use PhpAnalyzer\Node\Declaration\Namespace_;
 use PhpAnalyzer\Node\Node;
 use PhpAnalyzer\Node\NodeList;
+use PhpAnalyzer\Visitor\Traversable;
 
 /**
  * @author Matthieu Napoli <matthieu@mnapoli.fr>
  */
-class File
+class File implements Traversable
 {
     /**
      * @var string
@@ -48,6 +49,11 @@ class File
         return array_filter($this->tree->getChildren(), function (Node $node) {
             return $node instanceof Class_;
         });
+    }
+
+    public function getChildren() : array
+    {
+        return [$this->tree];
     }
 
     public function getClass(string $name) : Class_
