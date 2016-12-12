@@ -42,6 +42,10 @@ How it works:
 
     This project is meant as a base to write more useful applications for end users, as such it's just a library. If you are interested, open an issue.
 
+### Is it fast?
+
+No, for now the goal is to have something working. Then it will be made as fast as possible, just don't expect that to be a priority at first.
+
 ## Installation
 
 ```
