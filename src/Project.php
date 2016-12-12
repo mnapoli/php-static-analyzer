@@ -4,6 +4,8 @@ declare(strict_types = 1);
 namespace PhpAnalyzer;
 
 use PhpAnalyzer\Node\Declaration\Class_;
+use PhpAnalyzer\Scope\GlobalScope;
+use PhpAnalyzer\Scope\Scope;
 use PhpAnalyzer\Visitor\Visitor;
 use Symfony\Component\Finder\Finder;
 
@@ -23,12 +25,18 @@ class Project
     private $files;
 
     /**
+     * @var GlobalScope
+     */
+    private $globalScope;
+
+    /**
      * @param string[] $directories
      * @param Visitor[] $visitors
      */
     public function __construct(array $directories, array $visitors = [])
     {
         $this->directories = $directories;
+        $this->globalScope = new GlobalScope($this);
 
         $this->parseDirectories();
 
@@ -49,6 +57,11 @@ class Project
             $classes = array_merge($classes, $file->getClasses());
         }
         return $classes;
+    }
+
+    public function getGlobalScope() : Scope
+    {
+        return $this->globalScope;
     }
 
     private function parseDirectories()
