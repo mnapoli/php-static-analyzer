@@ -5,11 +5,7 @@
         "children": [
             {
                 "type": "new",
-                "class": {
-                    "type": "primitive_value",
-                    "value": "Foo",
-                    "returnType": "string"
-                },
+                "class": "Foo",
                 "arguments": [
                     {
                         "type": "primitive_value",

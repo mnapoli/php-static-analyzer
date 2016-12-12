@@ -4,14 +4,17 @@ declare(strict_types = 1);
 namespace PhpAnalyzer\Node\Operation;
 
 use PhpAnalyzer\Node\Node;
+use PhpAnalyzer\Node\TypedNode;
+use PhpAnalyzer\Type\ObjectType;
+use PhpAnalyzer\Type\Type;
 
 /**
  * @author Matthieu Napoli <matthieu@mnapoli.fr>
  */
-class New_ extends Node
+class New_ extends Node implements TypedNode
 {
     /**
-     * @var Node
+     * @var string
      */
     private $class;
 
@@ -20,7 +23,7 @@ class New_ extends Node
      */
     private $arguments;
 
-    public function __construct(Node $class, array $arguments)
+    public function __construct(string $class, array $arguments)
     {
         $this->class = $class;
         $this->arguments = $arguments;
@@ -28,14 +31,19 @@ class New_ extends Node
 
     public function getChildren() : array
     {
-        return array_merge([$this->class], $this->arguments);
+        return $this->arguments;
+    }
+
+    public function getReturnType() : Type
+    {
+        return new ObjectType($this->class);
     }
 
     public function toArray() : array
     {
         return [
             'type' => 'new',
-            'class' => $this->class->toArray(),
+            'class' => $this->class,
             'arguments' => array_map(function (Node $argument) {
                 return $argument->toArray();
             }, $this->arguments),
@@ -47,7 +55,7 @@ class New_ extends Node
         $arguments = array_map(function (array $argument) {
             return Node::fromArray($argument);
         }, $data['arguments']);
-        return new self(Node::fromArray($data['class']), $arguments);
+        return new self($data['class'], $arguments);
     }
 
     public static function fromAstNode(\ast\Node $astNode) : Node
@@ -61,6 +69,6 @@ class New_ extends Node
             return Node::fromAst($astNode);
         }, $astNode->children['args']->children);
 
-        return new self(Node::fromAst($class), $arguments);
+        return new self($class, $arguments);
     }
 }
