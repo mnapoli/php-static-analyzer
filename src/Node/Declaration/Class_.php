@@ -5,6 +5,7 @@ namespace PhpAnalyzer\Node\Declaration;
 
 use ast\Node\Decl;
 use PhpAnalyzer\Node\Node;
+use PhpAnalyzer\Scope\Scope;
 
 /**
  * @author Matthieu Napoli <matthieu@mnapoli.fr>
@@ -74,6 +75,26 @@ class Class_ extends Node
         $this->deprecated = $deprecated;
     }
 
+    public function hasMethod(string $name) : bool
+    {
+        foreach ($this->methods as $method) {
+            if ($method->getName() === $name) {
+                return true;
+            }
+        }
+        return false;
+    }
+
+    public function getMethod(string $name) : ClassMethod
+    {
+        foreach ($this->methods as $method) {
+            if ($method->getName() === $name) {
+                return $method;
+            }
+        }
+        throw new \Exception("Unknown method $name");
+    }
+
     public function getChildren() : array
     {
         return array_merge($this->properties, $this->methods);
@@ -95,13 +116,13 @@ class Class_ extends Node
         ];
     }
 
-    public static function fromArray(array $data) : Node
+    public static function fromArray(array $data, Scope $scope) : Node
     {
-        $properties = array_map(function ($data) {
-            return ClassProperty::fromArray($data);
+        $properties = array_map(function ($data) use ($scope) {
+            return ClassProperty::fromArray($data, $scope);
         }, $data['properties']);
-        $methods = array_map(function ($data) {
-            return ClassMethod::fromArray($data);
+        $methods = array_map(function ($data) use ($scope) {
+            return ClassMethod::fromArray($data, $scope);
         }, $data['methods']);
 
         $class = new self($data['name'], $data['docComment'], $properties, $methods);
@@ -113,7 +134,7 @@ class Class_ extends Node
         return $class;
     }
 
-    public static function fromAstNode(\ast\Node $astNode) : Node
+    public static function fromAstNode(\ast\Node $astNode, Scope $scope) : Node
     {
         if ($astNode->kind !== \ast\AST_CLASS || !$astNode instanceof Decl) {
             throw new \Exception('Wrong type: ' . \ast\get_kind_name($astNode->kind));
@@ -125,16 +146,16 @@ class Class_ extends Node
         $properties = array_filter($children, function (\ast\Node $astNode) {
             return $astNode->kind === \ast\AST_PROP_DECL;
         });
-        $properties = array_map(function (\ast\Node $astNode) {
-            return ClassProperty::fromAstNode($astNode);
+        $properties = array_map(function (\ast\Node $astNode) use ($scope) {
+            return ClassProperty::fromAstNode($astNode, $scope);
         }, $properties);
 
         // Methods
         $methods = array_filter($children, function (\ast\Node $astNode) {
             return $astNode->kind === \ast\AST_METHOD;
         });
-        $methods = array_map(function (\ast\Node $astNode) {
-            return ClassMethod::fromAstNode($astNode);
+        $methods = array_map(function (\ast\Node $astNode) use ($scope) {
+            return ClassMethod::fromAstNode($astNode, $scope);
         }, $methods);
 
         return new self($astNode->name, $astNode->docComment, $properties, $methods);

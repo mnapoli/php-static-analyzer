@@ -4,6 +4,7 @@ declare(strict_types = 1);
 namespace PhpAnalyzer\Test\Serialization;
 
 use PhpAnalyzer\File;
+use PhpAnalyzer\Test\FakeScope;
 use PHPUnit\Framework\TestCase;
 
 /**
@@ -18,7 +19,7 @@ class SerializationTest extends TestCase
     {
         chdir(__DIR__);
 
-        $file = new File($filename . '.php');
+        $file = new File(new FakeScope, $filename . '.php');
 
         $generatedJson = json_encode($file->toArray(), JSON_PRETTY_PRINT) . "\n";
 
@@ -33,7 +34,7 @@ class SerializationTest extends TestCase
         self::assertEquals($expectedJson, $generatedJson);
 
         // Test deserialization
-        self::assertEquals($file, File::fromArray(json_decode($expectedJson, true)));
+        self::assertEquals($file, File::fromArray(json_decode($expectedJson, true), new FakeScope));
     }
 
     public static function provideTestFiles()

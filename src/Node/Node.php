@@ -15,6 +15,7 @@ use PhpAnalyzer\Node\Operation\Print_;
 use PhpAnalyzer\Node\Operation\Return_;
 use PhpAnalyzer\Node\Operation\Throw_;
 use PhpAnalyzer\Node\Operation\Variable;
+use PhpAnalyzer\Scope\Scope;
 use PhpAnalyzer\Visitor\Traversable;
 
 /**
@@ -59,7 +60,7 @@ abstract class Node implements Traversable
      */
     abstract public function toArray() : array;
 
-    public static function fromArray(array $data) : Node
+    public static function fromArray(array $data, Scope $scope) : Node
     {
         $allNodes = self::TYPE_TO_NODES;
 
@@ -69,17 +70,17 @@ abstract class Node implements Traversable
             $class = $allNodes[$data['type']];
         }
 
-        return $class::fromArray($data);
+        return $class::fromArray($data, $scope);
     }
 
-    abstract public static function fromAstNode(\ast\Node $astNode) : Node;
+    abstract public static function fromAstNode(\ast\Node $astNode, Scope $scope) : Node;
 
     /**
      * Create a node from anything found in the AST of the PHP-AST extension.
      *
      * @param mixed $anything
      */
-    public static function fromAst($anything) : Node
+    public static function fromAst($anything, Scope $scope) : Node
     {
         if (is_scalar($anything)) {
             return PrimitiveValue::fromValue($anything);
@@ -97,6 +98,6 @@ abstract class Node implements Traversable
             $class = $allNodes[$anything->kind];
         }
 
-        return $class::fromAstNode($anything);
+        return $class::fromAstNode($anything, $scope);
     }
 }

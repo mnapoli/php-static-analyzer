@@ -4,6 +4,7 @@ declare(strict_types = 1);
 namespace PhpAnalyzer\Node\Operation;
 
 use PhpAnalyzer\Node\Node;
+use PhpAnalyzer\Scope\Scope;
 
 /**
  * Use of a constant.
@@ -13,12 +14,18 @@ use PhpAnalyzer\Node\Node;
 class ConstantUsage extends Node
 {
     /**
+     * @var Scope
+     */
+    private $scope;
+
+    /**
      * @var string
      */
     private $name;
 
-    public function __construct(string $name)
+    public function __construct(Scope $scope, string $name)
     {
+        $this->scope = $scope;
         $this->name = $name;
     }
 
@@ -35,17 +42,17 @@ class ConstantUsage extends Node
         ];
     }
 
-    public static function fromArray(array $data) : Node
+    public static function fromArray(array $data, Scope $scope) : Node
     {
-        return new self($data['name']);
+        return new self($scope, $data['name']);
     }
 
-    public static function fromAstNode(\ast\Node $astNode) : Node
+    public static function fromAstNode(\ast\Node $astNode, Scope $scope) : Node
     {
         if ($astNode->kind !== \ast\AST_CONST) {
             throw new \Exception('Wrong type: ' . \ast\get_kind_name($astNode->kind));
         }
 
-        return new self($astNode->children['name']->children['name']);
+        return new self($scope, $astNode->children['name']->children['name']);
     }
 }

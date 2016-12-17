@@ -2,8 +2,6 @@
 
 namespace PhpAnalyzer\Scope;
 
-use PhpAnalyzer\Log\Logger;
-use PhpAnalyzer\Parser\Node\ReflectedVariable;
 use PhpAnalyzer\Type\Type;
 use PhpAnalyzer\Type\UnknownType;
 
@@ -15,7 +13,7 @@ use PhpAnalyzer\Type\UnknownType;
 class LocalVariable extends Variable
 {
     /**
-     * @var ReflectedVariable
+     * @var \PhpAnalyzer\Node\Operation\Variable
      */
     private $node;
 
@@ -24,14 +22,14 @@ class LocalVariable extends Variable
      */
     protected $types = [];
 
-    public function __construct(ReflectedVariable $node)
+    public function __construct(\PhpAnalyzer\Node\Operation\Variable $node)
     {
         $this->node = $node;
     }
 
     public function getName()
     {
-        return $this->node->name;
+        return $this->node->getName();
     }
 
     public function getType()
@@ -42,7 +40,7 @@ class LocalVariable extends Variable
 
         // TODO handle more than one type detected
         if (count($this->types) > 1) {
-            Logger::error('No support for multi-type yet');
+            throw new \Exception('No support for multi-types yet');
         }
 
         return $this->types[0];

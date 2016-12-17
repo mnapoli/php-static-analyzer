@@ -4,6 +4,7 @@ declare(strict_types = 1);
 namespace PhpAnalyzer\Node\Operation;
 
 use PhpAnalyzer\Node\Node;
+use PhpAnalyzer\Scope\Scope;
 
 /**
  * Binary or numerical operation.
@@ -64,16 +65,16 @@ class Operation extends Node
         ];
     }
 
-    public static function fromArray(array $data) : Node
+    public static function fromArray(array $data, Scope $scope) : Node
     {
         return new self(
             new Operand($data['operand']),
-            Node::fromArray($data['left']),
-            Node::fromArray($data['right'])
+            Node::fromArray($data['left'], $scope),
+            Node::fromArray($data['right'], $scope)
         );
     }
 
-    public static function fromAstNode(\ast\Node $astNode) : Node
+    public static function fromAstNode(\ast\Node $astNode, Scope $scope) : Node
     {
         if ($astNode->kind !== self::getKind()) {
             throw new \Exception('Wrong type: ' . \ast\get_kind_name($astNode->kind));
@@ -81,8 +82,8 @@ class Operation extends Node
 
         return new self(
             Operand::fromAstNode($astNode),
-            Node::fromAst($astNode->children['left']),
-            Node::fromAst($astNode->children['right'])
+            Node::fromAst($astNode->children['left'], $scope),
+            Node::fromAst($astNode->children['right'], $scope)
         );
     }
 

@@ -4,6 +4,7 @@ declare(strict_types = 1);
 namespace PhpAnalyzer\Node\Operation;
 
 use PhpAnalyzer\Node\Node;
+use PhpAnalyzer\Scope\Scope;
 
 /**
  * Assignment of the result of an expression to a variable.
@@ -12,6 +13,11 @@ use PhpAnalyzer\Node\Node;
  */
 class Assign extends Node
 {
+    /**
+     * @var Scope
+     */
+    private $scope;
+
     /**
      * Can be null if the name is unknown (dynamic).
      *
@@ -29,8 +35,9 @@ class Assign extends Node
     /**
      * @param string|null $variableName
      */
-    public function __construct($variableName, Node $expression)
+    public function __construct(Scope $scope, $variableName, Node $expression)
     {
+        $this->scope = $scope;
         $this->variableName = $variableName;
         $this->expression = $expression;
     }
@@ -49,12 +56,12 @@ class Assign extends Node
         ];
     }
 
-    public static function fromArray(array $data) : Node
+    public static function fromArray(array $data, Scope $scope) : Node
     {
-        return new self($data['variableName'], Node::fromArray($data['expression']));
+        return new self($scope, $data['variableName'], Node::fromArray($data['expression'], $scope));
     }
 
-    public static function fromAstNode(\ast\Node $astNode) : Node
+    public static function fromAstNode(\ast\Node $astNode, Scope $scope) : Node
     {
         if ($astNode->kind !== \ast\AST_ASSIGN) {
             throw new \Exception('Wrong type: ' . \ast\get_kind_name($astNode->kind));
@@ -62,7 +69,7 @@ class Assign extends Node
 
         $variableName = $astNode->children['var']->children['name'] ?? null;
 
-        return new self($variableName, Node::fromAst($astNode->children['expr']));
+        return new self($scope, $variableName, Node::fromAst($astNode->children['expr'], $scope));
     }
 
     public static function getKind() : int

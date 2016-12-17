@@ -1,41 +1,39 @@
 <?php
+declare(strict_types = 1);
 
-namespace PhpAnalyzer\Scope;
+namespace PhpAnalyzer\Test;
 
 use PhpAnalyzer\Node\Declaration\Class_;
-use PhpAnalyzer\Project;
 use PhpAnalyzer\Scope\Exception\VariableDoesNotExist;
+use PhpAnalyzer\Scope\Scope;
+use PhpAnalyzer\Scope\Variable;
 
 /**
- * Represents the global scope.
- *
  * @author Matthieu Napoli <matthieu@mnapoli.fr>
  */
-class GlobalScope implements Scope
+class FakeScope implements Scope
 {
     /**
-     * @var Project
+     * @var Class_[]
      */
-    private $project;
+    private $classes = [];
 
     /**
      * @var Variable[]
      */
     private $variables = [];
 
-    public function __construct(Project $project)
-    {
-        $this->project = $project;
-    }
-
     public function hasClass(string $name) : bool
     {
-        return $this->project->hasClass($name);
+        return isset($this->classes[$name]);
     }
 
     public function getClass(string $name) : Class_
     {
-        return $this->project->getClass($name);
+        if (!$this->hasClass($name)) {
+            throw new \Exception('Class not found');
+        }
+        return $this->classes[$name];
     }
 
     public function addVariable(Variable $variable)

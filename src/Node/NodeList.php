@@ -4,6 +4,7 @@ declare(strict_types = 1);
 namespace PhpAnalyzer\Node;
 
 use const ast\AST_STMT_LIST;
+use PhpAnalyzer\Scope\Scope;
 
 /**
  * @author Matthieu Napoli <matthieu@mnapoli.fr>
@@ -41,23 +42,23 @@ class NodeList extends Node
         ];
     }
 
-    public static function fromArray(array $data) : Node
+    public static function fromArray(array $data, Scope $scope) : Node
     {
-        $children = array_map(function (array $childData) {
-            return Node::fromArray($childData);
+        $children = array_map(function (array $childData) use ($scope) {
+            return Node::fromArray($childData, $scope);
         }, $data['children']);
 
         return new self($children);
     }
 
-    public static function fromAstNode(\ast\Node $astNode) : Node
+    public static function fromAstNode(\ast\Node $astNode, Scope $scope) : Node
     {
         if ($astNode->kind !== AST_STMT_LIST) {
             throw new \Exception('Wrong type');
         }
 
-        $children = array_map(function ($child) {
-            return Node::fromAst($child);
+        $children = array_map(function ($child) use ($scope) {
+            return Node::fromAst($child, $scope);
         }, $astNode->children);
 
         return new self($children);

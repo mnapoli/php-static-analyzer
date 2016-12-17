@@ -31,8 +31,8 @@ class Project implements Traversable
     private $globalScope;
 
     /**
-     * @param string[] $directories
-     * @param Visitor[] $visitors
+     * @param string[] $directories Directories containing code to parse.
+     * @param Visitor[] $visitors Visitors to automatically apply.
      */
     public function __construct(array $directories, array $visitors = [])
     {
@@ -42,9 +42,7 @@ class Project implements Traversable
         $this->parseDirectories();
 
         foreach ($visitors as $visitor) {
-            foreach ($this->files as $file) {
-                $visitor->visit($file);
-            }
+            $visitor->visit($this);
         }
     }
 
@@ -58,6 +56,30 @@ class Project implements Traversable
             $classes = array_merge($classes, $file->getClasses());
         }
         return $classes;
+    }
+
+    public function hasClass(string $className) : bool
+    {
+        // TODO optimize
+        $classes = $this->getClasses();
+        foreach ($classes as $class) {
+            if ($class->getName() === $className) {
+                return true;
+            }
+        }
+        return false;
+    }
+
+    public function getClass(string $className) : Class_
+    {
+        // TODO optimize
+        $classes = $this->getClasses();
+        foreach ($classes as $class) {
+            if ($class->getName() === $className) {
+                return $class;
+            }
+        }
+        throw new \Exception("Class $className not found");
     }
 
     public function getGlobalScope() : Scope
@@ -78,7 +100,7 @@ class Project implements Traversable
 
         $this->files = [];
         foreach ($finder as $fileInfo) {
-            $this->files[] = new File($fileInfo->getPathname());
+            $this->files[] = new File($this->getGlobalScope(), $fileInfo->getPathname());
         }
     }
 }

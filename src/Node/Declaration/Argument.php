@@ -4,6 +4,7 @@ declare(strict_types = 1);
 namespace PhpAnalyzer\Node\Declaration;
 
 use PhpAnalyzer\Node\Node;
+use PhpAnalyzer\Scope\Scope;
 
 /**
  * Method or function argument.
@@ -12,6 +13,11 @@ use PhpAnalyzer\Node\Node;
  */
 class Argument extends Node
 {
+    /**
+     * @var Scope
+     */
+    private $scope;
+
     /**
      * @var string
      */
@@ -22,8 +28,9 @@ class Argument extends Node
      */
     private $defaultValue;
 
-    public function __construct(string $name, Node $defaultValue = null)
+    public function __construct(Scope $scope, string $name, Node $defaultValue = null)
     {
+        $this->scope = $scope;
         $this->name = $name;
         $this->defaultValue = $defaultValue;
     }
@@ -46,15 +53,16 @@ class Argument extends Node
         ];
     }
 
-    public static function fromArray(array $data) : Node
+    public static function fromArray(array $data, Scope $scope) : Node
     {
         return new self(
+            $scope,
             $data['name'],
-            $data['defaultValue'] ? Node::fromArray($data['defaultValue']) : null
+            $data['defaultValue'] ? Node::fromArray($data['defaultValue'], $scope) : null
         );
     }
 
-    public static function fromAstNode(\ast\Node $astNode) : Node
+    public static function fromAstNode(\ast\Node $astNode, Scope $scope) : Node
     {
         if ($astNode->kind !== \ast\AST_PARAM) {
             throw new \Exception('Wrong type: ' . \ast\get_kind_name($astNode->kind));
@@ -63,9 +71,9 @@ class Argument extends Node
         $name = $astNode->children['name'];
         $defaultValue = $astNode->children['default'];
         if ($defaultValue) {
-            $defaultValue = Node::fromAst($defaultValue);
+            $defaultValue = Node::fromAst($defaultValue, $scope);
         }
 
-        return new self($name, $defaultValue);
+        return new self($scope, $name, $defaultValue);
     }
 }

@@ -6,7 +6,7 @@ namespace PhpAnalyzer\Test\Visitor;
 use PhpAnalyzer\Node\Declaration\ClassMethod;
 use PhpAnalyzer\Project;
 use PhpAnalyzer\Visitor\Traversable;
-use PhpAnalyzer\Visitor\TreeVisitor;
+use PhpAnalyzer\Visitor\Visitor;
 
 class TreeVisitorTest extends \PHPUnit_Framework_TestCase
 {
@@ -14,7 +14,7 @@ class TreeVisitorTest extends \PHPUnit_Framework_TestCase
     {
         $project = new Project([__DIR__ . '/TreeVisitor']);
 
-        $visitor = new class extends TreeVisitor {
+        $visitor = new class extends Visitor {
             public $classCount = 0;
             protected function visitNode(Traversable $node)
             {

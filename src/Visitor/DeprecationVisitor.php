@@ -9,11 +9,16 @@ use PhpAnalyzer\File;
  *
  * @author Matthieu Napoli <matthieu@mnapoli.fr>
  */
-class DeprecationVisitor implements Visitor
+class DeprecationVisitor extends Visitor
 {
-    public function visit(File $file)
+    /**
+     * @param File $node
+     */
+    protected function visitNode(Traversable $node)
     {
-        foreach ($file->getClasses() as $class) {
+        assert($node instanceof File);
+
+        foreach ($node->getClasses() as $class) {
             $docblock = $class->getDocComment();
             if (! $docblock) {
                 continue;
@@ -23,5 +28,13 @@ class DeprecationVisitor implements Visitor
                 $class->setDeprecated(true);
             }
         }
+    }
+
+    /**
+     * @return string[] Class names of the nodes to visit.
+     */
+    protected function getTargetNodes() : array
+    {
+        return [File::class];
     }
 }

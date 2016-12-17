@@ -7,6 +7,7 @@ use PhpAnalyzer\Node\Declaration\Class_;
 use PhpAnalyzer\Node\Declaration\Namespace_;
 use PhpAnalyzer\Node\Node;
 use PhpAnalyzer\Node\NodeList;
+use PhpAnalyzer\Scope\Scope;
 use PhpAnalyzer\Visitor\Traversable;
 
 /**
@@ -24,10 +25,16 @@ class File implements Traversable
      */
     private $tree;
 
-    public function __construct(string $filename, Node $tree = null)
+    /**
+     * @var Scope
+     */
+    private $scope;
+
+    public function __construct(Scope $scope, string $filename, Node $tree = null)
     {
         $this->filename = $filename;
-        $this->tree = $tree ?: NodeList::fromAstNode(\ast\parse_file($this->filename, 35));
+        $this->tree = $tree ?: NodeList::fromAstNode(\ast\parse_file($this->filename, 35), $scope);
+        $this->scope = $scope;
     }
 
     public function getNamespace() : Namespace_
@@ -38,7 +45,7 @@ class File implements Traversable
                 return $node;
             }
         }
-        return Namespace_::globalNamespace();
+        return Namespace_::globalNamespace($this->scope);
     }
 
     /**
@@ -74,11 +81,11 @@ class File implements Traversable
         ];
     }
 
-    public static function fromArray(array $data) : self
+    public static function fromArray(array $data, Scope $scope) : self
     {
         if (isset($data['children'])) {
-            $tree = Node::fromArray($data['children']);
+            $tree = Node::fromArray($data['children'], $scope);
         }
-        return new self($data['filename'], $tree ?? null);
+        return new self($scope, $data['filename'], $tree ?? null);
     }
 }

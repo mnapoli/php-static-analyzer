@@ -4,20 +4,47 @@ declare(strict_types = 1);
 namespace PhpAnalyzer\Node\Operation;
 
 use PhpAnalyzer\Node\Node;
+use PhpAnalyzer\Node\TypedNode;
+use PhpAnalyzer\Scope\LocalVariable;
+use PhpAnalyzer\Scope\Scope;
+use PhpAnalyzer\Type\Type;
 
 /**
  * @author Matthieu Napoli <matthieu@mnapoli.fr>
  */
-class Variable extends Node
+class Variable extends Node implements TypedNode
 {
+    /**
+     * @var Scope
+     */
+    private $scope;
+
     /**
      * @var string
      */
     private $name;
 
-    public function __construct(string $name)
+    public function __construct(Scope $scope, string $name)
     {
         $this->name = $name;
+        $this->scope = $scope;
+
+        // Register the variable in the current scope
+        if ($this->scope->hasVariable($this->getName())) {
+            // TODO merge type
+            return;
+        }
+        $this->scope->addVariable(new LocalVariable($this));
+    }
+
+    public function getName() : string
+    {
+        return $this->name;
+    }
+
+    public function getReturnType() : Type
+    {
+        return $this->scope->getVariable($this->getName())->getType();
     }
 
     public function getChildren() : array
@@ -33,12 +60,12 @@ class Variable extends Node
         ];
     }
 
-    public static function fromArray(array $data) : Node
+    public static function fromArray(array $data, Scope $scope) : Node
     {
-        return new self($data['name']);
+        return new self($scope, $data['name']);
     }
 
-    public static function fromAstNode(\ast\Node $astNode) : Node
+    public static function fromAstNode(\ast\Node $astNode, Scope $scope) : Node
     {
         if ($astNode->kind !== self::getKind()) {
             throw new \Exception('Wrong type: ' . \ast\get_kind_name($astNode->kind));
@@ -49,7 +76,7 @@ class Variable extends Node
             throw new \Exception('Dynamic variable names are not supported yet');
         }
 
-        return new self($name);
+        return new self($scope, $name);
     }
 
     public static function getKind() : int

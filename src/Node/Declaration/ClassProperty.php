@@ -5,6 +5,7 @@ namespace PhpAnalyzer\Node\Declaration;
 
 use PhpAnalyzer\Node\TypedNode;
 use PhpAnalyzer\Node\Node;
+use PhpAnalyzer\Scope\Scope;
 use PhpAnalyzer\Type\Type;
 use PhpAnalyzer\Type\UnknownType;
 use PhpAnalyzer\Visibility\Visibility;
@@ -61,12 +62,12 @@ class ClassProperty extends Node implements TypedNode
         ];
     }
 
-    public static function fromArray(array $data) : Node
+    public static function fromArray(array $data, Scope $scope) : Node
     {
         return new self($data['name'], $data['docComment'], new Visibility($data['visibility']));
     }
 
-    public static function fromAstNode(\ast\Node $astNode) : Node
+    public static function fromAstNode(\ast\Node $astNode, Scope $scope) : Node
     {
         if ($astNode->kind !== \ast\AST_PROP_DECL) {
             throw new \Exception('Wrong type: ' . \ast\get_kind_name($astNode->kind));

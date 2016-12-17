@@ -4,6 +4,7 @@ declare(strict_types = 1);
 namespace PhpAnalyzer\Test\Visitor;
 
 use PhpAnalyzer\File;
+use PhpAnalyzer\Test\FakeScope;
 use PhpAnalyzer\Visitor\FqnVisitor;
 use PHPUnit\Framework\TestCase;
 
@@ -14,7 +15,7 @@ class FqnVisitorTest extends TestCase
 {
     public function test resolve class fqn()
     {
-        $file = new File(__DIR__ . '/Fqn/class.php');
+        $file = new File(new FakeScope, __DIR__ . '/Fqn/class.php');
 
         // Before
         self::assertEquals('Bar', $file->getClass('Bar')->getName());
@@ -27,7 +28,7 @@ class FqnVisitorTest extends TestCase
 
     public function test resolve class in global namespace()
     {
-        $file = new File(__DIR__ . '/Fqn/class-global-namespace.php');
+        $file = new File(new FakeScope, __DIR__ . '/Fqn/class-global-namespace.php');
         (new FqnVisitor)->visit($file);
         self::assertEquals('Foo', $file->getClass('Foo')->getName());
     }

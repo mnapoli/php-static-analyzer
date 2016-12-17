@@ -5,6 +5,7 @@ namespace PhpAnalyzer\Node\Operation;
 
 use PhpAnalyzer\Node\TypedNode;
 use PhpAnalyzer\Node\Node;
+use PhpAnalyzer\Scope\Scope;
 use PhpAnalyzer\Type\PrimitiveType;
 use PhpAnalyzer\Type\Type;
 
@@ -56,7 +57,7 @@ class PrimitiveValue extends Node implements TypedNode
         ];
     }
 
-    public static function fromArray(array $data) : Node
+    public static function fromArray(array $data, Scope $scope) : Node
     {
         return new self($data['value'], PrimitiveType::get($data['returnType']));
     }
@@ -66,7 +67,7 @@ class PrimitiveValue extends Node implements TypedNode
         return new self($value, PrimitiveType::getFromValue($value));
     }
 
-    public static function fromAstNode(\ast\Node $astNode) : Node
+    public static function fromAstNode(\ast\Node $astNode, Scope $scope) : Node
     {
         throw new \Exception('Invalid case');
     }

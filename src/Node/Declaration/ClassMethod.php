@@ -6,6 +6,7 @@ namespace PhpAnalyzer\Node\Declaration;
 use ast\Node\Decl;
 use PhpAnalyzer\Node\TypedNode;
 use PhpAnalyzer\Node\Node;
+use PhpAnalyzer\Scope\Scope;
 use PhpAnalyzer\Type\Type;
 use PhpAnalyzer\Type\UnknownType;
 use PhpAnalyzer\Visibility\Visibility;
@@ -15,6 +16,11 @@ use PhpAnalyzer\Visibility\Visibility;
  */
 class ClassMethod extends Node implements TypedNode
 {
+    /**
+     * @var Scope
+     */
+    private $scope;
+
     /**
      * @var string
      */
@@ -38,8 +44,9 @@ class ClassMethod extends Node implements TypedNode
     /**
      * @param Argument[] $arguments
      */
-    public function __construct(string $name, string $docComment = null, Visibility $visibility, array $arguments)
+    public function __construct(Scope $scope, string $name, string $docComment = null, Visibility $visibility, array $arguments)
     {
+        $this->scope = $scope;
         $this->name = $name;
         $this->docComment = $docComment;
         $this->visibility = $visibility;
@@ -74,19 +81,20 @@ class ClassMethod extends Node implements TypedNode
         ];
     }
 
-    public static function fromArray(array $data) : Node
+    public static function fromArray(array $data, Scope $scope) : Node
     {
         return new self(
+            $scope,
             $data['name'],
             $data['docComment'],
             new Visibility($data['visibility']),
-            array_map(function (array $data) {
-                return Argument::fromArray($data);
+            array_map(function (array $data) use ($scope) {
+                return Argument::fromArray($data, $scope);
             }, $data['arguments'])
         );
     }
 
-    public static function fromAstNode(\ast\Node $astNode) : Node
+    public static function fromAstNode(\ast\Node $astNode, Scope $scope) : Node
     {
         if ($astNode->kind !== \ast\AST_METHOD || !$astNode instanceof Decl) {
             throw new \Exception('Wrong type: ' . \ast\get_kind_name($astNode->kind));
@@ -96,10 +104,10 @@ class ClassMethod extends Node implements TypedNode
         $docComment = $astNode->docComment;
         $visibility = Visibility::fromFlags($astNode->flags);
 
-        $arguments = array_map(function (\ast\Node $astNode) {
-            return Argument::fromAstNode($astNode);
+        $arguments = array_map(function (\ast\Node $astNode) use ($scope) {
+            return Argument::fromAstNode($astNode, $scope);
         }, $astNode->children['params']->children);
 
-        return new self($name, $docComment, $visibility, $arguments);
+        return new self($scope, $name, $docComment, $visibility, $arguments);
     }
 }

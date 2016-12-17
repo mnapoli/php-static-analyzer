@@ -3,6 +3,7 @@
 namespace PhpAnalyzer\Scope;
 
 use PhpAnalyzer\Node\Declaration\Class_;
+use PhpAnalyzer\Scope\Exception\VariableDoesNotExist;
 
 /**
  * @author Matthieu Napoli <matthieu@mnapoli.fr>
@@ -17,6 +18,9 @@ interface Scope
 
     public function hasVariable(string $name) : bool;
 
+    /**
+     * @throws VariableDoesNotExist
+     */
     public function getVariable(string $name) : Variable;
 
     /**

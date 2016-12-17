@@ -4,6 +4,7 @@ declare(strict_types = 1);
 namespace PhpAnalyzer\Node\Operation;
 
 use PhpAnalyzer\Node\Node;
+use PhpAnalyzer\Scope\Scope;
 
 /**
  * @author Matthieu Napoli <matthieu@mnapoli.fr>
@@ -33,17 +34,17 @@ class Print_ extends Node
         ];
     }
 
-    public static function fromArray(array $data) : Node
+    public static function fromArray(array $data, Scope $scope) : Node
     {
-        return new self(Node::fromArray($data['argument']));
+        return new self(Node::fromArray($data['argument'], $scope));
     }
 
-    public static function fromAstNode(\ast\Node $astNode) : Node
+    public static function fromAstNode(\ast\Node $astNode, Scope $scope) : Node
     {
         if ($astNode->kind !== \ast\AST_PRINT) {
             throw new \Exception('Wrong type: ' . \ast\get_kind_name($astNode->kind));
         }
 
-        return new self(Node::fromAst($astNode->children['expr']));
+        return new self(Node::fromAst($astNode->children['expr'], $scope));
     }
 }
